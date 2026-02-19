@@ -55,10 +55,12 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
 private:
-    Parameters parameters;
+    Parameters parameters{ *this };
 
-    float outputGain = 0.0f;
+    juce::SmoothedValue<float> inputGainSmoother;
     juce::SmoothedValue<float> outputGainSmoother;
+
+    juce::dsp::NoiseGate<float> gate;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DownfallPluginAudioProcessor)
 };

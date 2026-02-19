@@ -20,23 +20,43 @@ auto& addParameterToProcessor(juce::AudioProcessor& processor, auto parameter) {
     return parameterReference;
 }
 
-juce::AudioParameterFloat& createOutputGainParameter(juce::AudioProcessor& processor) {
+juce::AudioParameterFloat& createParameterFloat(juce::AudioProcessor& processor, juce::String parameterID, juce::String parameterName,
+    juce::NormalisableRange<float> normalisableRange, float initialValue, juce::AudioParameterFloatAttributes attributes) {
     auto parameter = std::make_unique<juce::AudioParameterFloat>(
-        juce::ParameterID{ "output.gain", versionHint },
-        "Output gain",
-        juce::NormalisableRange{ -12.f, 12.f, 0.1f, 0.4f },
-        0.f,
-        juce::AudioParameterFloatAttributes{}.withLabel("dB"));
+        juce::ParameterID{ parameterID, versionHint },
+        parameterName,
+        normalisableRange,
+        initialValue,
+        attributes);
     return addParameterToProcessor(processor, std::move(parameter));
 }
 
 struct Parameters {
     explicit Parameters(juce::AudioProcessor& audioProcessor) 
-        : outputGain(createOutputGainParameter(audioProcessor))
+        : outputGain(createParameterFloat(audioProcessor, 
+            "output.gain", 
+            "Output gain", 
+            juce::NormalisableRange{ -12.f, 12.f, 0.1f, 0.4f },
+            0.f,
+            juce::AudioParameterFloatAttributes{}.withLabel("dB"))),
+        gateThreshold(createParameterFloat(audioProcessor,
+            "gate.threshold",
+            "Gate Threshold",
+            juce::NormalisableRange{ -96.f, 0.f, 0.1f, 0.4f },
+            -96.f,
+            juce::AudioParameterFloatAttributes{}.withLabel("dB"))),
+        inputGain(createParameterFloat(audioProcessor,
+            "input.gain",
+            "Output gain",
+            juce::NormalisableRange{ -12.f, 12.f, 0.1f, 0.4f },
+            0.f,
+            juce::AudioParameterFloatAttributes{}.withLabel("dB")))
     {
     }
 
+    juce::AudioParameterFloat& inputGain;
     juce::AudioParameterFloat& outputGain;
+    juce::AudioParameterFloat& gateThreshold;
 
     JUCE_DECLARE_NON_COPYABLE(Parameters);
     JUCE_DECLARE_NON_MOVEABLE(Parameters);

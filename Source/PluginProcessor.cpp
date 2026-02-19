@@ -86,14 +86,25 @@ void DownfallPluginAudioProcessor::changeProgramName (int index, const juce::Str
 //==============================================================================
 void DownfallPluginAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
+    inputGainSmoother.reset(sampleRate, 0.002f);
+    inputGainSmoother.setCurrentAndTargetValue(0.f);
+
     outputGainSmoother.reset(sampleRate, 0.002f);
     outputGainSmoother.setCurrentAndTargetValue(0.f);
+
+    juce::dsp::ProcessSpec spec;
+    spec.maximumBlockSize = static_cast<juce::uint32>(samplesPerBlock);
+    spec.numChannels = 2;
+    spec.sampleRate = sampleRate;
+    gate.reset();
+    gate.prepare(spec);
+    gate.setAttack(1.f);
+    gate.setRelease(200.f);
+    gate.setRatio(1.f);
 }
 
 void DownfallPluginAudioProcessor::releaseResources()
 {
-    // When playback stops, you can use this as an opportunity to free up any
-    // spare memory, etc.
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -127,7 +138,13 @@ void DownfallPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
+    inputGainSmoother.setTargetValue(parameters.inputGain.get());
     outputGainSmoother.setTargetValue(parameters.outputGain.get());
+    gate.setThreshold(parameters.gateThreshold.get());
+
+    buffer.applyGain(inputGainSmoother.getNextValue());
+
+    gate.process(buffer);
 
     buffer.applyGain(juce::Decibels::decibelsToGain(outputGainSmoother.getNextValue()));
 }
