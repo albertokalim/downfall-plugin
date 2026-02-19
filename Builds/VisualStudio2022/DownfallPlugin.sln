@@ -1,0 +1,46 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio Version 17
+
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DownfallPlugin - Standalone Plugin", "DownfallPlugin_StandalonePlugin.vcxproj", "{3A515949-4767-D788-18B6-C95358168E78}"
+	ProjectSection(ProjectDependencies) = postProject
+		{EFCD3EFC-B6EF-0238-C55C-E471E1C8144E} = {EFCD3EFC-B6EF-0238-C55C-E471E1C8144E}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DownfallPlugin - VST3", "DownfallPlugin_VST3.vcxproj", "{827937A7-DAE9-EE20-1E62-C8437FB19E21}"
+	ProjectSection(ProjectDependencies) = postProject
+		{EFCD3EFC-B6EF-0238-C55C-E471E1C8144E} = {EFCD3EFC-B6EF-0238-C55C-E471E1C8144E}
+		{B1E45BD3-5FEB-00BC-EA8C-220393153071} = {B1E45BD3-5FEB-00BC-EA8C-220393153071}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DownfallPlugin - Shared Code", "DownfallPlugin_SharedCode.vcxproj", "{EFCD3EFC-B6EF-0238-C55C-E471E1C8144E}"
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "DownfallPlugin - VST3 Manifest Helper", "DownfallPlugin_VST3ManifestHelper.vcxproj", "{B1E45BD3-5FEB-00BC-EA8C-220393153071}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{827937A7-DAE9-EE20-1E62-C8437FB19E21}.Debug|x64.ActiveCfg = Debug|x64
+		{827937A7-DAE9-EE20-1E62-C8437FB19E21}.Debug|x64.Build.0 = Debug|x64
+		{827937A7-DAE9-EE20-1E62-C8437FB19E21}.Release|x64.ActiveCfg = Release|x64
+		{827937A7-DAE9-EE20-1E62-C8437FB19E21}.Release|x64.Build.0 = Release|x64
+		{3A515949-4767-D788-18B6-C95358168E78}.Debug|x64.ActiveCfg = Debug|x64
+		{3A515949-4767-D788-18B6-C95358168E78}.Debug|x64.Build.0 = Debug|x64
+		{3A515949-4767-D788-18B6-C95358168E78}.Release|x64.ActiveCfg = Release|x64
+		{3A515949-4767-D788-18B6-C95358168E78}.Release|x64.Build.0 = Release|x64
+		{EFCD3EFC-B6EF-0238-C55C-E471E1C8144E}.Debug|x64.ActiveCfg = Debug|x64
+		{EFCD3EFC-B6EF-0238-C55C-E471E1C8144E}.Debug|x64.Build.0 = Debug|x64
+		{EFCD3EFC-B6EF-0238-C55C-E471E1C8144E}.Release|x64.ActiveCfg = Release|x64
+		{EFCD3EFC-B6EF-0238-C55C-E471E1C8144E}.Release|x64.Build.0 = Release|x64
+		{B1E45BD3-5FEB-00BC-EA8C-220393153071}.Debug|x64.ActiveCfg = Debug|x64
+		{B1E45BD3-5FEB-00BC-EA8C-220393153071}.Debug|x64.Build.0 = Debug|x64
+		{B1E45BD3-5FEB-00BC-EA8C-220393153071}.Release|x64.ActiveCfg = Release|x64
+		{B1E45BD3-5FEB-00BC-EA8C-220393153071}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+EndGlobal
