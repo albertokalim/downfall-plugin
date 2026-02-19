@@ -9,6 +9,7 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "Parameters.h"
 
 //==============================================================================
 /**
@@ -54,5 +55,10 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
 private:
+    Parameters parameters;
+
+    float outputGain = 0.0f;
+    juce::SmoothedValue<float> outputGainSmoother;
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DownfallPluginAudioProcessor)
 };

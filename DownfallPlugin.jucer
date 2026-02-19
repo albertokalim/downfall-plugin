@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <JUCERPROJECT id="AhCYYS" name="DownfallPlugin" projectType="audioplug" useAppConfig="0"
-              addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1">
+              addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1" companyName="Alberto"
+              cppLanguageStandard="20">
   <MAINGROUP id="waeduC" name="DownfallPlugin">
     <GROUP id="{F8CB0AB7-C922-98DF-A4F1-2526B85D879F}" name="Source">
+      <FILE id="dKC0rr" name="Parameters.h" compile="0" resource="0" file="Source/Parameters.h"/>
       <FILE id="ioT0KD" name="PluginProcessor.cpp" compile="1" resource="0"
             file="Source/PluginProcessor.cpp"/>
       <FILE id="ttdACv" name="PluginProcessor.h" compile="0" resource="0"
