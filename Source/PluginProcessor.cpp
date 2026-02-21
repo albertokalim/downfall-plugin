@@ -94,13 +94,13 @@ void DownfallPluginAudioProcessor::prepareToPlay (double sampleRate, int samples
 
     juce::dsp::ProcessSpec spec;
     spec.maximumBlockSize = static_cast<juce::uint32>(samplesPerBlock);
-    spec.numChannels = 2;
+    spec.numChannels = getTotalNumOutputChannels();
     spec.sampleRate = sampleRate;
-    gate.reset();
-    gate.prepare(spec);
-    gate.setAttack(1.f);
-    gate.setRelease(200.f);
-    gate.setRatio(1.f);
+    //gate.reset();
+    //gate.prepare(spec);
+    //gate.setAttack(1.f);
+    //gate.setRelease(200.f);
+    //gate.setRatio(1.f);
 }
 
 void DownfallPluginAudioProcessor::releaseResources()
@@ -138,13 +138,13 @@ void DownfallPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
-    inputGainSmoother.setTargetValue(parameters.inputGain.get());
-    outputGainSmoother.setTargetValue(parameters.outputGain.get());
-    gate.setThreshold(parameters.gateThreshold.get());
+    inputGainSmoother.setTargetValue(parameters.getInputGain().get());
+    outputGainSmoother.setTargetValue(parameters.getOutputGain().get());
+    //gate.setThreshold(parameters.getGateThreshold().get());
 
     buffer.applyGain(inputGainSmoother.getNextValue());
 
-    gate.process(buffer);
+    //gate.process(buffer);
 
     buffer.applyGain(juce::Decibels::decibelsToGain(outputGainSmoother.getNextValue()));
 }
