@@ -60,7 +60,7 @@ private:
     juce::SmoothedValue<float> inputGainSmoother;
     juce::SmoothedValue<float> outputGainSmoother;
 
-    //juce::dsp::NoiseGate<float> gate;
+    juce::dsp::NoiseGate<float> gate;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DownfallPluginAudioProcessor)
 };
