@@ -101,6 +101,9 @@ void DownfallPluginAudioProcessor::prepareToPlay (double sampleRate, int samples
     gate.setAttack(1.f);
     gate.setRelease(200.f);
     gate.setRatio(1.f);
+
+    cleanAmp.reset();
+    cleanAmp.prepare(spec);
 }
 
 void DownfallPluginAudioProcessor::releaseResources()
@@ -142,10 +145,12 @@ void DownfallPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
     outputGainSmoother.setTargetValue(parameters.getOutputGain().get());
     gate.setThreshold(parameters.getGateThreshold().get());
 
-    buffer.applyGain(inputGainSmoother.getNextValue());
+    buffer.applyGain(juce::Decibels::decibelsToGain(inputGainSmoother.getNextValue()));
 
     juce::dsp::AudioBlock<float> block(buffer);
     juce::dsp::ProcessContextReplacing<float> context(block);
+
+    cleanAmp.process(context);
 
     gate.process(context);
 

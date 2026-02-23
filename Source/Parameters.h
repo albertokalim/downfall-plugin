@@ -64,6 +64,16 @@ namespace parameters {
         juce::AudioParameterFloat& inputGain;
         juce::AudioParameterFloat& outputGain;
         juce::AudioParameterFloat& gateThreshold;
+
+        JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(GlobalParameters)
+    };
+
+    class PreAmpParameters {
+    public:
+
+    private:
+
+        JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PreAmpParameters)
     };
 
 };

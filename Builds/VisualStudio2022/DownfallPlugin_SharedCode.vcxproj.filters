@@ -3741,6 +3741,9 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Source\PreAmp.h">
+      <Filter>DownfallPlugin\Source</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\Parameters.h">
       <Filter>DownfallPlugin\Source</Filter>
     </ClInclude>
