@@ -56,7 +56,8 @@ public:
     void setStateInformation (const void* data, int sizeInBytes) override;
 
 private:
-    parameters::GlobalParameters parameters{ *this };
+    parameters::GlobalParameters globalParameters{ *this };
+    parameters::PreAmpParameters preAmpParameters{ *this };
 
     juce::SmoothedValue<float> inputGainSmoother;
     juce::SmoothedValue<float> outputGainSmoother;

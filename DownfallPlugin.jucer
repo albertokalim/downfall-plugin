@@ -5,6 +5,8 @@
               cppLanguageStandard="20">
   <MAINGROUP id="waeduC" name="DownfallPlugin">
     <GROUP id="{F8CB0AB7-C922-98DF-A4F1-2526B85D879F}" name="Source">
+      <FILE id="fV1kCp" name="ProcessorBase.h" compile="0" resource="0" file="Source/ProcessorBase.h"/>
+      <FILE id="kSGCtw" name="Utils.h" compile="0" resource="0" file="Source/Utils.h"/>
       <FILE id="e87VR3" name="PreAmp.h" compile="0" resource="0" file="Source/PreAmp.h"/>
       <FILE id="dKC0rr" name="Parameters.h" compile="0" resource="0" file="Source/Parameters.h"/>
       <FILE id="ioT0KD" name="PluginProcessor.cpp" compile="1" resource="0"

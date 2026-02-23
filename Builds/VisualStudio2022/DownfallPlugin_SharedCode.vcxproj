@@ -2997,6 +2997,8 @@
     <ClCompile Include="..\..\JuceLibraryCode\include_juce_gui_extra.cpp"/>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Source\ProcessorBase.h"/>
+    <ClInclude Include="..\..\Source\Utils.h"/>
     <ClInclude Include="..\..\Source\PreAmp.h"/>
     <ClInclude Include="..\..\Source\Parameters.h"/>
     <ClInclude Include="..\..\Source\PluginProcessor.h"/>

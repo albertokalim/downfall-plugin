@@ -102,12 +102,12 @@ void DownfallPluginAudioProcessor::prepareToPlay (double sampleRate, int samples
     gate.setRelease(200.f);
     gate.setRatio(1.f);
 
-    cleanAmp.reset();
-    cleanAmp.prepare(spec);
+    cleanAmp.prepareToPlay(sampleRate, samplesPerBlock);
 }
 
 void DownfallPluginAudioProcessor::releaseResources()
 {
+    cleanAmp.releaseResources();
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -141,17 +141,17 @@ void DownfallPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
-    inputGainSmoother.setTargetValue(parameters.getInputGain().get());
-    outputGainSmoother.setTargetValue(parameters.getOutputGain().get());
-    gate.setThreshold(parameters.getGateThreshold().get());
+    inputGainSmoother.setTargetValue(globalParameters.getInputGain().get());
+    outputGainSmoother.setTargetValue(globalParameters.getOutputGain().get());
+    gate.setThreshold(globalParameters.getGateThreshold().get());
 
     buffer.applyGain(juce::Decibels::decibelsToGain(inputGainSmoother.getNextValue()));
 
+    cleanAmp.updateParameters(preAmpParameters);
+    cleanAmp.processBlock(buffer, midiMessages);
+
     juce::dsp::AudioBlock<float> block(buffer);
     juce::dsp::ProcessContextReplacing<float> context(block);
-
-    cleanAmp.process(context);
-
     gate.process(context);
 
     buffer.applyGain(juce::Decibels::decibelsToGain(outputGainSmoother.getNextValue()));

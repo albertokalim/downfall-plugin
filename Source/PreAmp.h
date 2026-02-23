@@ -10,6 +10,8 @@
 
 #pragma once
 #include <JuceHeader.h>
+#include "Utils.h"
+#include "ProcessorBase.h"
 
 namespace preamp {
 
@@ -19,11 +21,14 @@ namespace preamp {
         }
     };
 
-    class PreAmp {
+    class PreAmp : public ProcessorBase{
     public:
-        virtual void prepare(const juce::dsp::ProcessSpec&) = 0;
-        virtual void process(const juce::dsp::ProcessContextReplacing<float>&) = 0;
-        virtual void reset() = 0;
+        void prepareToPlay(double, int) override {}
+        void releaseResources() override {}
+        void processBlock(juce::AudioSampleBuffer&, juce::MidiBuffer&) override {}
+
+    protected:
+        
     };
 
     class CleanAmp : public PreAmp {
@@ -31,22 +36,58 @@ namespace preamp {
         CleanAmp() {
 
         }
-        void prepare(const juce::dsp::ProcessSpec& spec) override {
+
+        void prepareToPlay(double sampleRate, int samplesPerBlock) override {
+            juce::dsp::ProcessSpec spec;
+            spec.maximumBlockSize = static_cast<juce::uint32>(samplesPerBlock);
+            spec.numChannels = getTotalNumOutputChannels();
+            spec.sampleRate = sampleRate;
+
+            gainSmoother.reset(sampleRate, 0.002f);
+            gainSmoother.setCurrentAndTargetValue(mapValueInRange(0.5f, MIN_DRIVE, MAX_DRIVE));
+
+            waveShaper.reset();
             waveShaper.prepare(spec);
         }
-        void process(const juce::dsp::ProcessContextReplacing<float>& context) override {
-            waveShaper.process(context);
+
+        void processBlock(juce::AudioSampleBuffer& buffer, juce::MidiBuffer&) override {
+
+            for (int channel = 0; channel < buffer.getNumChannels(); ++channel) {
+                auto* input = buffer.getReadPointer(channel);
+                auto* output = buffer.getWritePointer(channel);
+
+                for (int sample = 0; sample < buffer.getNumSamples(); ++sample)
+                {
+                    auto inputSample = input[sample];
+
+                    inputSample = inputSample * gainSmoother.getNextValue();
+
+                    output[sample] = waveShaper.processSample(inputSample);
+
+                }
+            }
         }
-        void reset() override {
-            waveShaper.reset();
+
+        void releaseResources() override {
+            
+        }
+
+        void updateParameters(parameters::PreAmpParameters& parameters) {
+            gainSmoother.setTargetValue(mapValueInRange(parameters.getGain().get() / 100.f, MIN_DRIVE, MAX_DRIVE));
         }
 
     private:
+        
+        static constexpr float MIN_DRIVE = 1.f;
+        static constexpr float MAX_DRIVE = 20.f;
+
         juce::dsp::WaveShaper<float> waveShaper{ { waveshapingFunctions::asymptoticLimit } };
-        float gain = 0.0f;
+        juce::SmoothedValue<float> gainSmoother;
         float bass = 0.0f;
         float middle = 0.0f;
         float treble = 0.0f;
         float master = 0.0f;
+
+
     };
 };

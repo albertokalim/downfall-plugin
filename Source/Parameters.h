@@ -48,7 +48,7 @@ namespace parameters {
                 juce::AudioParameterFloatAttributes{}.withLabel("dB"))),
             inputGain(createParameterFloat(audioProcessor,
                 "input.gain",
-                "Output gain",
+                "Input Gain",
                 juce::NormalisableRange{ -12.f, 12.f, 0.1f, 0.4f },
                 0.f,
                 juce::AudioParameterFloatAttributes{}.withLabel("dB")))
@@ -70,8 +70,19 @@ namespace parameters {
 
     class PreAmpParameters {
     public:
+        explicit PreAmpParameters(juce::AudioProcessor& audioProcessor) 
+            : gain(createParameterFloat(audioProcessor, 
+                "gain", 
+                "Gain", 
+                juce::NormalisableRange{ 0.f, 100.f, 0.1f, 0.4f },
+                50.f,
+                juce::AudioParameterFloatAttributes{}.withLabel("%")))
+        {}
+
+        juce::AudioParameterFloat& getGain() { return gain; };
 
     private:
+        juce::AudioParameterFloat& gain;
 
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PreAmpParameters)
     };
