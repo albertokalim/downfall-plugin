@@ -4,6 +4,9 @@
               addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1" companyName="Alberto"
               cppLanguageStandard="20">
   <MAINGROUP id="waeduC" name="DownfallPlugin">
+    <GROUP id="{A1DA6CA4-139B-F186-11C3-D64C53B3EB6F}" name="Resources">
+      <FILE id="DQnZGg" name="test-ir.wav" compile="0" resource="1" file="../../../test-ir.wav"/>
+    </GROUP>
     <GROUP id="{F8CB0AB7-C922-98DF-A4F1-2526B85D879F}" name="Source">
       <FILE id="fV1kCp" name="ProcessorBase.h" compile="0" resource="0" file="Source/ProcessorBase.h"/>
       <FILE id="kSGCtw" name="Utils.h" compile="0" resource="0" file="Source/Utils.h"/>

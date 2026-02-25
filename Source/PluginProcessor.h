@@ -65,5 +65,7 @@ private:
     juce::dsp::NoiseGate<float> gate;
     preamp::CleanAmp cleanAmp;
 
+    juce::dsp::Convolution convolution;
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DownfallPluginAudioProcessor)
 };

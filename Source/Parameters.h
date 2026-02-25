@@ -31,39 +31,54 @@ namespace parameters {
         return addParameterToProcessor(processor, std::move(parameter));
     }
 
+    static juce::AudioParameterBool& createParameterBool(juce::AudioProcessor& processor, juce::String parameterID, juce::String parameterName,
+        bool initialValue) {
+        auto parameter = std::make_unique<juce::AudioParameterBool>(
+            juce::ParameterID{ parameterID, versionHint },
+            parameterName,
+            initialValue);
+        return addParameterToProcessor(processor, std::move(parameter));
+    }
+
     class GlobalParameters {
     public:
         explicit GlobalParameters(juce::AudioProcessor& audioProcessor)
             : outputGain(createParameterFloat(audioProcessor,
                 "output.gain",
                 "Output gain",
-                juce::NormalisableRange{ -12.f, 12.f, 0.1f, 0.4f },
+                juce::NormalisableRange{ -24.f, 24.f },
                 0.f,
                 juce::AudioParameterFloatAttributes{}.withLabel("dB"))),
             gateThreshold(createParameterFloat(audioProcessor,
                 "gate.threshold",
                 "Gate Threshold",
-                juce::NormalisableRange{ -96.f, 0.f, 0.1f, 0.4f },
+                juce::NormalisableRange{ -96.f, 0.f },
                 -96.f,
                 juce::AudioParameterFloatAttributes{}.withLabel("dB"))),
             inputGain(createParameterFloat(audioProcessor,
                 "input.gain",
                 "Input Gain",
-                juce::NormalisableRange{ -12.f, 12.f, 0.1f, 0.4f },
+                juce::NormalisableRange{ -24.f, 24.f },
                 0.f,
-                juce::AudioParameterFloatAttributes{}.withLabel("dB")))
+                juce::AudioParameterFloatAttributes{}.withLabel("dB"))),
+            bypassCabinet(createParameterBool(audioProcessor,
+                "bypassCabinet",
+                "Bypass Cabinet",
+                false))
         {
         }
 
         juce::AudioParameterFloat& getInputGain() { return inputGain; }
         juce::AudioParameterFloat& getOutputGain() { return outputGain; }
         juce::AudioParameterFloat& getGateThreshold() { return gateThreshold; }
+        juce::AudioParameterBool& getBypassCabinet() { return bypassCabinet; }
 
     private:
 
         juce::AudioParameterFloat& inputGain;
         juce::AudioParameterFloat& outputGain;
         juce::AudioParameterFloat& gateThreshold;
+        juce::AudioParameterBool& bypassCabinet;
 
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(GlobalParameters)
     };
@@ -74,7 +89,7 @@ namespace parameters {
             : gain(createParameterFloat(audioProcessor, 
                 "gain", 
                 "Gain", 
-                juce::NormalisableRange{ 0.f, 100.f, 0.1f, 0.4f },
+                juce::NormalisableRange{ 0.f, 100.f },
                 50.f,
                 juce::AudioParameterFloatAttributes{}.withLabel("%")))
         {}

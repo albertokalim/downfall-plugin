@@ -102,12 +102,21 @@ void DownfallPluginAudioProcessor::prepareToPlay (double sampleRate, int samples
     gate.setRelease(200.f);
     gate.setRatio(1.f);
 
-    cleanAmp.prepareToPlay(sampleRate, samplesPerBlock);
+    cleanAmp.reset();
+    cleanAmp.prepare(spec);
+
+    convolution.reset();
+    convolution.prepare(spec);
+    //TODO: For now the IR is a raw file. In the future a file selector will be provided.
+    convolution.loadImpulseResponse(BinaryData::testir_wav, BinaryData::testir_wavSize, 
+        juce::dsp::Convolution::Stereo::yes, 
+        juce::dsp::Convolution::Trim::yes,
+        0);
 }
 
 void DownfallPluginAudioProcessor::releaseResources()
 {
-    cleanAmp.releaseResources();
+
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -148,11 +157,15 @@ void DownfallPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
     buffer.applyGain(juce::Decibels::decibelsToGain(inputGainSmoother.getNextValue()));
 
     cleanAmp.updateParameters(preAmpParameters);
-    cleanAmp.processBlock(buffer, midiMessages);
 
     juce::dsp::AudioBlock<float> block(buffer);
     juce::dsp::ProcessContextReplacing<float> context(block);
+    cleanAmp.process(context);
     gate.process(context);
+
+    if (!globalParameters.getBypassCabinet().get()) {
+        convolution.process(context);
+    }
 
     buffer.applyGain(juce::Decibels::decibelsToGain(outputGainSmoother.getNextValue()));
 }
