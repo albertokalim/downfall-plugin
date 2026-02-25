@@ -97,15 +97,39 @@ namespace parameters {
                 "Bass",
                 juce::NormalisableRange{ 0.f, 100.f },
                 50.f,
+                juce::AudioParameterFloatAttributes{}.withLabel("%"))),
+            middle(createParameterFloat(audioProcessor,
+                "middle",
+                "Middle",
+                juce::NormalisableRange{ 0.f, 100.f },
+                50.f,
+                juce::AudioParameterFloatAttributes{}.withLabel("%"))),
+            treble(createParameterFloat(audioProcessor,
+                "treble",
+                "Treble",
+                juce::NormalisableRange{ 0.f, 100.f },
+                50.f,
+                juce::AudioParameterFloatAttributes{}.withLabel("%"))),
+            master(createParameterFloat(audioProcessor,
+                "master",
+                "Master",
+                juce::NormalisableRange{ 0.f, 100.f },
+                50.f,
                 juce::AudioParameterFloatAttributes{}.withLabel("%")))
         {}
 
-        juce::AudioParameterFloat& getGain() { return gain; };
+        juce::AudioParameterFloat& getGain() { return gain; }
         juce::AudioParameterFloat& getBass() { return bass; }
+        juce::AudioParameterFloat& getMiddle() { return middle; }
+        juce::AudioParameterFloat& getTreble() { return treble; }
+        juce::AudioParameterFloat& getMaster() { return master; }
 
     private:
         juce::AudioParameterFloat& gain;
         juce::AudioParameterFloat& bass;
+        juce::AudioParameterFloat& middle;
+        juce::AudioParameterFloat& treble;
+        juce::AudioParameterFloat& master;
 
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PreAmpParameters)
     };
