@@ -91,13 +91,21 @@ namespace parameters {
                 "Gain", 
                 juce::NormalisableRange{ 0.f, 100.f },
                 50.f,
+                juce::AudioParameterFloatAttributes{}.withLabel("%"))),
+            bass(createParameterFloat(audioProcessor,
+                "bass",
+                "Bass",
+                juce::NormalisableRange{ 0.f, 100.f },
+                50.f,
                 juce::AudioParameterFloatAttributes{}.withLabel("%")))
         {}
 
         juce::AudioParameterFloat& getGain() { return gain; };
+        juce::AudioParameterFloat& getBass() { return bass; }
 
     private:
         juce::AudioParameterFloat& gain;
+        juce::AudioParameterFloat& bass;
 
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PreAmpParameters)
     };
