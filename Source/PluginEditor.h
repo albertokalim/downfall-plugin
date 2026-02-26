@@ -28,6 +28,8 @@ private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     DownfallPluginAudioProcessor& audioProcessor;
+    std::unique_ptr<juce::FileChooser> fileChooser;
+    juce::TextButton fileChooserButton;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DownfallPluginAudioProcessorEditor)
 };

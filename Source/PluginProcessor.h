@@ -55,6 +55,8 @@ public:
     void getStateInformation (juce::MemoryBlock& destData) override;
     void setStateInformation (const void* data, int sizeInBytes) override;
 
+    void setIRToConvolution(juce::File newIRFile);
+
 private:
     parameters::GlobalParameters globalParameters{ *this };
     parameters::PreAmpParameters preAmpParameters{ *this };

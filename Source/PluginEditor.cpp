@@ -15,6 +15,22 @@ DownfallPluginAudioProcessorEditor::DownfallPluginAudioProcessorEditor (Downfall
 {
     // Make sure that before the constructor has finished, you've set the
     // editor's size to whatever you need it to be.
+    fileChooserButton.setButtonText("Load IR");
+    fileChooserButton.setBounds(0, 0, 70, 27);
+
+    fileChooserButton.onClick = [this] {
+        fileChooser = std::make_unique<juce::FileChooser>("Select an IR File to load...",
+            juce::File::getSpecialLocation(juce::File::userHomeDirectory),
+            "*.wav");
+
+        fileChooser->launchAsync(juce::FileBrowserComponent::openMode, [this](const juce::FileChooser& chooser)
+            {
+                juce::File newIRFile(chooser.getResult());
+                audioProcessor.setIRToConvolution(newIRFile);
+            });
+        };
+
+    addAndMakeVisible(fileChooserButton);
     setSize (400, 300);
 }
 
@@ -30,11 +46,11 @@ void DownfallPluginAudioProcessorEditor::paint (juce::Graphics& g)
 
     g.setColour (juce::Colours::white);
     g.setFont (juce::FontOptions (15.0f));
-    g.drawFittedText ("Hello World!", getLocalBounds(), juce::Justification::centred, 1);
 }
 
 void DownfallPluginAudioProcessorEditor::resized()
 {
-    // This is generally where you'll want to lay out the positions of any
-    // subcomponents in your editor..
+    auto bounds = getLocalBounds();
+
+    fileChooserButton.setTopLeftPosition(bounds.getCentreX() - fileChooserButton.getWidth() / 2, bounds.getCentreY() - fileChooserButton.getWidth() / 2);
 }

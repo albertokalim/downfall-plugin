@@ -19,14 +19,14 @@ namespace preamp {
     static constexpr float MAX_DRIVE = 20.f;
     static constexpr float MAX_BAND_GAIN = 6.f;
     static constexpr float MIN_BAND_GAIN = -6.f;
+    static constexpr float HPF_CENTER_FQ = 20.0f;
+    static constexpr float HPF_Q_FACTOR = 0.9f;
     static constexpr float BASS_CENTER_FQ = 100.f;
     static constexpr float BASS_Q_FACTOR = 0.6f;
     static constexpr float MID_CENTER_FQ = 500.f;
     static constexpr float MID_Q_FACTOR = 0.9f;
     static constexpr float TREBLE_CENTER_FQ = 5000.f;
     static constexpr float TREBLE_Q_FACTOR = 0.6f; 
-    static constexpr float MIN_MASTER_GAIN = -96.f;
-    static constexpr float MAX_MASTER_GAIN = 4.f;
 
     namespace waveshapingFunctions {
         static float asymptoticLimit(float x) {
@@ -62,7 +62,7 @@ namespace preamp {
                 TREBLE_Q_FACTOR,
                 juce::Decibels::decibelsToGain(trebleSmoother.getNextValue()));
 
-            master.setGainDecibels(mapValueInRange(parameters.getMaster().get() / 100.f, MIN_MASTER_GAIN, MAX_MASTER_GAIN));
+            master.setGainLinear(parameters.getMaster().get() / 100.f);
         }
 
     protected:
@@ -108,6 +108,10 @@ namespace preamp {
             waveShaper.reset();
             waveShaper.prepare(spec);
 
+            highPassFilter.reset();
+            *highPassFilter.state = *juce::dsp::IIR::Coefficients<float>::makeHighPass(spec.sampleRate, HPF_CENTER_FQ, HPF_Q_FACTOR);
+            highPassFilter.prepare(spec);
+
             bassEQ.reset();
             *bassEQ.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(spec.sampleRate, BASS_CENTER_FQ, BASS_Q_FACTOR, 0.f);
             bassEQ.prepare(spec);
@@ -122,12 +126,13 @@ namespace preamp {
 
             master.reset();
             master.prepare(spec);
-            master.setGainDecibels(mapValueInRange(0.5f, MIN_MASTER_GAIN, MAX_MASTER_GAIN));
+            master.setGainLinear(0.5f);
         }
 
         void process(juce::dsp::ProcessContextReplacing<float>& context) override {
             gain.process(context);
             waveShaper.process(context);
+            highPassFilter.process(context);
             bassEQ.process(context);
             middleEQ.process(context);
             trebleEQ.process(context);
@@ -140,5 +145,6 @@ namespace preamp {
 
     private:
         juce::dsp::WaveShaper<float> waveShaper{ { waveshapingFunctions::asymptoticLimit } };
+        juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> highPassFilter;
     };
 };

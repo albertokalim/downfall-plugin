@@ -108,10 +108,10 @@ void DownfallPluginAudioProcessor::prepareToPlay (double sampleRate, int samples
     convolution.reset();
     convolution.prepare(spec);
     //TODO: For now the IR is a raw file. In the future a file selector will be provided.
-    convolution.loadImpulseResponse(BinaryData::testir_wav, BinaryData::testir_wavSize, 
-        juce::dsp::Convolution::Stereo::yes, 
-        juce::dsp::Convolution::Trim::yes,
-        0);
+    //convolution.loadImpulseResponse(BinaryData::testir_wav, BinaryData::testir_wavSize, 
+    //    juce::dsp::Convolution::Stereo::yes, 
+    //    juce::dsp::Convolution::Trim::yes,
+    //    0);
 }
 
 void DownfallPluginAudioProcessor::releaseResources()
@@ -143,6 +143,7 @@ bool DownfallPluginAudioProcessor::isBusesLayoutSupported (const BusesLayout& la
 
 void DownfallPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
+
     juce::ScopedNoDenormals noDenormals;
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
@@ -173,7 +174,7 @@ void DownfallPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
 //==============================================================================
 bool DownfallPluginAudioProcessor::hasEditor() const
 {
-    return false; // (change this to false if you choose to not supply an editor)
+    return true; // (change this to false if you choose to not supply an editor)
 }
 
 juce::AudioProcessorEditor* DownfallPluginAudioProcessor::createEditor()
@@ -193,6 +194,14 @@ void DownfallPluginAudioProcessor::setStateInformation (const void* data, int si
 {
     // You should use this method to restore your parameters from this memory block,
     // whose contents will have been created by the getStateInformation() call.
+}
+
+void DownfallPluginAudioProcessor::setIRToConvolution(juce::File newIRFile)
+{
+    convolution.loadImpulseResponse(newIRFile,
+        juce::dsp::Convolution::Stereo::yes,
+        juce::dsp::Convolution::Trim::yes,
+        0);
 }
 
 //==============================================================================
