@@ -66,6 +66,7 @@ private:
 
     juce::dsp::NoiseGate<float> gate;
     preamp::CleanAmp cleanAmp;
+    preamp::HighGainAmp highGainAmp;
 
     juce::dsp::Convolution convolution;
 

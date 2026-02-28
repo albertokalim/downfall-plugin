@@ -105,6 +105,9 @@ void DownfallPluginAudioProcessor::prepareToPlay (double sampleRate, int samples
     cleanAmp.reset();
     cleanAmp.prepare(spec);
 
+    highGainAmp.reset();
+    highGainAmp.prepare(spec);
+
     convolution.reset();
     convolution.prepare(spec);
     //TODO: For now the IR is a raw file. In the future a file selector will be provided.
@@ -157,11 +160,13 @@ void DownfallPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
 
     buffer.applyGain(juce::Decibels::decibelsToGain(inputGainSmoother.getNextValue()));
 
-    cleanAmp.updateParameters(preAmpParameters);
+    //cleanAmp.updateCommonParameters(preAmpParameters);
+    highGainAmp.updateCommonParameters(preAmpParameters);
 
     juce::dsp::AudioBlock<float> block(buffer);
     juce::dsp::ProcessContextReplacing<float> context(block);
-    cleanAmp.process(context);
+    //cleanAmp.process(context);
+    highGainAmp.process(context);
     gate.process(context);
 
     if (!globalParameters.getBypassCabinet().get()) {

@@ -30,7 +30,16 @@ namespace preamp {
 
     namespace waveshapingFunctions {
         static float asymptoticLimit(float x) {
-            return (5*x) / (std::abs(5*x) + 1);
+            return (5.f * x) / (std::abs(5.f * x) + 1.f);
+        }
+
+        static float tanh(float x) {
+            return std::tanh(4.98f*x);
+        }
+
+        static float polynomial(float x) {
+            float input = std::clamp(x, -1.f, 1.f);
+            return 3/2 * std::sin(input) - 1/2 * std::pow(std::sin(input), 3);
         }
     };
 
@@ -40,7 +49,7 @@ namespace preamp {
         virtual void process(juce::dsp::ProcessContextReplacing<float>& context) = 0;
         virtual void reset() = 0;
 
-        void updateParameters(parameters::PreAmpParameters& parameters) {
+        void updateCommonParameters(parameters::PreAmpParameters& parameters) {
 
             gain.setGainLinear(mapValueInRange(parameters.getGain().get() / 100.f, MIN_DRIVE, MAX_DRIVE));
 
@@ -80,15 +89,8 @@ namespace preamp {
         juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> bassEQ;
         juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> middleEQ;
         juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> trebleEQ;
-    };
 
-    class CleanAmp : public PreAmp {
-    public:
-        CleanAmp() {
-
-        }
-
-        void prepare(juce::dsp::ProcessSpec& spec) override {
+        void prepareCommonParameters(juce::dsp::ProcessSpec& spec) {
 
             sampleRate = spec.sampleRate;
 
@@ -104,13 +106,6 @@ namespace preamp {
 
             trebleSmoother.reset(spec.sampleRate, 0.002f);
             trebleSmoother.setCurrentAndTargetValue(mapValueInRange(0.5f, MIN_BAND_GAIN, MAX_BAND_GAIN));
-
-            waveShaper.reset();
-            waveShaper.prepare(spec);
-
-            highPassFilter.reset();
-            *highPassFilter.state = *juce::dsp::IIR::Coefficients<float>::makeHighPass(spec.sampleRate, HPF_CENTER_FQ, HPF_Q_FACTOR);
-            highPassFilter.prepare(spec);
 
             bassEQ.reset();
             *bassEQ.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(spec.sampleRate, BASS_CENTER_FQ, BASS_Q_FACTOR, 0.f);
@@ -128,14 +123,36 @@ namespace preamp {
             master.prepare(spec);
             master.setGainLinear(0.5f);
         }
+    };
+
+    class CleanAmp : public PreAmp {
+    public:
+        CleanAmp() {
+
+        }
+
+        void prepare(juce::dsp::ProcessSpec& spec) override {
+            prepareCommonParameters(spec);
+
+            waveShaper.reset();
+            waveShaper.prepare(spec);
+
+            highPassFilter.reset();
+            *highPassFilter.state = *juce::dsp::IIR::Coefficients<float>::makeHighPass(spec.sampleRate, HPF_CENTER_FQ, HPF_Q_FACTOR);
+            highPassFilter.prepare(spec);
+        }
 
         void process(juce::dsp::ProcessContextReplacing<float>& context) override {
+
             gain.process(context);
+
             waveShaper.process(context);
             highPassFilter.process(context);
+
             bassEQ.process(context);
             middleEQ.process(context);
             trebleEQ.process(context);
+
             master.process(context);
         }
 
@@ -146,5 +163,99 @@ namespace preamp {
     private:
         juce::dsp::WaveShaper<float> waveShaper{ { waveshapingFunctions::asymptoticLimit } };
         juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> highPassFilter;
+    };
+
+    class HighGainAmp : public PreAmp {
+    public:
+        HighGainAmp() {
+
+        }
+        void prepare(juce::dsp::ProcessSpec& spec) override {
+
+            oversampler = std::unique_ptr<juce::dsp::Oversampling<float>>(new juce::dsp::Oversampling<float>(spec.numChannels,
+                2,
+                juce::dsp::Oversampling<float>::filterHalfBandPolyphaseIIR)
+            );
+
+            prepareCommonParameters(spec);
+
+            oversampler->reset();
+            oversampler->initProcessing(spec.maximumBlockSize);
+
+            juce::dsp::ProcessSpec osSpec;
+            osSpec.maximumBlockSize = spec.maximumBlockSize;
+            osSpec.numChannels = spec.numChannels;
+            osSpec.sampleRate = spec.sampleRate * oversampler->getOversamplingFactor();
+
+            waveShaperFirst.reset();
+            waveShaperFirst.prepare(osSpec);
+
+            highPassFilterFirst.reset();
+            *highPassFilterFirst.state = *juce::dsp::IIR::Coefficients<float>::makeHighPass(osSpec.sampleRate, HPF_CENTER_FQ, HPF_Q_FACTOR);
+            highPassFilterFirst.prepare(osSpec);
+
+            waveShaperSecond.reset();
+            waveShaperSecond.prepare(osSpec);
+
+            highPassFilterSecond.reset();
+            *highPassFilterSecond.state = *juce::dsp::IIR::Coefficients<float>::makeHighPass(osSpec.sampleRate, HPF_CENTER_FQ, HPF_Q_FACTOR);
+            highPassFilterSecond.prepare(osSpec);
+
+            waveShaperThird.reset();
+            waveShaperThird.prepare(osSpec);
+
+            highPassFilterThird.reset();
+            *highPassFilterThird.state = *juce::dsp::IIR::Coefficients<float>::makeHighPass(osSpec.sampleRate, 30.f, 0.6f);
+            highPassFilterThird.prepare(osSpec);
+
+            midBoostFilter.reset();
+            *midBoostFilter.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(spec.sampleRate, 710.71f, 0.9f, 6.13f);
+            midBoostFilter.prepare(spec);
+        }
+
+        void process(juce::dsp::ProcessContextReplacing<float>& context) override {
+
+            gain.process(context);
+
+            auto upSampleBlock = oversampler->processSamplesUp(context.getOutputBlock());
+            juce::dsp::ProcessContextReplacing<float> upSampleContext(upSampleBlock);
+
+            waveShaperFirst.process(upSampleContext);
+            highPassFilterFirst.process(upSampleContext);
+
+            waveShaperSecond.process(upSampleContext);
+            highPassFilterSecond.process(upSampleContext);
+
+            waveShaperThird.process(upSampleContext);
+            highPassFilterThird.process(upSampleContext);
+
+            oversampler->processSamplesDown(context.getOutputBlock());
+
+            midBoostFilter.process(context);
+
+            bassEQ.process(context);
+            middleEQ.process(context);
+            trebleEQ.process(context);
+
+            master.process(context);
+        }
+
+        void reset() override {
+
+        }
+
+    private:
+        std::unique_ptr<juce::dsp::Oversampling<float>> oversampler;
+
+        juce::dsp::WaveShaper<float> waveShaperFirst{ { waveshapingFunctions::asymptoticLimit } };
+        juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> highPassFilterFirst;
+
+        juce::dsp::WaveShaper<float> waveShaperSecond{ { waveshapingFunctions::tanh } };
+        juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> highPassFilterSecond;
+
+        juce::dsp::WaveShaper<float> waveShaperThird{ { waveshapingFunctions::polynomial } };
+        juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> highPassFilterThird;
+
+        juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> midBoostFilter;
     };
 };
