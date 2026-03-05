@@ -44,6 +44,11 @@ namespace preamp {
         static float tanh2(float x) {
             return std::tanh(3.96f * x);
         }
+
+        static float polynomial(float x) {
+            float limit = juce::jlimit(-1.f, 1.f, x);
+            return (-0.5f * limit) + (3/2 * std::pow(limit, 3));
+        }
     };
 
     class PreAmp {
@@ -82,6 +87,8 @@ namespace preamp {
         using IIRCoefs = juce::dsp::IIR::Coefficients<float>;
 
         double sampleRate = 44100;
+        float minDrive = 0.f;
+        float maxDrive = 0.f;
 
         juce::dsp::Gain<float> gain;
         juce::SmoothedValue<float> bassSmoother;
@@ -99,7 +106,7 @@ namespace preamp {
 
             gain.reset();
             gain.prepare(spec);
-            gain.setGainLinear(mapValueInRange(0.5f, MIN_DRIVE, MAX_DRIVE));
+            gain.setGainLinear(mapValueInRange(0.5f, minDrive, maxDrive));
 
             bassSmoother.reset(spec.sampleRate, 0.002f);
             bassSmoother.setCurrentAndTargetValue(mapValueInRange(0.5f, MIN_BAND_GAIN, MAX_BAND_GAIN));
@@ -135,6 +142,9 @@ namespace preamp {
         }
 
         void prepare(juce::dsp::ProcessSpec& spec) override {
+            minDrive = 1.f;
+            maxDrive = 20.f;
+
             prepareCommonParameters(spec);
 
             oversampler = std::unique_ptr<juce::dsp::Oversampling<float>>(new juce::dsp::Oversampling<float>(spec.numChannels,
@@ -201,6 +211,8 @@ namespace preamp {
         }
 
         void prepare(juce::dsp::ProcessSpec& spec) override {
+            minDrive = 20.f;
+            maxDrive = 100.f;
             prepareCommonParameters(spec);
             
             oversampler = std::unique_ptr<juce::dsp::Oversampling<float>>(new juce::dsp::Oversampling<float>(spec.numChannels,
@@ -232,9 +244,13 @@ namespace preamp {
             *highPassFilterDC.state = *juce::dsp::IIR::Coefficients<float>::makeHighPass(osSpec.sampleRate, 45.699f, HPF_Q_FACTOR);
             highPassFilterDC.prepare(osSpec);
 
-            gain2.reset();
-            gain2.prepare(osSpec);
-            gain2.setGainLinear(10.f);
+            highShelf.reset();
+            *highShelf.state = *juce::dsp::IIR::Coefficients<float>::makeHighShelf(spec.sampleRate, 6000.f, 0.3f, 6.64f);
+            highShelf.prepare(spec);
+
+            midBoost.reset();
+            *midBoost.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(spec.sampleRate, 1120.3f, 1.085f, 2.9f);
+            midBoost.prepare(spec);
 
         }
 
@@ -246,14 +262,15 @@ namespace preamp {
 
             waveShaper1.process(upSampleContext);
             waveShaper2.process(upSampleContext);
-
-            gain2.process(upSampleContext);
-
             waveShaper3.process(upSampleContext);
             waveShaper4.process(upSampleContext);
+
             highPassFilterDC.process(upSampleContext);
             
             oversampler->processSamplesDown(context.getOutputBlock());
+
+            midBoost.process(context);
+            highShelf.process(context);
 
             bassEQ.process(context);
             middleEQ.process(context);
@@ -267,14 +284,14 @@ namespace preamp {
         }
 
     private:
-        std::unique_ptr<juce::dsp::Oversampling<float>> oversampler;//TODO: This three can make a class maybe? (Class A - Class B Amp)
+        std::unique_ptr<juce::dsp::Oversampling<float>> oversampler;
 
-        juce::dsp::WaveShaper<float> waveShaper1{ { waveshapingFunctions::tanh } };
-        juce::dsp::WaveShaper<float> waveShaper2{ { waveshapingFunctions::tanh2 } };
-        juce::dsp::Gain<float> gain2;
-        juce::dsp::WaveShaper<float> waveShaper3{ { waveshapingFunctions::asymptoticLimit } };
-        juce::dsp::WaveShaper<float> waveShaper4{ { waveshapingFunctions::asymptoticLimit2 } };
+        juce::dsp::WaveShaper<float> waveShaper1{ { waveshapingFunctions::asymptoticLimit } };
+        juce::dsp::WaveShaper<float> waveShaper2{ { waveshapingFunctions::tanh } };
+        juce::dsp::WaveShaper<float> waveShaper3{ { waveshapingFunctions::tanh2 } };
+        juce::dsp::WaveShaper<float> waveShaper4{ { waveshapingFunctions::polynomial } };
         juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> highPassFilterDC;
-        juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> lowPassFilter;
+        juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> midBoost;
+        juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> highShelf;
     };
 };
