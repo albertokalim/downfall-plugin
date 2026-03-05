@@ -40,6 +40,17 @@ namespace parameters {
         return addParameterToProcessor(processor, std::move(parameter));
     }
 
+    static juce::AudioParameterChoice& createParameterChoice(juce::AudioProcessor& processor, juce::String parameterID, juce::String parameterName, 
+        juce::StringArray values, int initialValueIndex) {
+        auto parameter = std::make_unique<juce::AudioParameterChoice>(
+            juce::ParameterID{ parameterID, versionHint },
+            parameterName,
+            values,
+            initialValueIndex
+        );
+        return addParameterToProcessor(processor, std::move(parameter));
+    }
+
     class GlobalParameters {
     public:
         explicit GlobalParameters(juce::AudioProcessor& audioProcessor)
@@ -115,7 +126,12 @@ namespace parameters {
                 "Master",
                 juce::NormalisableRange{ 0.f, 100.f },
                 50.f,
-                juce::AudioParameterFloatAttributes{}.withLabel("%")))
+                juce::AudioParameterFloatAttributes{}.withLabel("%"))),
+            ampType(createParameterChoice(audioProcessor,
+                "ampType",
+                "Amp Type",
+                juce::StringArray {"Clean", "HighGain"},
+                0))
         {}
 
         juce::AudioParameterFloat& getGain() { return gain; }
@@ -123,6 +139,7 @@ namespace parameters {
         juce::AudioParameterFloat& getMiddle() { return middle; }
         juce::AudioParameterFloat& getTreble() { return treble; }
         juce::AudioParameterFloat& getMaster() { return master; }
+        juce::AudioParameterChoice& getAmpType() { return ampType; }
 
     private:
         juce::AudioParameterFloat& gain;
@@ -130,6 +147,7 @@ namespace parameters {
         juce::AudioParameterFloat& middle;
         juce::AudioParameterFloat& treble;
         juce::AudioParameterFloat& master;
+        juce::AudioParameterChoice& ampType;
 
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PreAmpParameters)
     };
