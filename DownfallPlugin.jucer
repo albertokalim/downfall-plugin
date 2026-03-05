@@ -8,6 +8,9 @@
       <FILE id="DQnZGg" name="test-ir.wav" compile="0" resource="1" file="../../../test-ir.wav"/>
     </GROUP>
     <GROUP id="{F8CB0AB7-C922-98DF-A4F1-2526B85D879F}" name="Source">
+      <FILE id="e66wnY" name="PreAmp.cpp" compile="1" resource="0" file="Source/PreAmp.cpp"/>
+      <FILE id="VBWdA4" name="Distortion.cpp" compile="1" resource="0" file="Source/Distortion.cpp"/>
+      <FILE id="nzJh8h" name="Distortion.h" compile="0" resource="0" file="Source/Distortion.h"/>
       <FILE id="fV1kCp" name="ProcessorBase.h" compile="0" resource="0" file="Source/ProcessorBase.h"/>
       <FILE id="kSGCtw" name="Utils.h" compile="0" resource="0" file="Source/Utils.h"/>
       <FILE id="e87VR3" name="PreAmp.h" compile="0" resource="0" file="Source/PreAmp.h"/>
