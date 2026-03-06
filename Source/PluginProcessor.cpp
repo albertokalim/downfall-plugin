@@ -110,10 +110,6 @@ void DownfallPluginAudioProcessor::prepareToPlay (double sampleRate, int samples
 
     convolution.reset();
     convolution.prepare(spec);
-    convolution.loadImpulseResponse(BinaryData::testir_wav, BinaryData::testir_wavSize,
-        juce::dsp::Convolution::Stereo::yes,
-        juce::dsp::Convolution::Trim::yes,
-        0);
 }
 
 void DownfallPluginAudioProcessor::releaseResources()
