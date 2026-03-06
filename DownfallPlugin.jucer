@@ -43,8 +43,8 @@
   <EXPORTFORMATS>
     <VS2022 targetFolder="Builds/VisualStudio2022">
       <CONFIGURATIONS>
-        <CONFIGURATION isDebug="1" name="Debug" targetName="DownfallPlugin" useRuntimeLibDLL="0"/>
-        <CONFIGURATION isDebug="0" name="Release" targetName="DownfallPlugin" useRuntimeLibDLL="0"/>
+        <CONFIGURATION isDebug="1" name="Debug" targetName="DownfallPlugin"/>
+        <CONFIGURATION isDebug="0" name="Release" targetName="DownfallPlugin"/>
       </CONFIGURATIONS>
       <MODULEPATHS>
         <MODULEPATH id="juce_audio_basics" path="C:/JUCE/modules"/>

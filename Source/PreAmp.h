@@ -33,8 +33,12 @@ namespace preamp {
             return x / (std::abs(x) + 1.f);
         }
 
+        static float asymptoticLimit2(float x) {
+            return (5.f*x) / ((std::abs(5.f*x) + 1.f));
+        }
+
         static float tanh(float x) {
-            return std::tanh(5.f * x);
+            return std::tanh(5.f*x);
         }
 
         static float tanh2(float x) {
