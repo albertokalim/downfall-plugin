@@ -12,8 +12,6 @@
 #include <JuceHeader.h>
 #include "Utils.h"
 #include "ProcessorBase.h"
-#include "Parameters.h"
-#include "Distortion.h"
 
 namespace preamp {
 
@@ -30,13 +28,55 @@ namespace preamp {
     static constexpr float TREBLE_CENTER_FQ = 5000.f;
     static constexpr float TREBLE_Q_FACTOR = 0.6f; 
 
+    namespace waveshapingFunctions {
+        static float asymptoticLimit(float x) {
+            return x / (std::abs(x) + 1.f);
+        }
+
+        static float tanh(float x) {
+            return std::tanh(5.f * x);
+        }
+
+        static float tanh2(float x) {
+            return std::tanh(3.96f * x);
+        }
+
+        static float polynomial(float x) {
+            float limit = juce::jlimit(-1.f, 1.f, x);
+            return (-0.5f * limit) + (3/2 * std::pow(limit, 3));
+        }
+    };
+
     class PreAmp {
     public:
         virtual void prepare(juce::dsp::ProcessSpec& spec) = 0;
-        virtual void process(juce::dsp::ProcessContextReplacing<float>& context);
+        virtual void process(juce::dsp::ProcessContextReplacing<float>& context) = 0;
         virtual void reset() = 0;
 
-        void updateCommonParameters(parameters::PreAmpParameters& parameters);
+        void updateCommonParameters(parameters::PreAmpParameters& parameters) {
+
+            gain.setGainLinear(mapValueInRange(parameters.getGain().get() / 100.f, MIN_DRIVE, MAX_DRIVE));
+
+            bassSmoother.setTargetValue(mapValueInRange(parameters.getBass().get() / 100.f, MIN_BAND_GAIN, MAX_BAND_GAIN));
+            *bassEQ.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(sampleRate, 
+                BASS_CENTER_FQ, 
+                BASS_Q_FACTOR, 
+                juce::Decibels::decibelsToGain(bassSmoother.getNextValue()));
+
+            middleSmoother.setTargetValue(mapValueInRange(parameters.getMiddle().get() / 100.f, MIN_BAND_GAIN, MAX_BAND_GAIN));
+            *middleEQ.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(sampleRate, 
+                MID_CENTER_FQ, 
+                MID_Q_FACTOR, 
+                juce::Decibels::decibelsToGain(middleSmoother.getNextValue()));
+
+            trebleSmoother.setTargetValue(mapValueInRange(parameters.getTreble().get() / 100.f, MIN_BAND_GAIN, MAX_BAND_GAIN));
+            *trebleEQ.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(sampleRate,
+                TREBLE_CENTER_FQ,
+                TREBLE_Q_FACTOR,
+                juce::Decibels::decibelsToGain(trebleSmoother.getNextValue()));
+
+            master.setGainLinear(parameters.getMaster().get() / 100.f);
+        }
 
     protected:
         using IIRFilter = juce::dsp::IIR::Filter<float>;
@@ -47,9 +87,6 @@ namespace preamp {
         float maxDrive = 0.f;
 
         juce::dsp::Gain<float> gain;
-
-        std::unique_ptr<Distortion> distortion;
-
         juce::SmoothedValue<float> bassSmoother;
         juce::SmoothedValue<float> middleSmoother;
         juce::SmoothedValue<float> trebleSmoother;
@@ -59,7 +96,39 @@ namespace preamp {
         juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> middleEQ;
         juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> trebleEQ;
 
-        void prepareCommonParameters(juce::dsp::ProcessSpec& spec);
+        void prepareCommonParameters(juce::dsp::ProcessSpec& spec) {
+
+            sampleRate = spec.sampleRate;
+
+            gain.reset();
+            gain.prepare(spec);
+            gain.setGainLinear(mapValueInRange(0.5f, minDrive, maxDrive));
+
+            bassSmoother.reset(spec.sampleRate, 0.002f);
+            bassSmoother.setCurrentAndTargetValue(mapValueInRange(0.5f, MIN_BAND_GAIN, MAX_BAND_GAIN));
+
+            middleSmoother.reset(spec.sampleRate, 0.002f);
+            middleSmoother.setCurrentAndTargetValue(mapValueInRange(0.5f, MIN_BAND_GAIN, MAX_BAND_GAIN));
+
+            trebleSmoother.reset(spec.sampleRate, 0.002f);
+            trebleSmoother.setCurrentAndTargetValue(mapValueInRange(0.5f, MIN_BAND_GAIN, MAX_BAND_GAIN));
+
+            bassEQ.reset();
+            *bassEQ.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(spec.sampleRate, BASS_CENTER_FQ, BASS_Q_FACTOR, 0.f);
+            bassEQ.prepare(spec);
+
+            middleEQ.reset();
+            *middleEQ.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(spec.sampleRate, MID_CENTER_FQ, MID_Q_FACTOR, 0.f);
+            middleEQ.prepare(spec);
+
+            trebleEQ.reset();
+            *trebleEQ.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(spec.sampleRate, TREBLE_CENTER_FQ, TREBLE_Q_FACTOR, 0.f);
+            trebleEQ.prepare(spec);
+
+            master.reset();
+            master.prepare(spec);
+            master.setGainLinear(0.5f);
+        }
     };
 
     class CleanAmp : public PreAmp {

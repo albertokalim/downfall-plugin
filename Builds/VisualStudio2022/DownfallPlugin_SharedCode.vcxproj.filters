@@ -705,12 +705,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Source\PreAmp.cpp">
-      <Filter>DownfallPlugin\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\Distortion.cpp">
-      <Filter>DownfallPlugin\Source</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\PluginProcessor.cpp">
       <Filter>DownfallPlugin\Source</Filter>
     </ClCompile>
@@ -3599,9 +3593,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Source\Distortion.h">
-      <Filter>DownfallPlugin\Source</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\ProcessorBase.h">
       <Filter>DownfallPlugin\Source</Filter>
     </ClInclude>
