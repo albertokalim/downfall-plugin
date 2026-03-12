@@ -32,7 +32,7 @@ void preamp::CleanAmp::prepare(juce::dsp::ProcessSpec& spec)
     lowMidBoost.prepare(spec);
 
     midBoost.reset();
-    *midBoost.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(spec.sampleRate, 750.8f, 0.9f, 4.f);
+    *midBoost.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(spec.sampleRate, 3000.f, 0.9f, 8.f);
     midBoost.prepare(spec);
 
     pickAccentBoost.reset();
@@ -64,7 +64,7 @@ void preamp::CleanAmp::prepare(juce::dsp::ProcessSpec& spec)
     highPassFilter.prepare(spec);
 
     lowPassFilter.reset();
-    *lowPassFilter.state = *juce::dsp::IIR::Coefficients<float>::makeLowPass(spec.sampleRate, 12608.f, 0.7f);
+    *lowPassFilter.state = *juce::dsp::IIR::Coefficients<float>::makeLowPass(spec.sampleRate, 15000.f, 0.7f);
     lowPassFilter.prepare(spec);
 
     oversample = std::unique_ptr<juce::dsp::Oversampling<float>>(new juce::dsp::Oversampling<float>(spec.numChannels,
