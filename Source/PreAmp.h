@@ -11,7 +11,6 @@
 #pragma once
 #include <JuceHeader.h>
 #include "Utils.h"
-#include "ProcessorBase.h"
 #include "Parameters.h"
 
 namespace preamp {
@@ -95,6 +94,8 @@ namespace preamp {
             decorator->reset(); 
         }
 
+        void setDecorator(PreAmpDecorator* _decorator) { decorator = std::unique_ptr<PreAmpDecorator>(_decorator); }
+
     private:
         std::unique_ptr<PreAmpDecorator> decorator;
     };
@@ -143,5 +144,7 @@ namespace preamp {
         juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> middleEQ;
         juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> trebleEQ;
         juce::dsp::Gain<float> master;
+
+        JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (CleanAmp)
     };
 };

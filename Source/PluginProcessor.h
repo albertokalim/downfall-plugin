@@ -11,6 +11,7 @@
 #include <JuceHeader.h>
 #include "Parameters.h"
 #include "PreAmp.h"
+#include "HighGain.h"
 
 //==============================================================================
 /**
@@ -65,7 +66,7 @@ private:
     juce::SmoothedValue<float> outputGainSmoother;
 
     juce::dsp::NoiseGate<float> gate;
-    std::unique_ptr<preamp::PreAmp> preAmp;
+    std::vector<std::unique_ptr<preamp::PreAmp>> preAmps{ 2 };
 
     juce::dsp::Convolution convolution;
 

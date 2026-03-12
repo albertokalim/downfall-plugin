@@ -15,7 +15,6 @@ DownfallPluginAudioProcessor::DownfallPluginAudioProcessor()
                        .withInput  ("Input",  juce::AudioChannelSet::stereo(), true)
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true))
 {
-    
 }
 
 DownfallPluginAudioProcessor::~DownfallPluginAudioProcessor()
@@ -88,8 +87,12 @@ void DownfallPluginAudioProcessor::changeProgramName (int index, const juce::Str
 void DownfallPluginAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
     preamp::CleanAmp* cleanAmp = new preamp::CleanAmp(1.f, 7.5f);
-    preamp::PreAmpDecorator* decorator = new preamp::PreAmpDecorator(cleanAmp);
-    preAmp = std::unique_ptr<preamp::PreAmp>(new preamp::PreAmp(decorator));
+    preamp::PreAmpDecorator* decoratorClean = new preamp::PreAmpDecorator(cleanAmp);
+    preAmps[0] = std::unique_ptr<preamp::PreAmp>(new preamp::PreAmp(decoratorClean));
+
+    preamp::HighGainAmp* highGainAmp = new preamp::HighGainAmp(1.f, 7.5f);
+    preamp::PreAmpDecorator* decoratorHighGain = new preamp::PreAmpDecorator(highGainAmp);
+    preAmps[1] = std::unique_ptr<preamp::PreAmp>(new preamp::PreAmp(decoratorHighGain));
 
     inputGainSmoother.reset(sampleRate, 0.002f);
     inputGainSmoother.setCurrentAndTargetValue(0.f);
@@ -107,8 +110,10 @@ void DownfallPluginAudioProcessor::prepareToPlay (double sampleRate, int samples
     gate.setRelease(200.f);
     gate.setRatio(1.f);
 
-    preAmp->reset();
-    preAmp->prepare(spec);
+    preAmps[0]->reset();
+    preAmps[0]->prepare(spec);
+    preAmps[1]->reset();
+    preAmps[1]->prepare(spec);
 
     convolution.reset();
     convolution.prepare(spec);
@@ -120,7 +125,6 @@ void DownfallPluginAudioProcessor::prepareToPlay (double sampleRate, int samples
 
 void DownfallPluginAudioProcessor::releaseResources()
 {
-
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
@@ -161,12 +165,13 @@ void DownfallPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
 
     buffer.applyGain(juce::Decibels::decibelsToGain(inputGainSmoother.getNextValue()));
 
-    preAmp->update(preAmpParameters);
+    auto index = preAmpParameters.getAmpType().getIndex();
+    preAmps[index]->update(preAmpParameters);
 
     juce::dsp::AudioBlock<float> block(buffer);
     juce::dsp::ProcessContextReplacing<float> context(block);
     
-    preAmp->process(context);
+    preAmps[preAmpParameters.getAmpType().getIndex()]->process(context);
     
     gate.process(context);
 
