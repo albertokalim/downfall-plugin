@@ -15,6 +15,7 @@ DownfallPluginAudioProcessor::DownfallPluginAudioProcessor()
                        .withInput  ("Input",  juce::AudioChannelSet::stereo(), true)
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true))
 {
+    
 }
 
 DownfallPluginAudioProcessor::~DownfallPluginAudioProcessor()
@@ -86,6 +87,10 @@ void DownfallPluginAudioProcessor::changeProgramName (int index, const juce::Str
 //==============================================================================
 void DownfallPluginAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
+    preamp::CleanAmp* cleanAmp = new preamp::CleanAmp(1.f, 7.5f);
+    preamp::PreAmpDecorator* decorator = new preamp::PreAmpDecorator(cleanAmp);
+    preAmp = std::unique_ptr<preamp::PreAmp>(new preamp::PreAmp(decorator));
+
     inputGainSmoother.reset(sampleRate, 0.002f);
     inputGainSmoother.setCurrentAndTargetValue(0.f);
 
@@ -102,14 +107,15 @@ void DownfallPluginAudioProcessor::prepareToPlay (double sampleRate, int samples
     gate.setRelease(200.f);
     gate.setRatio(1.f);
 
-    cleanAmp.reset();
-    cleanAmp.prepare(spec);
-
-    highGainAmp.reset();
-    highGainAmp.prepare(spec);
+    preAmp->reset();
+    preAmp->prepare(spec);
 
     convolution.reset();
     convolution.prepare(spec);
+    convolution.loadImpulseResponse(BinaryData::testir_wav, BinaryData::testir_wavSize,
+        juce::dsp::Convolution::Stereo::yes,
+        juce::dsp::Convolution::Trim::yes,
+        0);
 }
 
 void DownfallPluginAudioProcessor::releaseResources()
@@ -155,18 +161,12 @@ void DownfallPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
 
     buffer.applyGain(juce::Decibels::decibelsToGain(inputGainSmoother.getNextValue()));
 
-    cleanAmp.updateCommonParameters(preAmpParameters);
-    highGainAmp.updateCommonParameters(preAmpParameters);
+    preAmp->update(preAmpParameters);
 
     juce::dsp::AudioBlock<float> block(buffer);
     juce::dsp::ProcessContextReplacing<float> context(block);
     
-    if (preAmpParameters.getAmpType().getCurrentChoiceName() == "Clean") {
-        cleanAmp.process(context);
-    }
-    else {
-        highGainAmp.process(context);
-    }
+    preAmp->process(context);
     
     gate.process(context);
 

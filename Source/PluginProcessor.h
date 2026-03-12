@@ -65,8 +65,7 @@ private:
     juce::SmoothedValue<float> outputGainSmoother;
 
     juce::dsp::NoiseGate<float> gate;
-    preamp::CleanAmp cleanAmp;
-    preamp::HighGainAmp highGainAmp;
+    std::unique_ptr<preamp::PreAmp> preAmp;
 
     juce::dsp::Convolution convolution;
 
