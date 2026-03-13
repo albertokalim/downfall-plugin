@@ -28,19 +28,19 @@ void preamp::CleanAmp::prepare(juce::dsp::ProcessSpec& spec)
     trebleSmoother.setCurrentAndTargetValue(mapValueInRange(0.5f, MIN_BAND_GAIN, MAX_BAND_GAIN));
 
     lowMidBoost.reset();
-    *lowMidBoost.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(spec.sampleRate, 223.69f, 0.9f, 8.f);
+    *lowMidBoost.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(spec.sampleRate, 223.69f, 0.9f, 2.f);
     lowMidBoost.prepare(spec);
 
     midBoost.reset();
-    *midBoost.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(spec.sampleRate, 3000.f, 0.9f, 8.f);
+    *midBoost.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(spec.sampleRate, 3000.f, 0.9f, 2.f);
     midBoost.prepare(spec);
 
     pickAccentBoost.reset();
-    *pickAccentBoost.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(spec.sampleRate, 1385.7f, 6.f, 4.f);
+    *pickAccentBoost.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(spec.sampleRate, 1385.7f, 6.f, 1.413);
     pickAccentBoost.prepare(spec);
 
     highShelf.reset();
-    *highShelf.state = *juce::dsp::IIR::Coefficients<float>::makeHighShelf(spec.sampleRate, 5000.f, 0.3f, 4.f);
+    *highShelf.state = *juce::dsp::IIR::Coefficients<float>::makeHighShelf(spec.sampleRate, 5000.f, 0.3f, 1.413f);
     highShelf.prepare(spec);
 
     bassEQ.reset();
@@ -59,9 +59,13 @@ void preamp::CleanAmp::prepare(juce::dsp::ProcessSpec& spec)
     master.prepare(spec);
     master.setGainLinear(0.5f);
 
-    highPassFilter.reset();
-    *highPassFilter.state = *juce::dsp::IIR::Coefficients<float>::makeHighPass(spec.sampleRate, HPF_CENTER_FQ, HPF_Q_FACTOR);
-    highPassFilter.prepare(spec);
+    postLowEndBoost.reset();
+    *postLowEndBoost.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(spec.sampleRate, 165.29f, 1.113f, 2.2f);
+    postLowEndBoost.prepare(spec);
+
+    postMidBoost.reset();
+    *postMidBoost.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(spec.sampleRate, 1298.f, 2.716f, 2.2f);
+    postMidBoost.prepare(spec);
 
     lowPassFilter.reset();
     *lowPassFilter.state = *juce::dsp::IIR::Coefficients<float>::makeLowPass(spec.sampleRate, 15000.f, 0.7f);
@@ -134,7 +138,8 @@ void preamp::CleanAmp::waveshaping(juce::dsp::ProcessContextReplacing<float>& co
 
 void preamp::CleanAmp::postfilter(juce::dsp::ProcessContextReplacing<float>& context)
 {
-    //highPassFilter.process(context);
+    postLowEndBoost.process(context);
+    postMidBoost.process(context);
     lowPassFilter.process(context);
 }
 

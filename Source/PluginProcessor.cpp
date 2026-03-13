@@ -90,7 +90,7 @@ void DownfallPluginAudioProcessor::prepareToPlay (double sampleRate, int samples
     preamp::PreAmpDecorator* decoratorClean = new preamp::PreAmpDecorator(cleanAmp);
     preAmps[0] = std::unique_ptr<preamp::PreAmp>(new preamp::PreAmp(decoratorClean));
 
-    preamp::HighGainAmp* highGainAmp = new preamp::HighGainAmp(1.f, 7.5f);
+    preamp::HighGainAmp* highGainAmp = new preamp::HighGainAmp(25.f, 100.f);
     preamp::PreAmpDecorator* decoratorHighGain = new preamp::PreAmpDecorator(highGainAmp);
     preAmps[1] = std::unique_ptr<preamp::PreAmp>(new preamp::PreAmp(decoratorHighGain));
 

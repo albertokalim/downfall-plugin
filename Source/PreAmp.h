@@ -32,12 +32,12 @@ namespace preamp {
     using IIRCoefs = juce::dsp::IIR::Coefficients<float>;
 
     namespace waveshapingFunctions {
-        static float asymptoticLimit(float x) {
-            return x / (std::abs(x) + 1.f);
+        static float tanh(float x) {
+            return (x * (abs(x) + 3.5f) / (x * x + (3.5f - 1) * abs(x) + 1));
         }
 
-        static float tanh(float x) {
-            return std::tanh(x);
+        static float tanhHighGain(float x) {
+            return (x * (abs(x) + 50.f) / (x * x + (50.f - 1) * abs(x) + 1));
         }
     };
 
@@ -137,9 +137,10 @@ namespace preamp {
         juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> lowEndBoost;
         std::unique_ptr<juce::dsp::Oversampling<float>> oversample;
         juce::dsp::Gain<float> gain;
-        juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> highPassFilter;
+        juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> postLowEndBoost;
+        juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> postMidBoost;
         juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> lowPassFilter;
-        juce::dsp::WaveShaper<float> waveshaper{ { waveshapingFunctions::asymptoticLimit } };
+        juce::dsp::WaveShaper<float> waveshaper{ { waveshapingFunctions::tanh } };
         juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> bassEQ;
         juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> middleEQ;
         juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> trebleEQ;

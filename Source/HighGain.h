@@ -40,12 +40,23 @@ namespace preamp {
         float maxDrive = MAX_DRIVE;
         double sampleRate = 44100;
 
+        juce::SmoothedValue<float> bassSmoother;
+        juce::SmoothedValue<float> middleSmoother;
+        juce::SmoothedValue<float> trebleSmoother;
+
         std::unique_ptr<juce::dsp::Oversampling<float>> oversample;
         juce::dsp::Gain<float> gain;
-        juce::dsp::WaveShaper<float> waveshaperStage1{ { waveshapingFunctions::tanh } };
-        juce::dsp::WaveShaper<float> waveshaperStage2{ { waveshapingFunctions::asymptoticLimit } };
-        juce::dsp::WaveShaper<float> waveshaperStage3{ { waveshapingFunctions::tanh } };
-        juce::dsp::WaveShaper<float> waveshaperStage4{ { waveshapingFunctions::asymptoticLimit } };
+        juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> lowMidBoost;
+        juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> lowEndControl;
+        juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> midBoost;
+        juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> midBoost2;
+        juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> pickAccentBoost;
+        juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> highShelf;
+        juce::dsp::WaveShaper<float> waveshaper{ { waveshapingFunctions::tanhHighGain } };
+        juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> hpfPostWaveshaper;
+        juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> highShelfPostWaveshaper;
+        juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> pickAccentPostWaveshaper;
+        juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> lowEndControlPostWaveshaper;
         juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> bassEQ;
         juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> middleEQ;
         juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> trebleEQ;
