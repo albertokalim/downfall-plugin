@@ -15,13 +15,16 @@ void preamp::HighGainAmp::prepare(juce::dsp::ProcessSpec& spec)
     sampleRate = spec.sampleRate;
 
     bassSmoother.reset(spec.sampleRate, 0.002f);
-    bassSmoother.setCurrentAndTargetValue(mapValueInRange(0.5f, MIN_BAND_GAIN, MAX_BAND_GAIN));
+    bassSmoother.setCurrentAndTargetValue(1.f);
 
     middleSmoother.reset(spec.sampleRate, 0.002f);
-    middleSmoother.setCurrentAndTargetValue(mapValueInRange(0.5f, MIN_BAND_GAIN, MAX_BAND_GAIN));
+    middleSmoother.setCurrentAndTargetValue(1.f);
 
     trebleSmoother.reset(spec.sampleRate, 0.002f);
-    trebleSmoother.setCurrentAndTargetValue(mapValueInRange(0.5f, MIN_BAND_GAIN, MAX_BAND_GAIN));
+    trebleSmoother.setCurrentAndTargetValue(1.f);
+
+    presenceSmoother.reset(spec.sampleRate, 0.002f);
+    presenceSmoother.setCurrentAndTargetValue(1.f);
 
     gain.reset();
     gain.prepare(spec);
@@ -72,16 +75,20 @@ void preamp::HighGainAmp::prepare(juce::dsp::ProcessSpec& spec)
     lowEndControlPostWaveshaper.prepare(spec);
 
     bassEQ.reset();
-    *bassEQ.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(spec.sampleRate, BASS_CENTER_FQ, BASS_Q_FACTOR, 0.f);
+    *bassEQ.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(spec.sampleRate, BASS_CENTER_FQ, BASS_Q_FACTOR, 1.f);
     bassEQ.prepare(spec);
 
     middleEQ.reset();
-    *middleEQ.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(spec.sampleRate, MID_CENTER_FQ, MID_Q_FACTOR, 0.f);
+    *middleEQ.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(spec.sampleRate, MID_CENTER_FQ, MID_Q_FACTOR, 1.f);
     middleEQ.prepare(spec);
 
     trebleEQ.reset();
-    *trebleEQ.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(spec.sampleRate, TREBLE_CENTER_FQ, TREBLE_Q_FACTOR, 0.f);
+    *trebleEQ.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(spec.sampleRate, TREBLE_CENTER_FQ, TREBLE_Q_FACTOR, 1.f);
     trebleEQ.prepare(spec);
+
+    presence.reset();
+    *presence.state = *juce::dsp::IIR::Coefficients<float>::makeHighShelf(spec.sampleRate, 4500.f, 0.707, 1.f);
+    presence.prepare(spec);
 
     oversample = std::unique_ptr<juce::dsp::Oversampling<float>>(new juce::dsp::Oversampling<float>(spec.numChannels,
         2,
@@ -121,6 +128,12 @@ void preamp::HighGainAmp::updateState(parameters::PreAmpParameters& parameters)
         TREBLE_CENTER_FQ,
         TREBLE_Q_FACTOR,
         juce::Decibels::decibelsToGain(trebleSmoother.getNextValue()));
+
+    presenceSmoother.setTargetValue(mapValueInRange(parameters.getPresence().get() / 100.f, MIN_BAND_GAIN, MAX_BAND_GAIN));
+    *presence.state = *juce::dsp::IIR::Coefficients<float>::makeHighShelf(sampleRate, 
+        4500.f, 
+        0.707,
+        juce::Decibels::decibelsToGain(presenceSmoother.getNextValue()));
 
     master.setGainLinear(mapValueInRange(parameters.getMaster().get() / 100.f, 0.f, 2.f));
 }
@@ -163,6 +176,7 @@ void preamp::HighGainAmp::eq(juce::dsp::ProcessContextReplacing<float>& context)
     bassEQ.process(context);
     middleEQ.process(context);
     trebleEQ.process(context);
+    presence.process(context);
 }
 
 void preamp::HighGainAmp::manageOutput(juce::dsp::ProcessContextReplacing<float>& context)

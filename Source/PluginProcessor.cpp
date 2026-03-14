@@ -170,10 +170,12 @@ void DownfallPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
 
     juce::dsp::AudioBlock<float> block(buffer);
     juce::dsp::ProcessContextReplacing<float> context(block);
-    
-    preAmps[preAmpParameters.getAmpType().getIndex()]->process(context);
-    
-    gate.process(context);
+
+    if (!globalParameters.getBypassPreamp().get()) {
+        preAmps[preAmpParameters.getAmpType().getIndex()]->process(context);
+    }
+
+    //gate.process(context);
 
     if (!globalParameters.getBypassCabinet().get()) {
         convolution.process(context);

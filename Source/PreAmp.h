@@ -17,8 +17,8 @@ namespace preamp {
 
     static constexpr float MIN_DRIVE = 1.f;
     static constexpr float MAX_DRIVE = 20.f;
-    static constexpr float MAX_BAND_GAIN = 6.f;
-    static constexpr float MIN_BAND_GAIN = -6.f;
+    static constexpr float MAX_BAND_GAIN = 4.f;
+    static constexpr float MIN_BAND_GAIN = 0.001f;
     static constexpr float HPF_CENTER_FQ = 20.0f;
     static constexpr float HPF_Q_FACTOR = 0.9f;
     static constexpr float BASS_CENTER_FQ = 100.f;

@@ -43,6 +43,7 @@ namespace preamp {
         juce::SmoothedValue<float> bassSmoother;
         juce::SmoothedValue<float> middleSmoother;
         juce::SmoothedValue<float> trebleSmoother;
+        juce::SmoothedValue<float> presenceSmoother;
 
         std::unique_ptr<juce::dsp::Oversampling<float>> oversample;
         juce::dsp::Gain<float> gain;
@@ -60,6 +61,7 @@ namespace preamp {
         juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> bassEQ;
         juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> middleEQ;
         juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> trebleEQ;
+        juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> presence;
         juce::dsp::Gain<float> master;
 
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(HighGainAmp)

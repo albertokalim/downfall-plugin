@@ -75,6 +75,10 @@ namespace parameters {
             bypassCabinet(createParameterBool(audioProcessor,
                 "bypassCabinet",
                 "Bypass Cabinet",
+                false)),
+            bypassPreamp(createParameterBool(audioProcessor,
+                "bypassPreamp",
+                "Bypass PreAmp",
                 false))
         {
         }
@@ -83,6 +87,7 @@ namespace parameters {
         juce::AudioParameterFloat& getOutputGain() { return outputGain; }
         juce::AudioParameterFloat& getGateThreshold() { return gateThreshold; }
         juce::AudioParameterBool& getBypassCabinet() { return bypassCabinet; }
+        juce::AudioParameterBool& getBypassPreamp() { return bypassPreamp; }
 
     private:
 
@@ -90,6 +95,7 @@ namespace parameters {
         juce::AudioParameterFloat& outputGain;
         juce::AudioParameterFloat& gateThreshold;
         juce::AudioParameterBool& bypassCabinet;
+        juce::AudioParameterBool& bypassPreamp;
 
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(GlobalParameters)
     };
@@ -121,6 +127,12 @@ namespace parameters {
                 juce::NormalisableRange{ 0.f, 100.f },
                 50.f,
                 juce::AudioParameterFloatAttributes{}.withLabel("%"))),
+            presence(createParameterFloat(audioProcessor,
+                "high-gain-presence",
+                "High Gain Presence",
+                juce::NormalisableRange{ 0.f, 100.f },
+                50.f,
+                juce::AudioParameterFloatAttributes{}.withLabel("%"))),
             master(createParameterFloat(audioProcessor,
                 "master",
                 "Master",
@@ -138,6 +150,7 @@ namespace parameters {
         juce::AudioParameterFloat& getBass() { return bass; }
         juce::AudioParameterFloat& getMiddle() { return middle; }
         juce::AudioParameterFloat& getTreble() { return treble; }
+        juce::AudioParameterFloat& getPresence() { return presence; }
         juce::AudioParameterFloat& getMaster() { return master; }
         juce::AudioParameterChoice& getAmpType() { return ampType; }
 
@@ -146,6 +159,7 @@ namespace parameters {
         juce::AudioParameterFloat& bass;
         juce::AudioParameterFloat& middle;
         juce::AudioParameterFloat& treble;
+        juce::AudioParameterFloat& presence;
         juce::AudioParameterFloat& master;
         juce::AudioParameterChoice& ampType;
 
