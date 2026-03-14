@@ -9,7 +9,8 @@
 */
 
 #include "PreAmp.h"
-
+//TODO: There is so much repeated code in this class with HighGain class. Maybe a solution is to create a parent class, 
+//or to put everything in common in the parent class already instead of creating a new one.
 void preamp::CleanAmp::prepare(juce::dsp::ProcessSpec& spec)
 {
     sampleRate = spec.sampleRate;
