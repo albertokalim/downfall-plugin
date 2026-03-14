@@ -152,4 +152,20 @@ namespace parameters {
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PreAmpParameters)
     };
 
+    class FXParameters {
+    public:
+        explicit FXParameters(juce::AudioProcessor& audioProcessor, juce::String effectName)
+            : bypassEffect(createParameterBool(audioProcessor,
+                effectName << "bypass",
+                effectName << " Bypass",
+                false))
+        {}
+
+
+        juce::AudioParameterBool& getBypassEffect() { return bypassEffect; }
+
+    protected:
+        juce::AudioParameterBool& bypassEffect;
+    };
+
 };

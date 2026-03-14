@@ -706,6 +706,9 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Source\Effect.cpp">
+      <Filter>DownfallPlugin\Source</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\HighGain.cpp">
       <Filter>DownfallPlugin\Source</Filter>
     </ClCompile>
@@ -3753,10 +3756,10 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Source\HighGain.h">
+    <ClInclude Include="..\..\Source\Effect.h">
       <Filter>DownfallPlugin\Source</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\Source\ProcessorBase.h">
+    <ClInclude Include="..\..\Source\HighGain.h">
       <Filter>DownfallPlugin\Source</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\Utils.h">
