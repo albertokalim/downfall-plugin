@@ -47,7 +47,7 @@ namespace effects {
 
         const auto& pos = *opt; //Desreferenciar
 
-        if (pos.getBpm().hasValue()) { //También es un optional
+        if (pos.getBpm().hasValue()) { //Tambi	es un optional
             bpm = *pos.getBpm();
         }
     }

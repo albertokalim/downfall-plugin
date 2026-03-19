@@ -11,7 +11,6 @@
 #pragma once
 #include <JuceHeader.h>
 #include "Parameters.h"
-#include "DelayLine.h"
 
 namespace effects {
     class FX {

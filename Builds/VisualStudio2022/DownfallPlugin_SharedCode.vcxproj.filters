@@ -706,9 +706,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Source\DelayLine.cpp">
-      <Filter>DownfallPlugin\Source</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\Effect.cpp">
       <Filter>DownfallPlugin\Source</Filter>
     </ClCompile>
@@ -3759,9 +3756,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Source\DelayLine.h">
-      <Filter>DownfallPlugin\Source</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\Effect.h">
       <Filter>DownfallPlugin\Source</Filter>
     </ClInclude>
