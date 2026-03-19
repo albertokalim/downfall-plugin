@@ -11,9 +11,12 @@
 #pragma once
 
 #include <JuceHeader.h>
-namespace parameters {
-    static const int versionHint = 1;
 
+static constexpr float MAX_DELAY_TIME = 5000.0f;
+static constexpr float MIN_DELAY_TIME = 5.0f;
+static const int versionHint = 1;
+
+namespace parameters {
     static auto& addParameterToProcessor(juce::AudioProcessor& processor, auto parameter) {
         auto& parameterReference = *parameter;
         processor.addParameter(parameter.release());
@@ -40,7 +43,7 @@ namespace parameters {
         return addParameterToProcessor(processor, std::move(parameter));
     }
 
-    static juce::AudioParameterChoice& createParameterChoice(juce::AudioProcessor& processor, juce::String parameterID, juce::String parameterName, 
+    static juce::AudioParameterChoice& createParameterChoice(juce::AudioProcessor& processor, juce::String parameterID, juce::String parameterName,
         juce::StringArray values, int initialValueIndex) {
         auto parameter = std::make_unique<juce::AudioParameterChoice>(
             juce::ParameterID{ parameterID, versionHint },
@@ -53,7 +56,7 @@ namespace parameters {
 
     class GlobalParameters {
     public:
-        explicit GlobalParameters(juce::AudioProcessor& audioProcessor)
+        GlobalParameters(juce::AudioProcessor& audioProcessor)
             : outputGain(createParameterFloat(audioProcessor,
                 "output.gain",
                 "Output gain",
@@ -102,10 +105,10 @@ namespace parameters {
 
     class PreAmpParameters {
     public:
-        explicit PreAmpParameters(juce::AudioProcessor& audioProcessor) 
-            : gain(createParameterFloat(audioProcessor, 
-                "gain", 
-                "Gain", 
+        PreAmpParameters(juce::AudioProcessor& audioProcessor)
+            : gain(createParameterFloat(audioProcessor,
+                "gain",
+                "Gain",
                 juce::NormalisableRange{ 0.f, 100.f },
                 50.f,
                 juce::AudioParameterFloatAttributes{}.withLabel("%"))),
@@ -142,9 +145,10 @@ namespace parameters {
             ampType(createParameterChoice(audioProcessor,
                 "ampType",
                 "Amp Type",
-                juce::StringArray {"Clean", "HighGain"},
+                juce::StringArray{ "Clean", "HighGain" },
                 0))
-        {}
+        {
+        }
 
         juce::AudioParameterFloat& getGain() { return gain; }
         juce::AudioParameterFloat& getBass() { return bass; }
@@ -168,12 +172,14 @@ namespace parameters {
 
     class FXParameters {
     public:
-        explicit FXParameters(juce::AudioProcessor& audioProcessor, juce::String effectName)
+        FXParameters(juce::AudioProcessor& audioProcessor, juce::String effectName)
             : bypassEffect(createParameterBool(audioProcessor,
-                effectName << "bypass",
+                effectName << "Bypass",
                 effectName << " Bypass",
-                false))
-        {}
+                true))
+        {
+        }
+        virtual ~FXParameters() {}
 
 
         juce::AudioParameterBool& getBypassEffect() { return bypassEffect; }
@@ -182,4 +188,69 @@ namespace parameters {
         juce::AudioParameterBool& bypassEffect;
     };
 
+    class DelayParameters : public FXParameters {
+    public:
+        DelayParameters(juce::AudioProcessor& audioProcessor)
+            : FXParameters(audioProcessor, "delay"),
+            delayTime(createParameterFloat(audioProcessor,
+                "delayTime",
+                "Delay Time",
+                juce::NormalisableRange<float> { MIN_DELAY_TIME, MAX_DELAY_TIME, 0.001f, 0.25f },
+                100.0f,
+                juce::AudioParameterFloatAttributes{}.withLabel("ms"))),
+            mix(createParameterFloat(audioProcessor,
+                "delayMix",
+                "Delay Mix",
+                juce::NormalisableRange<float>(0.0f, 100.0f, 1.0f),
+                100.0f,
+                juce::AudioParameterFloatAttributes{}.withLabel("%"))),
+            feedback(createParameterFloat(audioProcessor,
+                "delayFeedback",
+                "Delay Feedback",
+                juce::NormalisableRange<float>(0.f, 100.0f, 1.0f),
+                0.0f,
+                juce::AudioParameterFloatAttributes{}.withLabel("%"))),
+            sync(createParameterBool(audioProcessor,
+                "delaySync",
+                "Delay Sync",
+                false)),
+            delayNote(createParameterChoice(audioProcessor,
+                "delayNote",
+                "Delay Note",
+                juce::StringArray{
+                    "1/32",
+                    "1/16 trip",
+                    "1/32 dot",
+                    "1/16",
+                    "1/8 trip",
+                    "1/16 dot",
+                    "1/8",
+                    "1/4 trip",
+                    "1/8 dot",
+                    "1/4",
+                    "1/2 trip",
+                    "1/4 dot",
+                    "1/2",
+                    "1/1 trip",
+                    "1/2 dot",
+                    "1/1",
+                },
+                9))
+        {
+        }
+        ~DelayParameters() {}
+
+        juce::AudioParameterFloat& getDelayTime() { return delayTime; }
+        juce::AudioParameterFloat& getMix() { return mix; }
+        juce::AudioParameterFloat& getFeedback() { return feedback; }
+        juce::AudioParameterBool& getSync() { return sync; }
+        juce::AudioParameterChoice& getDelayNote() { return delayNote; }
+
+    private:
+        juce::AudioParameterFloat& delayTime;
+        juce::AudioParameterFloat& mix;
+        juce::AudioParameterFloat& feedback;
+        juce::AudioParameterBool& sync;
+        juce::AudioParameterChoice& delayNote;
+    };
 };

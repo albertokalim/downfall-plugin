@@ -12,6 +12,7 @@
 #include "Parameters.h"
 #include "PreAmp.h"
 #include "HighGain.h"
+#include "Effect.h"
 
 //==============================================================================
 /**
@@ -61,12 +62,15 @@ public:
 private:
     parameters::GlobalParameters globalParameters{ *this };
     parameters::PreAmpParameters preAmpParameters{ *this };
+    parameters::DelayParameters delayParameters{ *this };
 
     juce::SmoothedValue<float> inputGainSmoother;
     juce::SmoothedValue<float> outputGainSmoother;
 
     juce::dsp::NoiseGate<float> gate;
     std::vector<std::unique_ptr<preamp::PreAmp>> preAmps{ 2 };
+
+    effects::DelayFX delay;
 
     juce::dsp::Convolution convolution;
 

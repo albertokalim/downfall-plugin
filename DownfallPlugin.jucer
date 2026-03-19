@@ -8,6 +8,8 @@
       <FILE id="DQnZGg" name="test-ir.wav" compile="0" resource="1" file="../../../test-ir.wav"/>
     </GROUP>
     <GROUP id="{F8CB0AB7-C922-98DF-A4F1-2526B85D879F}" name="Source">
+      <FILE id="bnpLsk" name="DelayLine.cpp" compile="1" resource="0" file="Source/DelayLine.cpp"/>
+      <FILE id="J8MM17" name="DelayLine.h" compile="0" resource="0" file="Source/DelayLine.h"/>
       <FILE id="IvRY3h" name="Effect.cpp" compile="1" resource="0" file="Source/Effect.cpp"/>
       <FILE id="CM60yX" name="Effect.h" compile="0" resource="0" file="Source/Effect.h"/>
       <FILE id="ri8M3t" name="HighGain.cpp" compile="1" resource="0" file="Source/HighGain.cpp"/>
