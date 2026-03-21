@@ -287,4 +287,15 @@ namespace parameters {
         juce::AudioParameterFloat& width;
         juce::AudioParameterFloat& mix;
     };
+
+    class ReverbParameters : public FXParameters {
+    public:
+        ReverbParameters(juce::AudioProcessor& audioProcessor) :
+            FXParameters(audioProcessor, "reverb")
+        {}
+
+
+    private:
+
+    };
 };

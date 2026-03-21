@@ -13,6 +13,7 @@
 #include "PreAmp.h"
 #include "HighGain.h"
 #include "Effect.h"
+#include "Reverb.h"
 
 //==============================================================================
 /**
@@ -64,6 +65,7 @@ private:
     parameters::PreAmpParameters preAmpParameters{ *this };
     parameters::DelayParameters delayParameters{ *this };
     parameters::ChorusParameters chorusParameters{ *this };
+    parameters::ReverbParameters reverbParameters{ *this };
 
     juce::SmoothedValue<float> inputGainSmoother;
     juce::SmoothedValue<float> outputGainSmoother;
@@ -73,6 +75,7 @@ private:
 
     effects::DelayFX delay;
     effects::ChorusFX chorus;
+    effects::ReverbFX reverb;
 
     juce::dsp::Convolution convolution;
 

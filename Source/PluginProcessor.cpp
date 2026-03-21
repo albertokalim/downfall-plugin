@@ -121,6 +121,9 @@ void DownfallPluginAudioProcessor::prepareToPlay (double sampleRate, int samples
     chorus.reset();
     chorus.prepare(spec);
 
+    reverb.reset();
+    reverb.prepare(spec);
+
     convolution.reset();
     convolution.prepare(spec);
     convolution.loadImpulseResponse(BinaryData::testir_wav, BinaryData::testir_wavSize,
@@ -176,8 +179,8 @@ void DownfallPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
     chorus.update(chorusParameters);
     delay.updateTempoPlayHead(getPlayHead());
     delay.update(delayParameters);
+    reverb.update(reverbParameters);
     
-
     juce::dsp::AudioBlock<float> block(buffer);
     juce::dsp::ProcessContextReplacing<float> context(block);
 
@@ -187,6 +190,7 @@ void DownfallPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
 
     chorus.process(context);
     delay.process(context);
+    reverb.process(context);
 
     //gate.process(context);
 

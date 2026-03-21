@@ -144,6 +144,7 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Source\Reverb.cpp"/>
     <ClCompile Include="..\..\Source\Effect.cpp"/>
     <ClCompile Include="..\..\Source\HighGain.cpp"/>
     <ClCompile Include="..\..\Source\PreAmp.cpp"/>
@@ -3001,6 +3002,7 @@
     <ClCompile Include="..\..\JuceLibraryCode\include_juce_gui_extra.cpp"/>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Source\Reverb.h"/>
     <ClInclude Include="..\..\Source\Effect.h"/>
     <ClInclude Include="..\..\Source\HighGain.h"/>
     <ClInclude Include="..\..\Source\Utils.h"/>
