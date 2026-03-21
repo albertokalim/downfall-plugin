@@ -253,7 +253,7 @@ namespace parameters {
         juce::AudioParameterBool& sync;
         juce::AudioParameterChoice& delayNote;
     };
-
+    //TODO: Search for the logarithmic change of value (like analog knob)
     class ChorusParameters : public FXParameters {
     public:
         ChorusParameters(juce::AudioProcessor& audioProcessor) : 
@@ -261,7 +261,7 @@ namespace parameters {
             rate(createParameterFloat(audioProcessor,
                 "chorusRate",
                 "Chorus Rate",
-                juce::NormalisableRange<float>(0.1f, 7.0f, 0.1f),
+                juce::NormalisableRange<float>(0.1f, 7.0f, 0.1f), 
                 1.f,
                 juce::AudioParameterFloatAttributes{}.withLabel("Hz"))),
             width(createParameterFloat(audioProcessor,
