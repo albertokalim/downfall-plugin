@@ -140,5 +140,84 @@ namespace effects {
     void DelayFX::reset()
     {
     }
+
+    void ChorusFX::prepare(juce::dsp::ProcessSpec& spec)
+    {
+        sampleRate = spec.sampleRate;
+
+        delayLine.prepare(spec);
+        double numSamples = MAX_DELAY_TIME / 1000.0 * spec.sampleRate;
+        int maxDelayInSamples = int(std::ceil(numSamples));
+        delayLine.setMaximumDelayInSamples(maxDelayInSamples);
+        delayLine.reset();
+
+        lfo.prepare(spec);
+
+        rateSmoother.reset(spec.sampleRate, 0.002f);
+        rateSmoother.setCurrentAndTargetValue(5.f);
+
+        widthSmoother.reset(spec.sampleRate, 0.002f);
+        widthSmoother.setCurrentAndTargetValue(0.4f);
+
+        mixSmoother.reset(spec.sampleRate, 0.002f);
+        mixSmoother.setCurrentAndTargetValue(0.5f);
+    }
+
+    void ChorusFX::update(parameters::FXParameters& parameters)
+    {
+        bypass = parameters.getBypassEffect().get();
+
+        parameters::ChorusParameters& chorusParams = dynamic_cast<parameters::ChorusParameters&>(parameters);
+
+        rateSmoother.setTargetValue(chorusParams.getRate().get());
+
+        widthSmoother.setTargetValue(chorusParams.getWidth().get() / 100.f);
+
+        mixSmoother.setTargetValue(chorusParams.getMix().get() / 100.f);
+    }
+
+    void ChorusFX::process(juce::dsp::ProcessContextReplacing<float>& context)
+    {
+        if (bypass) {
+            return;
+        }
+
+        auto inputBlock = context.getInputBlock();
+        auto outputBlock = context.getOutputBlock();
+
+        for (int sample = 0; sample < inputBlock.getNumSamples(); ++sample) {
+            lfo.setFrequency(rateSmoother.getNextValue());
+
+            float lfoNextValue = lfo.processSample(0.f);
+            float lfoValue = lfoNextValue * widthSmoother.getNextValue();
+            float delayTime = mapValueInRange(lfoValue, MIN_CHORUS_DELAY, MAX_CHORUS_DELAY);
+            float delayInSamples = delayTime / 1000.0f * sampleRate;
+            delayLine.setDelay(delayInSamples);
+
+            float dryL = inputBlock.getSample(0, sample);
+            float dryR = inputBlock.getSample(1, sample);
+
+            float mono = (dryL + dryR) * 0.5f;
+
+            delayLine.pushSample(0, mono);
+            delayLine.pushSample(1, mono);
+
+            float wetL = delayLine.popSample(0);
+            float wetR = delayLine.popSample(1);
+
+            float mix = mixSmoother.getNextValue();
+
+            float mixL = dryL + wetL * mix; //mix param
+            float mixR = dryR + wetR * mix;
+
+            outputBlock.setSample(0, sample, mixL);
+            outputBlock.setSample(1, sample, mixR);
+        }
+    }
+
+    void ChorusFX::reset()
+    {
+    }
+
 }
 

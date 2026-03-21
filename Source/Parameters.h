@@ -253,4 +253,38 @@ namespace parameters {
         juce::AudioParameterBool& sync;
         juce::AudioParameterChoice& delayNote;
     };
+
+    class ChorusParameters : public FXParameters {
+    public:
+        ChorusParameters(juce::AudioProcessor& audioProcessor) : 
+            FXParameters(audioProcessor, "chorus"),
+            rate(createParameterFloat(audioProcessor,
+                "chorusRate",
+                "Chorus Rate",
+                juce::NormalisableRange<float>(0.1f, 20.0f, 0.1f),
+                5.f,
+                juce::AudioParameterFloatAttributes{}.withLabel("Hz"))),
+            width(createParameterFloat(audioProcessor,
+                "chorusWidth",
+                "Chorus Width",
+                juce::NormalisableRange<float>(0.f, 100.f, 0.1f),
+                40.f,
+                juce::AudioParameterFloatAttributes{}.withLabel("%"))),
+            mix(createParameterFloat(audioProcessor,
+                "chorusMix",
+                "Chorus Mix",
+                juce::NormalisableRange<float>(0.f, 100.0f, 1.0f),
+                50.f,
+                juce::AudioParameterFloatAttributes{}.withLabel("%")))
+        {}
+
+        juce::AudioParameterFloat& getRate() { return rate; }
+        juce::AudioParameterFloat& getWidth() { return width; }
+        juce::AudioParameterFloat& getMix() { return mix; }
+
+    private:
+        juce::AudioParameterFloat& rate;
+        juce::AudioParameterFloat& width;
+        juce::AudioParameterFloat& mix;
+    };
 };

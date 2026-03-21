@@ -63,6 +63,7 @@ private:
     parameters::GlobalParameters globalParameters{ *this };
     parameters::PreAmpParameters preAmpParameters{ *this };
     parameters::DelayParameters delayParameters{ *this };
+    parameters::ChorusParameters chorusParameters{ *this };
 
     juce::SmoothedValue<float> inputGainSmoother;
     juce::SmoothedValue<float> outputGainSmoother;
@@ -71,6 +72,7 @@ private:
     std::vector<std::unique_ptr<preamp::PreAmp>> preAmps{ 2 };
 
     effects::DelayFX delay;
+    effects::ChorusFX chorus;
 
     juce::dsp::Convolution convolution;
 

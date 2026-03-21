@@ -118,6 +118,9 @@ void DownfallPluginAudioProcessor::prepareToPlay (double sampleRate, int samples
     delay.reset();
     delay.prepare(spec);
 
+    chorus.reset();
+    chorus.prepare(spec);
+
     convolution.reset();
     convolution.prepare(spec);
     convolution.loadImpulseResponse(BinaryData::testir_wav, BinaryData::testir_wavSize,
@@ -170,6 +173,7 @@ void DownfallPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
 
     auto index = preAmpParameters.getAmpType().getIndex();//TODO: Maybe Amp Type is a global parameter.
     preAmps[index]->update(preAmpParameters);
+    chorus.update(chorusParameters);
     delay.updateTempoPlayHead(getPlayHead());
     delay.update(delayParameters);
     
@@ -181,6 +185,7 @@ void DownfallPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
         preAmps[preAmpParameters.getAmpType().getIndex()]->process(context);
     }
 
+    chorus.process(context);
     delay.process(context);
 
     //gate.process(context);
