@@ -154,7 +154,7 @@ namespace effects {
         lfo.prepare(spec);
 
         rateSmoother.reset(spec.sampleRate, 0.002f);
-        rateSmoother.setCurrentAndTargetValue(5.f);
+        rateSmoother.setCurrentAndTargetValue(1.f);
 
         widthSmoother.reset(spec.sampleRate, 0.002f);
         widthSmoother.setCurrentAndTargetValue(0.4f);
@@ -197,10 +197,8 @@ namespace effects {
             float dryL = inputBlock.getSample(0, sample);
             float dryR = inputBlock.getSample(1, sample);
 
-            float mono = (dryL + dryR) * 0.5f;
-
-            delayLine.pushSample(0, mono);
-            delayLine.pushSample(1, mono);
+            delayLine.pushSample(0, dryL);
+            delayLine.pushSample(1, dryR);
 
             float wetL = delayLine.popSample(0);
             float wetR = delayLine.popSample(1);
