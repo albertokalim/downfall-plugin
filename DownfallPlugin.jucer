@@ -8,6 +8,10 @@
       <FILE id="DQnZGg" name="test-ir.wav" compile="0" resource="1" file="../../../test-ir.wav"/>
     </GROUP>
     <GROUP id="{F8CB0AB7-C922-98DF-A4F1-2526B85D879F}" name="Source">
+      <FILE id="J0CFKC" name="Diffuser.cpp" compile="1" resource="0" file="Source/Diffuser.cpp"/>
+      <FILE id="QD2TTf" name="Diffuser.h" compile="0" resource="0" file="Source/Diffuser.h"/>
+      <FILE id="wIVviW" name="Splitter.cpp" compile="1" resource="0" file="Source/Splitter.cpp"/>
+      <FILE id="nETDLj" name="Splitter.h" compile="0" resource="0" file="Source/Splitter.h"/>
       <FILE id="hv23E0" name="Reverb.cpp" compile="1" resource="0" file="Source/Reverb.cpp"/>
       <FILE id="egCuaH" name="Reverb.h" compile="0" resource="0" file="Source/Reverb.h"/>
       <FILE id="IvRY3h" name="Effect.cpp" compile="1" resource="0" file="Source/Effect.cpp"/>

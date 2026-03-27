@@ -291,11 +291,26 @@ namespace parameters {
     class ReverbParameters : public FXParameters {
     public:
         ReverbParameters(juce::AudioProcessor& audioProcessor) :
-            FXParameters(audioProcessor, "reverb")
+            FXParameters(audioProcessor, "reverb"),
+            decay(createParameterFloat(audioProcessor,
+                "reverbDecay",
+                "Reverb Decay",
+                juce::NormalisableRange<float>(0.f, 100.0f, 1.0f),
+                0.0f,
+                juce::AudioParameterFloatAttributes{}.withLabel("%"))),
+            mix(createParameterFloat(audioProcessor,
+                "reverbMix",
+                "Reverb Mix",
+                juce::NormalisableRange<float>(0.f, 100.0f, 1.0f),
+                50.f,
+                juce::AudioParameterFloatAttributes{}.withLabel("%")))
         {}
 
+        juce::AudioParameterFloat& getDecay() { return decay; }
+        juce::AudioParameterFloat& getMix() { return mix; }
 
     private:
-
+        juce::AudioParameterFloat& decay;
+        juce::AudioParameterFloat& mix;
     };
 };

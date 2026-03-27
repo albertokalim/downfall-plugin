@@ -144,6 +144,8 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Source\Diffuser.cpp"/>
+    <ClCompile Include="..\..\Source\Splitter.cpp"/>
     <ClCompile Include="..\..\Source\Reverb.cpp"/>
     <ClCompile Include="..\..\Source\Effect.cpp"/>
     <ClCompile Include="..\..\Source\HighGain.cpp"/>
@@ -3002,6 +3004,8 @@
     <ClCompile Include="..\..\JuceLibraryCode\include_juce_gui_extra.cpp"/>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Source\Diffuser.h"/>
+    <ClInclude Include="..\..\Source\Splitter.h"/>
     <ClInclude Include="..\..\Source\Reverb.h"/>
     <ClInclude Include="..\..\Source\Effect.h"/>
     <ClInclude Include="..\..\Source\HighGain.h"/>

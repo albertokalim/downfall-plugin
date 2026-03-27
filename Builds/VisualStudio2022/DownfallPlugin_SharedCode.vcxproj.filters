@@ -706,6 +706,12 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Source\Diffuser.cpp">
+      <Filter>DownfallPlugin\Source</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Splitter.cpp">
+      <Filter>DownfallPlugin\Source</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\Reverb.cpp">
       <Filter>DownfallPlugin\Source</Filter>
     </ClCompile>
@@ -3759,6 +3765,12 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Source\Diffuser.h">
+      <Filter>DownfallPlugin\Source</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Splitter.h">
+      <Filter>DownfallPlugin\Source</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\Reverb.h">
       <Filter>DownfallPlugin\Source</Filter>
     </ClInclude>
