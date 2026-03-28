@@ -13,6 +13,7 @@
 #include "Splitter.h"
 #include "Diffuser.h"
 #include "Effect.h"
+#include "Constants.h"
 
 namespace effects {
     class ReverbFX : public FX {
@@ -24,13 +25,13 @@ namespace effects {
         void reset() override;
 
     private:
-        std::array<float, 4u> delayTimes{ 31.f, 37.f, 41.f, 43.f };
+        std::array<float, REVERB_CHANNELS> delayTimes{ 100.f, 133.3f, 166.6f, 200.f };
 
         Splitter split;
-        std::array<Diffuser, 8u> diff;
-        std::array<juce::dsp::DelayLine<float>, 4u> delays;
-        std::array<float, 4u> feedbacks;
-        juce::dsp::StateVariableTPTFilter<float> highCutFilter; //low-pass filter
+        std::array<Diffuser, DIFF_STEPS> diff;
+        std::array<juce::dsp::DelayLine<float>, REVERB_CHANNELS> delays;
+        std::array<float, REVERB_CHANNELS> feedbacks;
+        std::array<juce::dsp::StateVariableTPTFilter<float>, REVERB_CHANNELS> highCutFilter; //low-pass filter
 
         juce::SmoothedValue<float> decay;
         juce::SmoothedValue<float> mix;

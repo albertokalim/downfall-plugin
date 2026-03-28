@@ -3004,6 +3004,7 @@
     <ClCompile Include="..\..\JuceLibraryCode\include_juce_gui_extra.cpp"/>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Source\Constants.h"/>
     <ClInclude Include="..\..\Source\Diffuser.h"/>
     <ClInclude Include="..\..\Source\Splitter.h"/>
     <ClInclude Include="..\..\Source\Reverb.h"/>

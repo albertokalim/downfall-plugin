@@ -10,6 +10,7 @@
 
 #pragma once
 #include <JuceHeader.h>
+#include "Constants.h"
 
 using AudioBuffer = juce::AudioBuffer<float>;
 namespace effects {
@@ -23,7 +24,7 @@ namespace effects {
         void split(juce::dsp::ProcessContextReplacing<float>& context);
 
     private:
-        std::array<AudioBuffer, 4u> audioBuffers;
+        std::array<AudioBuffer, REVERB_CHANNELS> audioBuffers;
 
         void clearAudioBuffers();
     };

@@ -21,16 +21,8 @@ namespace effects {
         void process(Splitter& split);
 
     private:
-        std::array<float, 4u> delayTimes = { 31.f, 37.f, 41.f, 43.f };
-
-        std::array<juce::dsp::DelayLine<float>, 4u> delays;
-        std::array<juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs>, 4u> allPassFilters;
-        std::array<float, 4u> allPassFrequencies = { 450.f, 1100.f, 1900.f, 2750.f };
-        float hadamard[4][4] = {
-            {1,1,1,1},
-            {1,-1,1,-1},
-            {1,1,-1,-1},
-            {1,-1,-1,1}
-        };
+        std::array<float, REVERB_CHANNELS> delayTimes = { 13.3f, 33.3f, 66.6f, 100.f };
+        std::array<juce::dsp::DelayLine<float>, REVERB_CHANNELS> delays;
+        std::array<bool, REVERB_CHANNELS> flipPolarity = { true, false, false, true };
     };
 }
