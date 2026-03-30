@@ -25,15 +25,17 @@ namespace effects {
         void reset() override;
 
     private:
+        static constexpr float multiplier = -2.f / REVERB_CHANNELS;
+
         std::array<float, REVERB_CHANNELS> delayTimes{ 100.f, 133.3f, 166.6f, 200.f };
 
         Splitter split;
         std::array<Diffuser, DIFF_STEPS> diff;
         std::array<juce::dsp::DelayLine<float>, REVERB_CHANNELS> delays;
-        std::array<float, REVERB_CHANNELS> feedbacks;
-        std::array<juce::dsp::StateVariableTPTFilter<float>, REVERB_CHANNELS> highCutFilter; //low-pass filter
 
         juce::SmoothedValue<float> decay;
         juce::SmoothedValue<float> mix;
+
+        void Householder(std::vector<float>& buffer);
     };
 }

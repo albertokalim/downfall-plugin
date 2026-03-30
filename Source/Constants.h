@@ -11,5 +11,5 @@
 #pragma once
 #include <cstdint>
 
-static constexpr uint16_t DIFF_STEPS = 8u;
-static constexpr uint16_t REVERB_CHANNELS = 4u;
+static constexpr uint16_t DIFF_STEPS = 4u;
+static constexpr uint16_t REVERB_CHANNELS = 8u;

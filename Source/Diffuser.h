@@ -23,6 +23,9 @@ namespace effects {
     private:
         std::array<float, REVERB_CHANNELS> delayTimes = { 13.3f, 33.3f, 66.6f, 100.f };
         std::array<juce::dsp::DelayLine<float>, REVERB_CHANNELS> delays;
-        std::array<bool, REVERB_CHANNELS> flipPolarity = { true, false, false, true };
+
+        const float scalingFactor = std::sqrt(1.f / REVERB_CHANNELS);
+
+        void Hadamard(float* buffer, int numSamples);
     };
 }

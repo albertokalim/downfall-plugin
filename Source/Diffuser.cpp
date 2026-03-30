@@ -42,35 +42,27 @@ void effects::Diffuser::process(Splitter& split)
     }
 
     //Hadamard mixing matrix.
-    const float* input[REVERB_CHANNELS];
     float* output[REVERB_CHANNELS];
-    for (int i = 0; i < REVERB_CHANNELS; ++i) {
-        input[i] = split.getAudioBuffer(i).getReadPointer(0);
-        output[i] = split.getAudioBuffer(i).getWritePointer(0);
+    int numSamples = split.getAudioBuffer(0).getNumSamples();
+    for (int c = 0; c < REVERB_CHANNELS; ++c) {
+        output[c] = split.getAudioBuffer(c).getWritePointer(0);
+        Hadamard(output[c], numSamples);
     }
-    
-    for (int sample = 0; sample < split.getAudioBuffer(0).getNumSamples(); ++sample) {
-        float x0 = input[0][sample];
-        float x1 = input[1][sample];
-        float x2 = input[2][sample];
-        float x3 = input[3][sample];
+}
 
-        output[0][sample] = (x0 + x1 + x2 + x3) * 0.5f; // 1/sqrt(n), n = 4 
-
-        output[1][sample] = (x0 - x1 + x2 - x3) * 0.5f;
-
-        output[2][sample] = (x0 + x1 - x2 - x3) * 0.5f;
-
-        output[3][sample] = (x0 - x1 - x2 + x3) * 0.5f;
-    }
-
-    //allpass filter
-    for (int i = 0; i < REVERB_CHANNELS; ++i) {
-        auto& buffer = split.getAudioBuffer(i);
-        juce::dsp::AudioBlock<float> block(buffer);
-        juce::dsp::ProcessContextReplacing<float> context(block);
-        if (flipPolarity[i]) {
-            block.multiplyBy(-1);
+void effects::Diffuser::Hadamard(float* buffer, int numSamples)
+{
+    for (int sample = 0; sample < numSamples; ++sample) {
+        float a = buffer[sample];
+        if (sample + 1 < numSamples) {
+            float b = buffer[sample + 1];
+            buffer[sample] = a + b;
+            buffer[sample + 1] = a - b;
+        }
+        buffer[sample] *= scalingFactor;
+        //flip polarity
+        if (rand() % 2) {
+            buffer[sample] *= -1;
         }
     }
 }

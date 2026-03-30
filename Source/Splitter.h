@@ -18,7 +18,7 @@ namespace effects {
     class Splitter {
     public:
         Splitter() = default;
-        std::array<AudioBuffer, 4u>& getAudioBuffers() { return audioBuffers; }
+        std::array<AudioBuffer, REVERB_CHANNELS>& getAudioBuffers() { return audioBuffers; }
         AudioBuffer& getAudioBuffer(int i) { return audioBuffers[i]; }
         void prepare(int numSamples);
         void split(juce::dsp::ProcessContextReplacing<float>& context);

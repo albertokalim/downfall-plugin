@@ -12,17 +12,16 @@
 
 void effects::Splitter::prepare(int numSamples)
 {
-    for (auto& buffer : audioBuffers) {
-        buffer.setSize(1, numSamples, false, true, true);
-        buffer.clear();
+    for (int c = 0; c < REVERB_CHANNELS; ++c) {
+        audioBuffers[c].setSize(1, numSamples, false, true, true);
+        audioBuffers[c].clear();
     }
 }
 
 void effects::Splitter::split(juce::dsp::ProcessContextReplacing<float>& context)
 {
     auto& block = context.getOutputBlock();
-    const float* source = block.getChannelPointer(0);
-
+    float* source = context.getOutputBlock().getChannelPointer(0);
     const int numSamples = (int)block.getNumSamples();
 
     for (int i = 0; i < REVERB_CHANNELS; ++i) {
