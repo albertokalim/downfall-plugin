@@ -706,6 +706,9 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Source\JsonSerializer.cpp">
+      <Filter>DownfallPlugin\Source</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\Diffuser.cpp">
       <Filter>DownfallPlugin\Source</Filter>
     </ClCompile>
@@ -3765,6 +3768,9 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Source\JsonSerializer.h">
+      <Filter>DownfallPlugin\Source</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\Source\Constants.h">
       <Filter>DownfallPlugin\Source</Filter>
     </ClInclude>

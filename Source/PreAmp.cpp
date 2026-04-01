@@ -91,27 +91,27 @@ void preamp::CleanAmp::prepare(juce::dsp::ProcessSpec& spec)
 
 void preamp::CleanAmp::updateState(parameters::PreAmpParameters& parameters)
 {
-    gain.setGainLinear(mapValueInRange(parameters.getGain().get() / 100.f, minDrive, maxDrive));
+    gain.setGainLinear(mapValueInRange(parameters.gain.get() / 100.f, minDrive, maxDrive));
 
-    bassSmoother.setTargetValue(mapValueInRange(parameters.getBass().get() / 100.f, MIN_BAND_GAIN, MAX_BAND_GAIN));
+    bassSmoother.setTargetValue(mapValueInRange(parameters.bass.get() / 100.f, MIN_BAND_GAIN, MAX_BAND_GAIN));
     *bassEQ.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(sampleRate,
         BASS_CENTER_FQ,
         BASS_Q_FACTOR,
         juce::Decibels::decibelsToGain(bassSmoother.getNextValue()));
 
-    middleSmoother.setTargetValue(mapValueInRange(parameters.getMiddle().get() / 100.f, MIN_BAND_GAIN, MAX_BAND_GAIN));
+    middleSmoother.setTargetValue(mapValueInRange(parameters.middle.get() / 100.f, MIN_BAND_GAIN, MAX_BAND_GAIN));
     *middleEQ.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(sampleRate,
         MID_CENTER_FQ,
         MID_Q_FACTOR,
         juce::Decibels::decibelsToGain(middleSmoother.getNextValue()));
 
-    trebleSmoother.setTargetValue(mapValueInRange(parameters.getTreble().get() / 100.f, MIN_BAND_GAIN, MAX_BAND_GAIN));
+    trebleSmoother.setTargetValue(mapValueInRange(parameters.treble.get() / 100.f, MIN_BAND_GAIN, MAX_BAND_GAIN));
     *trebleEQ.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(sampleRate,
         TREBLE_CENTER_FQ,
         TREBLE_Q_FACTOR,
         juce::Decibels::decibelsToGain(trebleSmoother.getNextValue()));
 
-    master.setGainLinear(mapValueInRange(parameters.getMaster().get() / 100.f, 0.f, 2.f));
+    master.setGainLinear(mapValueInRange(parameters.master.get() / 100.f, 0.f, 2.f));
 }
 
 void preamp::CleanAmp::manageInput(juce::dsp::ProcessContextReplacing<float>& context)

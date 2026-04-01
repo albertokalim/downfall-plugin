@@ -144,6 +144,7 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Source\JsonSerializer.cpp"/>
     <ClCompile Include="..\..\Source\Diffuser.cpp"/>
     <ClCompile Include="..\..\Source\Splitter.cpp"/>
     <ClCompile Include="..\..\Source\Reverb.cpp"/>
@@ -3004,6 +3005,7 @@
     <ClCompile Include="..\..\JuceLibraryCode\include_juce_gui_extra.cpp"/>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Source\JsonSerializer.h"/>
     <ClInclude Include="..\..\Source\Constants.h"/>
     <ClInclude Include="..\..\Source\Diffuser.h"/>
     <ClInclude Include="..\..\Source\Splitter.h"/>

@@ -81,16 +81,16 @@ namespace effects {
 
     void DelayFX::update(parameters::FXParameters& parameters)
     {
-        bypass = parameters.getBypassEffect().get();
+        bypass = parameters.bypassEffect.get();
 
         parameters::DelayParameters& delayParams = dynamic_cast<parameters::DelayParameters&>(parameters);
 
-        delayTimeSmoother.setTargetValue(delayParams.getDelayTime().get());
-        mixSmoother.setTargetValue(delayParams.getMix().get() / 100.f);
-        feedbackSmoother.setTargetValue(delayParams.getFeedback().get() / 100.f);
-        sync = delayParams.getSync().get();
+        delayTimeSmoother.setTargetValue(delayParams.delayTime.get());
+        mixSmoother.setTargetValue(delayParams.mix.get() / 100.f);
+        feedbackSmoother.setTargetValue(delayParams.feedback.get() / 100.f);
+        sync = delayParams.sync.get();
 
-        delayNoteIndex = delayParams.getDelayNote().getIndex();
+        delayNoteIndex = delayParams.delayNote.getIndex();
     }
 
     void DelayFX::process(juce::dsp::ProcessContextReplacing<float>& context)
@@ -165,15 +165,15 @@ namespace effects {
 
     void ChorusFX::update(parameters::FXParameters& parameters)
     {
-        bypass = parameters.getBypassEffect().get();
+        bypass = parameters.bypassEffect.get();
 
         parameters::ChorusParameters& chorusParams = dynamic_cast<parameters::ChorusParameters&>(parameters);
 
-        rateSmoother.setTargetValue(chorusParams.getRate().get());
+        rateSmoother.setTargetValue(chorusParams.rate.get());
 
-        widthSmoother.setTargetValue(chorusParams.getWidth().get() / 100.f);
+        widthSmoother.setTargetValue(chorusParams.width.get() / 100.f);
 
-        mixSmoother.setTargetValue(chorusParams.getMix().get() / 100.f);
+        mixSmoother.setTargetValue(chorusParams.mix.get() / 100.f);
     }
 
     void ChorusFX::process(juce::dsp::ProcessContextReplacing<float>& context)

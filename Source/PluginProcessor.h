@@ -14,6 +14,7 @@
 #include "HighGain.h"
 #include "Effect.h"
 #include "Reverb.h"
+#include "JsonSerializer.h"
 
 //==============================================================================
 /**

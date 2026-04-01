@@ -56,15 +56,15 @@ void effects::ReverbFX::prepare(juce::dsp::ProcessSpec& spec)
 
 void effects::ReverbFX::update(parameters::FXParameters& parameters)
 {
-    bypass = parameters.getBypassEffect().get();
+    bypass = parameters.bypassEffect.get();
 
     parameters::ReverbParameters& reverbParams = dynamic_cast<parameters::ReverbParameters&>(parameters);
-    decay.setTargetValue(reverbParams.getDecay().get() / 100.f);
+    decay.setTargetValue(reverbParams.decay.get() / 100.f);
     highShelfCut.coefficients = juce::dsp::IIR::Coefficients<float>::makeHighShelf(sampleRate,
         8000.f, 
         0.3f,
         juce::jlimit<float>(0.f, 0.9f, decay.getNextValue()));
-    mix.setTargetValue(reverbParams.getMix().get() / 100.f);
+    mix.setTargetValue(reverbParams.mix.get() / 100.f);
 }
 
 void effects::ReverbFX::process(juce::dsp::ProcessContextReplacing<float>& context)
