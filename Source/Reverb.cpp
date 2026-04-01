@@ -10,13 +10,14 @@
 
 #include "Reverb.h"
 
-effects::ReverbFX::ReverbFX()
+effects::ReverbFX::ReverbFX(float _delayTime)
 {
-
+    delayTime = _delayTime;
 }
 
 void effects::ReverbFX::prepare(juce::dsp::ProcessSpec& spec)
 {
+    sampleRate = spec.sampleRate;
     split.prepare(spec.maximumBlockSize);
     for (int i = 0; i < DIFF_STEPS; ++i) {
         diff[i].prepare(spec);
@@ -27,16 +28,21 @@ void effects::ReverbFX::prepare(juce::dsp::ProcessSpec& spec)
     oneChannelSpec.numChannels = 1;
     oneChannelSpec.sampleRate = spec.sampleRate;
 
+    highShelfCut.reset();
+    highShelfCut.coefficients = juce::dsp::IIR::Coefficients<float>::makeHighShelf(sampleRate, 8000.f, 0.3f, 0.9f);
+    highShelfCut.prepare(oneChannelSpec);
+
+    float delaySamplesBase = delayTime / 1000.0f * spec.sampleRate;
     for (int i = 0; i < REVERB_CHANNELS; ++i) {
         auto& delayLine = delays[i];
         delayLine.prepare(oneChannelSpec);
-
-        double maxNumSamples = 5000.f / 1000.0 * spec.sampleRate;
-        int maxDelayInSamples = int(std::ceil(maxNumSamples));
-        delayLine.setMaximumDelayInSamples(maxDelayInSamples);
-
-        double numSamples = delayTimes[i] / 1000.0 * spec.sampleRate;
-        delayLine.setDelay(numSamples);
+        delayLine.reset();
+        float r = i / delaySamplesBase;
+        float delayInSamples = (float) std::pow(2, r) * delaySamplesBase;
+        float ceilDelaySamples = std::ceilf(delayInSamples);
+        delayLine.setMaximumDelayInSamples(ceilDelaySamples);
+        delayLine.setDelay(ceilDelaySamples);
+        delayedSamples[i] = 0.f;
     }
 
     decay.reset(0.002f);
@@ -54,6 +60,10 @@ void effects::ReverbFX::update(parameters::FXParameters& parameters)
 
     parameters::ReverbParameters& reverbParams = dynamic_cast<parameters::ReverbParameters&>(parameters);
     decay.setTargetValue(reverbParams.getDecay().get() / 100.f);
+    highShelfCut.coefficients = juce::dsp::IIR::Coefficients<float>::makeHighShelf(sampleRate,
+        8000.f, 
+        0.3f,
+        juce::jlimit<float>(0.f, 0.9f, decay.getNextValue()));
     mix.setTargetValue(reverbParams.getMix().get() / 100.f);
 }
 
@@ -62,48 +72,75 @@ void effects::ReverbFX::process(juce::dsp::ProcessContextReplacing<float>& conte
     if (bypass)
         return;
 
+    split.clearAudioBuffers();
     split.split(context);
     for (int i = 0; i < DIFF_STEPS; ++i) {
         diff[i].process(split);
     }
 
-    float* output[REVERB_CHANNELS];
     for (int c = 0; c < REVERB_CHANNELS; ++c) {
         output[c] = split.getAudioBuffer(c).getWritePointer(0);
-    }
-
-    std::vector<float> delayedSamples;
-    for (int c = 0; c < REVERB_CHANNELS; ++c) {
-        delayedSamples.insert(delayedSamples.begin() + c, 0.f);
+        jassert(output[c] != nullptr);
+        delayedSamples[c] = 0.f;
     }
     
-    //Creo que el problema está en el feedback.
     for (int sample = 0; sample < split.getAudioBuffer(0).getNumSamples(); ++sample) {
         for (int c = 0; c < REVERB_CHANNELS; ++c) {
             delayedSamples[c] = delays[c].popSample(0);
         }
         Householder(delayedSamples);
         for (int c = 0; c < REVERB_CHANNELS; ++c) {
-            float mixedValue = delayedSamples[c] * mix.getTargetValue() * decay.getNextValue();
+            float filteredValue = highShelfCut.processSample(delayedSamples[c]);
+            highShelfCut.reset();
+            float mixedValue = delayedSamples[c] * decay.getNextValue();
             float sum = output[c][sample] + mixedValue;
             delays[c].pushSample(0, sum);
             output[c][sample] = sum;
+        }
+
+        float left = 0.f;
+        float right = 0.f;
+        for (int c = 0; c < REVERB_CHANNELS; c += 2) {
+            left += output[c][sample];
+            right += output[c + 1][sample];
+        }
+
+        auto& outputBlock = context.getOutputBlock();
+        float scaling = (float) outputBlock.getNumChannels() / (float) REVERB_CHANNELS;
+        float mixParam = mix.getNextValue();
+        if (outputBlock.getNumChannels() > 1) {
+            float* outL = outputBlock.getChannelPointer(0);
+            float* outR = outputBlock.getChannelPointer(1);
+            outL[sample] += left * scaling * mixParam;
+            outR[sample] += right * scaling * mixParam;
+        }
+        else {
+            float* outL = outputBlock.getChannelPointer(0);
+            outL[sample] = left * scaling;
         }
     }
 }
 
 void effects::ReverbFX::reset()
 {
+    split.clearAudioBuffers();
+    for (int i = 0; i < REVERB_CHANNELS; ++i) {
+        delayedSamples[i] = 0.f;
+        delays[i].reset();
+    }
+    for (int i = 0; i < DIFF_STEPS; ++i) {
+        diff[i].reset();
+    }
 }
 
-void effects::ReverbFX::Householder(std::vector<float>& buffer)
+void effects::ReverbFX::Householder(std::array<float, REVERB_CHANNELS>& inputs)
 {
     float sum = 0.f;
     for (int c = 0; c < REVERB_CHANNELS; ++c) {
-        sum += buffer[c];
+        sum += inputs[c];
     }
     sum *= multiplier;
     for (int c = 0; c < REVERB_CHANNELS; ++c) {
-        buffer[c] += sum;
+        inputs[c] += sum;
     }
 }

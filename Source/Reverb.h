@@ -18,7 +18,7 @@
 namespace effects {
     class ReverbFX : public FX {
     public:
-        ReverbFX();
+        ReverbFX(float _delayTime);
         void prepare(juce::dsp::ProcessSpec& spec) override;
         void update(parameters::FXParameters& parameters) override;
         void process(juce::dsp::ProcessContextReplacing<float>& context) override;
@@ -27,15 +27,18 @@ namespace effects {
     private:
         static constexpr float multiplier = -2.f / REVERB_CHANNELS;
 
-        std::array<float, REVERB_CHANNELS> delayTimes{ 100.f, 133.3f, 166.6f, 200.f };
-
+        float delayTime = 0.f;
+        float sampleRate = 44100.f;
         Splitter split;
-        std::array<Diffuser, DIFF_STEPS> diff;
+        std::array<Diffuser, DIFF_STEPS> diff{ Diffuser{20.0f},Diffuser{40.0f},Diffuser{80.0f},Diffuser{160.0f} };
         std::array<juce::dsp::DelayLine<float>, REVERB_CHANNELS> delays;
+        IIRFilter highShelfCut{ juce::dsp::IIR::Coefficients<float>::makeHighShelf(sampleRate, 8000.f, 0.3f, 0.9f) };
+        std::array<float, REVERB_CHANNELS> delayedSamples;
+        float* output[REVERB_CHANNELS];
 
         juce::SmoothedValue<float> decay;
         juce::SmoothedValue<float> mix;
 
-        void Householder(std::vector<float>& buffer);
+        void Householder(std::array<float, REVERB_CHANNELS>& inputs);
     };
 }

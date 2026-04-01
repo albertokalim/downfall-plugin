@@ -75,7 +75,7 @@ private:
 
     effects::DelayFX delay;
     effects::ChorusFX chorus;
-    effects::ReverbFX reverb;
+    effects::ReverbFX reverb{ 100.0 };
 
     juce::dsp::Convolution convolution;
 

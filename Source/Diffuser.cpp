@@ -9,6 +9,21 @@
 */
 
 #include "Diffuser.h"
+#include "Utils.h"
+
+effects::Diffuser::Diffuser(float _delayTime) : frame(new float[REVERB_CHANNELS])
+{
+    delayTime = _delayTime;
+    for (int i = 0; i < REVERB_CHANNELS; ++i) {
+        flipPolarity[i] = false;
+        frame[i] = 0.f;
+    }
+}
+
+effects::Diffuser::~Diffuser()
+{
+    delete frame;
+}
 
 void effects::Diffuser::prepare(juce::dsp::ProcessSpec& spec)
 {
@@ -17,52 +32,73 @@ void effects::Diffuser::prepare(juce::dsp::ProcessSpec& spec)
     oneChannelSpec.numChannels = 1;
     oneChannelSpec.sampleRate = spec.sampleRate;
 
+    float delaySamplesBase = delayTime * 0.001f * oneChannelSpec.sampleRate;
     for (int i = 0; i < REVERB_CHANNELS; ++i) {
         auto& delayLine = delays[i];
         delayLine.prepare(oneChannelSpec);
-        
-        double maxNumSamples =  5000.f / 1000.0 * spec.sampleRate;
-        int maxDelayInSamples = int(std::ceil(maxNumSamples));
-        delayLine.setMaximumDelayInSamples(maxDelayInSamples);
-
-        double numSamples = delayTimes[i] / 1000.0 * spec.sampleRate;
-        delayLine.setDelay(numSamples);
+        delayLine.reset();
+        float rangeLow = delaySamplesBase * i / REVERB_CHANNELS;
+        float rangeHigh = delaySamplesBase * (i + 1) / REVERB_CHANNELS;
+        float delayInSamples = randomInRange(rangeLow, rangeHigh);
+        float ceilDelaySamples = std::ceilf(delayInSamples);
+        delayLine.setMaximumDelayInSamples(ceilDelaySamples);
+        delayLine.setDelay(ceilDelaySamples);
+        flipPolarity[i] = rand() % 2;
+        frame[i] = 0.f;
     }
 }
 
 void effects::Diffuser::process(Splitter& split)
 {
-    //Delay
-    for (int i = 0; i < REVERB_CHANNELS; ++i) {
-        auto& delayLine = delays[i];
-        auto& buffer = split.getAudioBuffer(i);
-        juce::dsp::AudioBlock<float> block(buffer);
-        juce::dsp::ProcessContextReplacing<float> context(block);
-        delayLine.process(context);
-    }
-
-    //Hadamard mixing matrix.
-    float* output[REVERB_CHANNELS];
-    int numSamples = split.getAudioBuffer(0).getNumSamples();
     for (int c = 0; c < REVERB_CHANNELS; ++c) {
         output[c] = split.getAudioBuffer(c).getWritePointer(0);
-        Hadamard(output[c], numSamples);
+        jassert(output[c] != nullptr);
+    }
+    int numSamples = split.getAudioBuffer(0).getNumSamples();
+
+    for (int sample = 0; sample < numSamples; ++sample) {
+        for (int c = 0; c < REVERB_CHANNELS; ++c) {
+            delays[c].pushSample(0, output[c][sample]);
+            frame[c] = delays[c].popSample(0);
+        }
+        Hadamard(frame);
+        for (int c = 0; c < REVERB_CHANNELS; ++c) {
+            if (flipPolarity[c]) {
+                frame[c] *= -1.f;
+            }
+            output[c][sample] = frame[c];
+        }
     }
 }
 
-void effects::Diffuser::Hadamard(float* buffer, int numSamples)
+void effects::Diffuser::Hadamard(float* input)
 {
-    for (int sample = 0; sample < numSamples; ++sample) {
-        float a = buffer[sample];
-        if (sample + 1 < numSamples) {
-            float b = buffer[sample + 1];
-            buffer[sample] = a + b;
-            buffer[sample + 1] = a - b;
-        }
-        buffer[sample] *= scalingFactor;
-        //flip polarity
-        if (rand() % 2) {
-            buffer[sample] *= -1;
-        }
+    HadamardRecursive(input, REVERB_CHANNELS);
+    for (int c = 0; c < REVERB_CHANNELS; ++c) {
+        input[c] *= scalingFactor;
+    }
+}
+
+void effects::Diffuser::HadamardRecursive(float* input, int size)
+{
+    if (size <= 1) return;
+    const int hSize = size / 2;
+
+    HadamardRecursive(input, hSize);
+    HadamardRecursive(input + hSize, hSize);
+
+    for (int i = 0; i < hSize; ++i) {
+        float a = input[i];
+        float b = input[i + hSize];
+        input[i] = (a + b);
+        input[i + hSize] = (a - b);
+    }
+}
+
+void effects::Diffuser::reset()
+{
+    for (int i = 0; i < REVERB_CHANNELS; ++i) {
+        delays[i].reset();
+        frame[i] = 0.f;
     }
 }

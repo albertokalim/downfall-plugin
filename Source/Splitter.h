@@ -22,10 +22,9 @@ namespace effects {
         AudioBuffer& getAudioBuffer(int i) { return audioBuffers[i]; }
         void prepare(int numSamples);
         void split(juce::dsp::ProcessContextReplacing<float>& context);
+        void clearAudioBuffers();
 
     private:
         std::array<AudioBuffer, REVERB_CHANNELS> audioBuffers;
-
-        void clearAudioBuffers();
     };
 }

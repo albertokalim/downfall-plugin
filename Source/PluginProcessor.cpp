@@ -134,6 +134,7 @@ void DownfallPluginAudioProcessor::prepareToPlay (double sampleRate, int samples
 
 void DownfallPluginAudioProcessor::releaseResources()
 {
+    reverb.reset();
 }
 
 #ifndef JucePlugin_PreferredChannelConfigurations
