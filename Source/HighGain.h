@@ -26,7 +26,7 @@ namespace preamp {
             maxDrive = _maxDrive;
         }
         void prepare(juce::dsp::ProcessSpec& spec) override;
-        void updateState(parameters::PreAmpParameters& parameters) override;
+        void updateState(parameters::Parameters& parameters) override;
         void manageInput(juce::dsp::ProcessContextReplacing<float>& context) override;
         void prefilter(juce::dsp::ProcessContextReplacing<float>& context) override;
         void waveshaping(juce::dsp::ProcessContextReplacing<float>& context) override;

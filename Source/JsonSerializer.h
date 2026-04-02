@@ -14,17 +14,9 @@
 
 class JsonSerializer {
 public:
-    static void serializeGlobalParameters(parameters::GlobalParameters&, juce::OutputStream&);
-    static void serializePreAmpParameters(parameters::PreAmpParameters&, juce::OutputStream&);
-    static void serializeDelayParameters(parameters::DelayParameters&, juce::OutputStream&);
-    static void serializeChorusParameters(parameters::ChorusParameters&, juce::OutputStream&);
-    static void serializeReverbParameters(parameters::ReverbParameters&, juce::OutputStream&);
+    static void serializeParameters(parameters::Parameters&, juce::OutputStream&);
 
     /** @return Error message on failure; empty string otherwise.
      *           In case of error, no parameters are updated. */
-    static juce::Result deserializeGlobalParameters(juce::InputStream&, parameters::GlobalParameters&);
-    static juce::Result deserializePreAmpParameters(juce::InputStream&, parameters::PreAmpParameters&);
-    static juce::Result deserializeDelayParameters(juce::InputStream&, parameters::DelayParameters&);
-    static juce::Result deserializeChorusParameters(juce::InputStream&, parameters::ChorusParameters&);
-    static juce::Result deserializeReverbParameters(juce::InputStream&, parameters::ReverbParameters&);
+    static juce::Result deserializeParameters(juce::InputStream&, parameters::Parameters&);
 };

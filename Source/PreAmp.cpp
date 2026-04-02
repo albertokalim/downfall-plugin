@@ -89,7 +89,7 @@ void preamp::CleanAmp::prepare(juce::dsp::ProcessSpec& spec)
     waveshaper.prepare(osSpec);
 }
 
-void preamp::CleanAmp::updateState(parameters::PreAmpParameters& parameters)
+void preamp::CleanAmp::updateState(parameters::Parameters& parameters)
 {
     gain.setGainLinear(mapValueInRange(parameters.gain.get() / 100.f, minDrive, maxDrive));
 

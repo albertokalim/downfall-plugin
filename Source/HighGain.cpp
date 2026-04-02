@@ -107,7 +107,7 @@ void preamp::HighGainAmp::prepare(juce::dsp::ProcessSpec& spec)
     waveshaper.prepare(osSpec);
 }
 
-void preamp::HighGainAmp::updateState(parameters::PreAmpParameters& parameters)
+void preamp::HighGainAmp::updateState(parameters::Parameters& parameters)
 {
     gain.setGainLinear(mapValueInRange(parameters.gain.get() / 100.f, minDrive, maxDrive));
 

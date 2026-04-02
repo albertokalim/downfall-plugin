@@ -62,11 +62,7 @@ public:
     void setIRToConvolution(juce::File newIRFile);
 
 private:
-    parameters::GlobalParameters globalParameters{ *this };
-    parameters::PreAmpParameters preAmpParameters{ *this };
-    parameters::DelayParameters delayParameters{ *this };
-    parameters::ChorusParameters chorusParameters{ *this };
-    parameters::ReverbParameters reverbParameters{ *this };
+    parameters::Parameters parameters{ *this };
 
     juce::SmoothedValue<float> inputGainSmoother;
     juce::SmoothedValue<float> outputGainSmoother;

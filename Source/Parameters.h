@@ -55,9 +55,9 @@ namespace parameters {
         return addParameterToProcessor(processor, std::move(parameter));
     }
 
-    class GlobalParameters {
+    class Parameters {
     public:
-        GlobalParameters(juce::AudioProcessor& audioProcessor)
+        Parameters(juce::AudioProcessor& audioProcessor)
             : outputGain(createParameterFloat(audioProcessor,
                 "output.gain",
                 "Output gain",
@@ -83,55 +83,8 @@ namespace parameters {
             bypassPreamp(createParameterBool(audioProcessor,
                 "bypassPreamp",
                 "Bypass PreAmp",
-                false))
-        {
-        }
-
-        juce::AudioParameterFloat& inputGain;
-        juce::AudioParameterFloat& outputGain;
-        juce::AudioParameterFloat& gateThreshold;
-        juce::AudioParameterBool& bypassCabinet;
-        juce::AudioParameterBool& bypassPreamp;
-
-    private:
-
-        JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(GlobalParameters)
-    };
-
-    struct SerializableGlobalParameters {
-        float inputGain;
-        float outputGain;
-        float gateThreshold;
-        bool bypassCabinet;
-        bool bypassPreamp;
-
-        static constexpr auto marshallingVersion = MARSHALLING_VERSION;
-
-        template <typename Archive, typename T>
-        static void serialise(Archive& archive, T& t) {
-            using namespace juce;
-            if (archive.getVersion() != 1) {
-                return;
-            }
-
-            std::string pluginName = JucePlugin_Name;
-            archive(named("pluginName", pluginName));
-            if (pluginName != JucePlugin_Name) {
-                return;
-            }
-
-            archive(named("output.gain", t.outputGain),
-                named("gate.threshold", t.gateThreshold),
-                named("input.gain", t.inputGain),
-                named("bypassCabinet", t.bypassCabinet),
-                named("bypassPreamp", t.bypassPreamp));
-        }
-    };
-
-    class PreAmpParameters {
-    public:
-        PreAmpParameters(juce::AudioProcessor& audioProcessor)
-            : gain(createParameterFloat(audioProcessor,
+                false)),
+            gain(createParameterFloat(audioProcessor,
                 "gain",
                 "Gain",
                 juce::NormalisableRange{ 0.f, 100.f },
@@ -171,82 +124,14 @@ namespace parameters {
                 "ampType",
                 "Amp Type",
                 juce::StringArray{ "Clean", "HighGain" },
-                0))
-        {
-        }
-
-        juce::AudioParameterFloat& gain;
-        juce::AudioParameterFloat& bass;
-        juce::AudioParameterFloat& middle;
-        juce::AudioParameterFloat& treble;
-        juce::AudioParameterFloat& presence;
-        juce::AudioParameterFloat& master;
-        juce::AudioParameterChoice& ampType;
-
-    private:
-
-        JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(PreAmpParameters)
-    };
-
-    struct SerializablePreAmpParameters {
-        float gain;
-        float bass;
-        float middle;
-        float treble;
-        float presence;
-        float master;
-        juce::String ampType;
-
-        static constexpr auto marshallingVersion = MARSHALLING_VERSION;
-
-        template <typename Archive, typename T>
-        static void serialise(Archive& archive, T& t) {
-            using namespace juce;
-            if (archive.getVersion() != 1) {
-                return;
-            }
-
-            std::string pluginName = JucePlugin_Name;
-            archive(named("pluginName", pluginName));
-            if (pluginName != JucePlugin_Name) {
-                return;
-            }
-
-            archive(named("gain", t.gain),
-                named("bass", t.bass),
-                named("middle", t.middle),
-                named("treble", t.treble),
-                named("high-gain-presence", t.presence),
-                named("master", t.master),
-                named("ampType", t.ampType));
-        }
-    };
-
-    class FXParameters {
-    public:
-        FXParameters(juce::AudioProcessor& audioProcessor, juce::String effectName)
-            : bypassEffect(createParameterBool(audioProcessor,
-                effectName << "Bypass",
-                effectName << " Bypass",
-                true))
-        {
-        }
-        virtual ~FXParameters() {}
-
-        juce::AudioParameterBool& bypassEffect;
-    };
-
-    class DelayParameters : public FXParameters {
-    public:
-        DelayParameters(juce::AudioProcessor& audioProcessor)
-            : FXParameters(audioProcessor, "delay"),
+                0)),
             delayTime(createParameterFloat(audioProcessor,
                 "delayTime",
                 "Delay Time",
                 juce::NormalisableRange<float> { MIN_DELAY_TIME, MAX_DELAY_TIME, 0.001f, 0.25f },
                 100.0f,
                 juce::AudioParameterFloatAttributes{}.withLabel("ms"))),
-            mix(createParameterFloat(audioProcessor,
+            delayMix(createParameterFloat(audioProcessor,
                 "delayMix",
                 "Delay Mix",
                 juce::NormalisableRange<float>(0.0f, 100.0f, 1.0f),
@@ -283,59 +168,7 @@ namespace parameters {
                     "1/2 dot",
                     "1/1",
                 },
-                9))
-        {
-        }
-        ~DelayParameters() {}
-
-        juce::AudioParameterFloat& delayTime;
-        juce::AudioParameterFloat& mix;
-        juce::AudioParameterFloat& feedback;
-        juce::AudioParameterBool& sync;
-        juce::AudioParameterChoice& delayNote;
-
-    private:
-
-        JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(DelayParameters)
-    };
-
-    struct SerializableDelayParameters {
-        bool bypass;
-        float delayTime;
-        float mix;
-        float feedback;
-        bool sync;
-        juce::String delayNote;
-
-        static constexpr auto marshallingVersion = MARSHALLING_VERSION;
-
-        template <typename Archive, typename T>
-        static void serialise(Archive& archive, T& t) {
-            using namespace juce;
-            if (archive.getVersion() != 1) {
-                return;
-            }
-
-            std::string pluginName = JucePlugin_Name;
-            archive(named("pluginName", pluginName));
-            if (pluginName != JucePlugin_Name) {
-                return;
-            }
-
-            archive(named("delayTime", t.delayTime),
-                named("delayMix", t.mix),
-                named("delayFeedback", t.feedback),
-                named("delaySync", t.sync),
-                named("delayNote", t.delayNote),
-                named("delayBypass", t.bypass));
-        }
-    };
-
-    //TODO: Search for the logarithmic change of value (like analog knob)
-    class ChorusParameters : public FXParameters {
-    public:
-        ChorusParameters(juce::AudioProcessor& audioProcessor) : 
-            FXParameters(audioProcessor, "chorus"),
+                9)),
             rate(createParameterFloat(audioProcessor,
                 "chorusRate",
                 "Chorus Rate",
@@ -348,81 +181,96 @@ namespace parameters {
                 juce::NormalisableRange<float>(0.f, 100.f, 0.1f),
                 40.f,
                 juce::AudioParameterFloatAttributes{}.withLabel("%"))),
-            mix(createParameterFloat(audioProcessor,
+            chorusMix(createParameterFloat(audioProcessor,
                 "chorusMix",
                 "Chorus Mix",
                 juce::NormalisableRange<float>(0.f, 100.0f, 1.0f),
                 50.f,
-                juce::AudioParameterFloatAttributes{}.withLabel("%")))
-        {}
-
-        juce::AudioParameterFloat& rate;
-        juce::AudioParameterFloat& width;
-        juce::AudioParameterFloat& mix;
-
-    private:
-
-        JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ChorusParameters)
-    };
-
-    struct SerializableChorusParameters {
-        bool bypass;
-        float rate;
-        float width;
-        float mix;
-
-        static constexpr auto marshallingVersion = MARSHALLING_VERSION;
-
-        template <typename Archive, typename T>
-        static void serialise(Archive& archive, T& t) {
-            using namespace juce;
-            if (archive.getVersion() != 1) {
-                return;
-            }
-
-            std::string pluginName = JucePlugin_Name;
-            archive(named("pluginName", pluginName));
-            if (pluginName != JucePlugin_Name) {
-                return;
-            }
-
-            archive(named("chorusRate", t.rate),
-                named("chorusWidth", t.width),
-                named("chorusMix", t.mix),
-                named("chorusBypass", t.bypass));
-        }
-    };
-
-    class ReverbParameters : public FXParameters {
-    public:
-        ReverbParameters(juce::AudioProcessor& audioProcessor) :
-            FXParameters(audioProcessor, "reverb"),
+                juce::AudioParameterFloatAttributes{}.withLabel("%"))),
             decay(createParameterFloat(audioProcessor,
                 "reverbDecay",
                 "Reverb Decay",
                 juce::NormalisableRange<float>(0.f, 100.0f, 1.0f),
                 0.0f,
                 juce::AudioParameterFloatAttributes{}.withLabel("%"))),
-            mix(createParameterFloat(audioProcessor,
+            reverbMix(createParameterFloat(audioProcessor,
                 "reverbMix",
                 "Reverb Mix",
                 juce::NormalisableRange<float>(0.f, 100.0f, 1.0f),
                 50.f,
-                juce::AudioParameterFloatAttributes{}.withLabel("%")))
-        {}
+                juce::AudioParameterFloatAttributes{}.withLabel("%"))),
+            delayBypass(createParameterBool(audioProcessor,
+                "delayBypass",
+                "Delay Bypass",
+                true)),
+            chorusBypass(createParameterBool(audioProcessor,
+                "chorusBypass",
+                "Chorus Bypass",
+                true)),
+            reverbBypass(createParameterBool(audioProcessor,
+                "reverbBypass",
+                "Reverb Bypass",
+                true))
+        {
+        }
 
+        juce::AudioParameterFloat& inputGain;
+        juce::AudioParameterFloat& outputGain;
+        juce::AudioParameterFloat& gateThreshold;
+        juce::AudioParameterBool& bypassCabinet;
+        juce::AudioParameterBool& bypassPreamp;
+        juce::AudioParameterFloat& gain;
+        juce::AudioParameterFloat& bass;
+        juce::AudioParameterFloat& middle;
+        juce::AudioParameterFloat& treble;
+        juce::AudioParameterFloat& presence;
+        juce::AudioParameterFloat& master;
+        juce::AudioParameterChoice& ampType;
+        juce::AudioParameterFloat& delayTime;
+        juce::AudioParameterFloat& delayMix;
+        juce::AudioParameterFloat& feedback;
+        juce::AudioParameterBool& sync;
+        juce::AudioParameterChoice& delayNote;
+        juce::AudioParameterFloat& rate;
+        juce::AudioParameterFloat& width;
+        juce::AudioParameterFloat& chorusMix;
         juce::AudioParameterFloat& decay;
-        juce::AudioParameterFloat& mix;
+        juce::AudioParameterFloat& reverbMix;
+        juce::AudioParameterBool& delayBypass;
+        juce::AudioParameterBool& chorusBypass;
+        juce::AudioParameterBool& reverbBypass;
 
     private:
 
-        JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(ReverbParameters)
+        JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(Parameters)
     };
 
-    struct SerializableReverbParameters {
-        bool bypass;
+    struct SerializableParameters {
+        float inputGain;
+        float outputGain;
+        float gateThreshold;
+        bool bypassCabinet;
+        bool bypassPreamp;
+        float gain;
+        float bass;
+        float middle;
+        float treble;
+        float presence;
+        float master;
+        juce::String ampType;
+        bool delayBypass;
+        float delayTime;
+        float delayMix;
+        float feedback;
+        bool sync;
+        juce::String delayNote;
+        bool chorusBypass;
+        float rate;
+        float width;
+        float chorusMix;
+        bool reverbBypass;
         float decay;
-        float mix;
+        float reverbMix;
 
         static constexpr auto marshallingVersion = MARSHALLING_VERSION;
 
@@ -439,9 +287,31 @@ namespace parameters {
                 return;
             }
 
-            archive(named("reverbBypass", t.bypass),
+            archive(named("output.gain", t.outputGain),
+                named("gate.threshold", t.gateThreshold),
+                named("input.gain", t.inputGain),
+                named("bypassCabinet", t.bypassCabinet),
+                named("bypassPreamp", t.bypassPreamp),
+                named("gain", t.gain),
+                named("bass", t.bass),
+                named("middle", t.middle),
+                named("treble", t.treble),
+                named("high-gain-presence", t.presence),
+                named("master", t.master),
+                named("ampType", t.ampType),
+                named("delayTime", t.delayTime),
+                named("delayMix", t.delayMix),
+                named("delayFeedback", t.feedback),
+                named("delaySync", t.sync),
+                named("delayNote", t.delayNote),
+                named("delayBypass", t.delayBypass),
+                named("chorusRate", t.rate),
+                named("chorusWidth", t.width),
+                named("chorusMix", t.chorusMix),
+                named("chorusBypass", t.chorusBypass),
+                named("reverbBypass", t.reverbBypass),
                 named("reverbDecay", t.decay),
-                named("reverbMix", t.mix));
+                named("reverbMix", t.reverbMix));
         }
     };
 };

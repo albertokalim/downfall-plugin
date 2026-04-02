@@ -18,7 +18,7 @@ namespace effects {
     public:
         virtual ~FX() {}
         virtual void prepare(juce::dsp::ProcessSpec& spec) = 0;
-        virtual void update(parameters::FXParameters& parameters) = 0;
+        virtual void update(parameters::Parameters& parameters) = 0;
         virtual void process(juce::dsp::ProcessContextReplacing<float>& context) = 0;
         virtual void reset() = 0;
         bool isBypassed() const { return bypass; }
@@ -50,7 +50,7 @@ namespace effects {
     public:
         ~DelayFX() {}
         void prepare(juce::dsp::ProcessSpec& spec) override;
-        void update(parameters::FXParameters& parameters) override;
+        void update(parameters::Parameters& parameters) override;
         void process(juce::dsp::ProcessContextReplacing<float>& context) override;
         void reset() override;
         void updateTempoPlayHead(juce::AudioPlayHead* playhead) { tempo.update(playhead); }
@@ -73,7 +73,7 @@ namespace effects {
     public:
         ~ChorusFX() {}
         void prepare(juce::dsp::ProcessSpec& spec) override;
-        void update(parameters::FXParameters& parameters) override;
+        void update(parameters::Parameters& parameters) override;
         void process(juce::dsp::ProcessContextReplacing<float>& context) override;
         void reset() override;
 

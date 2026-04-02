@@ -45,7 +45,7 @@ namespace preamp {
     public:
         virtual ~PreAmpInterface() {}
         virtual void prepare(juce::dsp::ProcessSpec& spec) = 0;
-        virtual void updateState(parameters::PreAmpParameters& parameters) = 0;
+        virtual void updateState(parameters::Parameters& parameters) = 0;
         virtual void manageInput(juce::dsp::ProcessContextReplacing<float>& context) = 0;
         virtual void prefilter(juce::dsp::ProcessContextReplacing<float>& context) = 0;
         virtual void waveshaping(juce::dsp::ProcessContextReplacing<float>& context) = 0;
@@ -61,7 +61,7 @@ namespace preamp {
         ~PreAmpDecorator() { }
 
         void prepare(juce::dsp::ProcessSpec& spec) override { preAmp->prepare(spec); }
-        void updateState(parameters::PreAmpParameters& parameters) override { preAmp->updateState(parameters); }
+        void updateState(parameters::Parameters& parameters) override { preAmp->updateState(parameters); }
         void manageInput(juce::dsp::ProcessContextReplacing<float>& context) override { preAmp->manageInput(context); }
         void prefilter(juce::dsp::ProcessContextReplacing<float>& context) override { preAmp->prefilter(context); }
         void waveshaping(juce::dsp::ProcessContextReplacing<float>& context) override { preAmp->waveshaping(context); }
@@ -80,7 +80,7 @@ namespace preamp {
         ~PreAmp() { }
 
         void prepare(juce::dsp::ProcessSpec& spec) { decorator->prepare(spec); }
-        void update(parameters::PreAmpParameters& parameters) { decorator->updateState(parameters); }
+        void update(parameters::Parameters& parameters) { decorator->updateState(parameters); }
         void process(juce::dsp::ProcessContextReplacing<float>& context) {
             decorator->manageInput(context);
             decorator->prefilter(context);
@@ -112,7 +112,7 @@ namespace preamp {
             maxDrive = _maxDrive;
         }
         void prepare(juce::dsp::ProcessSpec& spec) override;
-        void updateState(parameters::PreAmpParameters& parameters) override;
+        void updateState(parameters::Parameters& parameters) override;
         void manageInput(juce::dsp::ProcessContextReplacing<float>& context) override;
         void prefilter(juce::dsp::ProcessContextReplacing<float>& context) override;
         void waveshaping(juce::dsp::ProcessContextReplacing<float>& context) override;

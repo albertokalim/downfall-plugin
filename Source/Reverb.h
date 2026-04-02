@@ -20,7 +20,7 @@ namespace effects {
     public:
         ReverbFX(float _delayTime);
         void prepare(juce::dsp::ProcessSpec& spec) override;
-        void update(parameters::FXParameters& parameters) override;
+        void update(parameters::Parameters& parameters) override;
         void process(juce::dsp::ProcessContextReplacing<float>& context) override;
         void reset() override;
 

@@ -164,24 +164,24 @@ void DownfallPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
     for (auto i = totalNumInputChannels; i < totalNumOutputChannels; ++i)
         buffer.clear (i, 0, buffer.getNumSamples());
 
-    inputGainSmoother.setTargetValue(globalParameters.inputGain.get());
-    outputGainSmoother.setTargetValue(globalParameters.outputGain.get());
-    gate.setThreshold(globalParameters.gateThreshold.get());
+    inputGainSmoother.setTargetValue(parameters.inputGain.get());
+    outputGainSmoother.setTargetValue(parameters.outputGain.get());
+    gate.setThreshold(parameters.gateThreshold.get());
 
     buffer.applyGain(juce::Decibels::decibelsToGain(inputGainSmoother.getNextValue()));
 
-    auto index = preAmpParameters.ampType.getIndex();//TODO: Maybe Amp Type is a global parameter.
-    preAmps[index]->update(preAmpParameters);
-    chorus.update(chorusParameters);
+    auto index = parameters.ampType.getIndex();//TODO: Maybe Amp Type is a global parameter.
+    preAmps[index]->update(parameters);
+    chorus.update(parameters);
     delay.updateTempoPlayHead(getPlayHead());
-    delay.update(delayParameters);
-    reverb.update(reverbParameters);
+    delay.update(parameters);
+    reverb.update(parameters);
     
     juce::dsp::AudioBlock<float> block(buffer);
     juce::dsp::ProcessContextReplacing<float> context(block);
 
-    if (!globalParameters.bypassPreamp.get()) {
-        preAmps[preAmpParameters.ampType.getIndex()]->process(context);
+    if (!parameters.bypassPreamp.get()) {
+        preAmps[parameters.ampType.getIndex()]->process(context);
     }
 
     chorus.process(context);
@@ -190,7 +190,7 @@ void DownfallPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
 
     //gate.process(context);
 
-    if (!globalParameters.bypassCabinet.get()) {
+    if (!parameters.bypassCabinet.get()) {
         convolution.process(context);
     }
 
@@ -213,22 +213,14 @@ void DownfallPluginAudioProcessor::getStateInformation (juce::MemoryBlock& destD
 {
     juce::MemoryOutputStream outputStream{ destData, true };
     //TODO: Considerar meter esto en un solo método porque es repetir código.
-    JsonSerializer::serializeGlobalParameters(globalParameters, outputStream);
-    JsonSerializer::serializePreAmpParameters(preAmpParameters, outputStream);
-    JsonSerializer::serializeDelayParameters(delayParameters, outputStream);
-    JsonSerializer::serializeChorusParameters(chorusParameters, outputStream);
-    JsonSerializer::serializeReverbParameters(reverbParameters, outputStream);
+    JsonSerializer::serializeParameters(parameters, outputStream);
 }
 
 void DownfallPluginAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
     juce::MemoryInputStream inputStream{ data, static_cast<size_t>(sizeInBytes), false };
     //TODO: Considerar meter esto en un solo método porque es repetir código.
-    JsonSerializer::deserializeGlobalParameters(inputStream, globalParameters);
-    JsonSerializer::deserializePreAmpParameters(inputStream, preAmpParameters);
-    JsonSerializer::deserializeDelayParameters(inputStream, delayParameters);
-    JsonSerializer::deserializeChorusParameters(inputStream, chorusParameters);
-    JsonSerializer::deserializeReverbParameters(inputStream, reverbParameters);
+    JsonSerializer::deserializeParameters(inputStream, parameters);
 }
 
 void DownfallPluginAudioProcessor::setIRToConvolution(juce::File newIRFile)

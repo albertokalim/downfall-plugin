@@ -79,18 +79,16 @@ namespace effects {
         feedbackSmoother.setCurrentAndTargetValue(0.f);
     }
 
-    void DelayFX::update(parameters::FXParameters& parameters)
+    void DelayFX::update(parameters::Parameters& parameters)
     {
-        bypass = parameters.bypassEffect.get();
+        bypass = parameters.delayBypass.get();
 
-        parameters::DelayParameters& delayParams = dynamic_cast<parameters::DelayParameters&>(parameters);
+        delayTimeSmoother.setTargetValue(parameters.delayTime.get());
+        mixSmoother.setTargetValue(parameters.delayMix.get() / 100.f);
+        feedbackSmoother.setTargetValue(parameters.feedback.get() / 100.f);
+        sync = parameters.sync.get();
 
-        delayTimeSmoother.setTargetValue(delayParams.delayTime.get());
-        mixSmoother.setTargetValue(delayParams.mix.get() / 100.f);
-        feedbackSmoother.setTargetValue(delayParams.feedback.get() / 100.f);
-        sync = delayParams.sync.get();
-
-        delayNoteIndex = delayParams.delayNote.getIndex();
+        delayNoteIndex = parameters.delayNote.getIndex();
     }
 
     void DelayFX::process(juce::dsp::ProcessContextReplacing<float>& context)
@@ -163,17 +161,15 @@ namespace effects {
         mixSmoother.setCurrentAndTargetValue(0.5f);
     }
 
-    void ChorusFX::update(parameters::FXParameters& parameters)
+    void ChorusFX::update(parameters::Parameters& parameters)
     {
-        bypass = parameters.bypassEffect.get();
+        bypass = parameters.chorusBypass.get();
 
-        parameters::ChorusParameters& chorusParams = dynamic_cast<parameters::ChorusParameters&>(parameters);
+        rateSmoother.setTargetValue(parameters.rate.get());
 
-        rateSmoother.setTargetValue(chorusParams.rate.get());
+        widthSmoother.setTargetValue(parameters.width.get() / 100.f);
 
-        widthSmoother.setTargetValue(chorusParams.width.get() / 100.f);
-
-        mixSmoother.setTargetValue(chorusParams.mix.get() / 100.f);
+        mixSmoother.setTargetValue(parameters.chorusMix.get() / 100.f);
     }
 
     void ChorusFX::process(juce::dsp::ProcessContextReplacing<float>& context)
