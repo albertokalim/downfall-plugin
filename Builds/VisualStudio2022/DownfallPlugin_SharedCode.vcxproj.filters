@@ -5,6 +5,33 @@
     <Filter Include="DownfallPlugin\Resources">
       <UniqueIdentifier>{C24A9A45-1F26-92A5-9FBA-3A1A4219DDB9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="DownfallPlugin\Include\gui">
+      <UniqueIdentifier>{4B8A58A8-46DB-FAD1-8463-0860166C8EDF}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DownfallPlugin\Include\fx">
+      <UniqueIdentifier>{B02B7066-2BA9-6111-980D-CE2E20AA6F32}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DownfallPlugin\Include\utils">
+      <UniqueIdentifier>{EA70D4FD-53A9-13CB-8C1C-00333B3FF0A4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DownfallPlugin\Include\amp">
+      <UniqueIdentifier>{4624F57C-F1CD-F25A-5B66-64309D1B4BB5}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DownfallPlugin\Include">
+      <UniqueIdentifier>{E9091163-313F-FF9F-2A8C-373757528068}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DownfallPlugin\Source\amp">
+      <UniqueIdentifier>{6235ED98-C13F-A804-B9A3-99E8ABD7C824}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DownfallPlugin\Source\utils">
+      <UniqueIdentifier>{FDEE19D5-06F0-5445-AAA8-D42EEC43578A}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DownfallPlugin\Source\fx">
+      <UniqueIdentifier>{EF71980A-A411-F16C-BF83-8DB5FE96B333}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="DownfallPlugin\Source\gui">
+      <UniqueIdentifier>{EC3F0327-2EA9-3A8B-DF71-3388EA208692}</UniqueIdentifier>
+    </Filter>
     <Filter Include="DownfallPlugin\Source">
       <UniqueIdentifier>{50BE5546-88E3-7F7A-5D2D-8C5E61C77582}</UniqueIdentifier>
     </Filter>
@@ -706,26 +733,32 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\Source\JsonSerializer.cpp">
-      <Filter>DownfallPlugin\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\Diffuser.cpp">
-      <Filter>DownfallPlugin\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\Splitter.cpp">
-      <Filter>DownfallPlugin\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\Reverb.cpp">
-      <Filter>DownfallPlugin\Source</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\Effect.cpp">
-      <Filter>DownfallPlugin\Source</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\Source\HighGain.cpp">
-      <Filter>DownfallPlugin\Source</Filter>
+      <Filter>DownfallPlugin\Source\amp</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\PreAmp.cpp">
-      <Filter>DownfallPlugin\Source</Filter>
+      <Filter>DownfallPlugin\Source\amp</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\JsonSerializer.cpp">
+      <Filter>DownfallPlugin\Source\utils</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Diffuser.cpp">
+      <Filter>DownfallPlugin\Source\fx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Splitter.cpp">
+      <Filter>DownfallPlugin\Source\fx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Reverb.cpp">
+      <Filter>DownfallPlugin\Source\fx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\Effect.cpp">
+      <Filter>DownfallPlugin\Source\fx</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\RotaryKnob.cpp">
+      <Filter>DownfallPlugin\Source\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\LevelMeter.cpp">
+      <Filter>DownfallPlugin\Source\gui</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\PluginProcessor.cpp">
       <Filter>DownfallPlugin\Source</Filter>
@@ -3768,41 +3801,47 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Source\JsonSerializer.h">
-      <Filter>DownfallPlugin\Source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\Constants.h">
-      <Filter>DownfallPlugin\Source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\Diffuser.h">
-      <Filter>DownfallPlugin\Source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\Splitter.h">
-      <Filter>DownfallPlugin\Source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\Reverb.h">
-      <Filter>DownfallPlugin\Source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\Effect.h">
-      <Filter>DownfallPlugin\Source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\HighGain.h">
-      <Filter>DownfallPlugin\Source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\Utils.h">
-      <Filter>DownfallPlugin\Source</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\Source\PreAmp.h">
-      <Filter>DownfallPlugin\Source</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\Source\Parameters.h">
-      <Filter>DownfallPlugin\Source</Filter>
+      <Filter>DownfallPlugin\Include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\PluginProcessor.h">
-      <Filter>DownfallPlugin\Source</Filter>
+      <Filter>DownfallPlugin\Include</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\PluginEditor.h">
-      <Filter>DownfallPlugin\Source</Filter>
+      <Filter>DownfallPlugin\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\RotaryKnob.h">
+      <Filter>DownfallPlugin\Include\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\LevelMeter.h">
+      <Filter>DownfallPlugin\Include\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Diffuser.h">
+      <Filter>DownfallPlugin\Include\fx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Splitter.h">
+      <Filter>DownfallPlugin\Include\fx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Reverb.h">
+      <Filter>DownfallPlugin\Include\fx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Effect.h">
+      <Filter>DownfallPlugin\Include\fx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\JsonSerializer.h">
+      <Filter>DownfallPlugin\Include\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Constants.h">
+      <Filter>DownfallPlugin\Include\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Utils.h">
+      <Filter>DownfallPlugin\Include\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\HighGain.h">
+      <Filter>DownfallPlugin\Include\amp</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\PreAmp.h">
+      <Filter>DownfallPlugin\Include\amp</Filter>
     </ClInclude>
     <ClInclude Include="C:\JUCE\modules\juce_audio_basics\audio_play_head\juce_AudioPlayHead.h">
       <Filter>JUCE Modules\juce_audio_basics\audio_play_head</Filter>

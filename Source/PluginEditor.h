@@ -10,6 +10,7 @@
 
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
+#include "RotaryKnob.h"
 
 //==============================================================================
 /**
@@ -28,8 +29,11 @@ private:
     // This reference is provided as a quick way for your editor to
     // access the processor object that created it.
     DownfallPluginAudioProcessor& audioProcessor;
-    std::unique_ptr<juce::FileChooser> fileChooser;
-    juce::TextButton fileChooserButton;
+    juce::GroupComponent top;
+    RotaryKnob inputKnob{"Input", true};
+    RotaryKnob outputKnob{ "Output", true };
+    juce::GroupComponent middle;
+    juce::GroupComponent bottom;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DownfallPluginAudioProcessorEditor)
 };

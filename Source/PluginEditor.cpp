@@ -13,25 +13,12 @@
 DownfallPluginAudioProcessorEditor::DownfallPluginAudioProcessorEditor (DownfallPluginAudioProcessor& p)
     : AudioProcessorEditor (&p), audioProcessor (p)
 {
-    // Make sure that before the constructor has finished, you've set the
-    // editor's size to whatever you need it to be.
-    fileChooserButton.setButtonText("Load IR");
-    fileChooserButton.setBounds(0, 0, 70, 27);
 
-    fileChooserButton.onClick = [this] {
-        fileChooser = std::make_unique<juce::FileChooser>("Select an IR File to load...",
-            juce::File::getSpecialLocation(juce::File::userHomeDirectory),
-            "*.wav");
-
-        fileChooser->launchAsync(juce::FileBrowserComponent::openMode, [this](const juce::FileChooser& chooser)
-            {
-                juce::File newIRFile(chooser.getResult());
-                audioProcessor.setIRToConvolution(newIRFile);
-            });
-        };
-
-    addAndMakeVisible(fileChooserButton);
-    setSize (400, 300);
+    top.addAndMakeVisible(inputKnob);
+    top.addAndMakeVisible(outputKnob);
+    addAndMakeVisible(top);
+    addAndMakeVisible(middle);
+    setSize (1356, 706);
 }
 
 DownfallPluginAudioProcessorEditor::~DownfallPluginAudioProcessorEditor()
@@ -42,15 +29,20 @@ DownfallPluginAudioProcessorEditor::~DownfallPluginAudioProcessorEditor()
 void DownfallPluginAudioProcessorEditor::paint (juce::Graphics& g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
-    g.fillAll (getLookAndFeel().findColour (juce::ResizableWindow::backgroundColourId));
-
-    g.setColour (juce::Colours::white);
-    g.setFont (juce::FontOptions (15.0f));
+    g.fillAll (juce::Colours::black);
 }
 
 void DownfallPluginAudioProcessorEditor::resized()
 {
     auto bounds = getLocalBounds();
+    int heightTop = 2 * bounds.getHeight() / 10;
+    int knobPaddingFromBorder = 80;
 
-    fileChooserButton.setTopLeftPosition(bounds.getCentreX() - fileChooserButton.getWidth() / 2, bounds.getCentreY() - fileChooserButton.getWidth() / 2);
+    top.setBounds(0, 0, bounds.getWidth(), heightTop);
+    middle.setBounds(0, heightTop, bounds.getWidth(), bounds.getHeight() - heightTop);
+
+    int knobYCoord = (heightTop / 2) - (inputKnob.getHeight() / 2);
+
+    inputKnob.setTopLeftPosition(knobPaddingFromBorder, knobYCoord);
+    outputKnob.setTopLeftPosition(bounds.getWidth() - knobPaddingFromBorder - outputKnob.getWidth(), knobYCoord);
 }

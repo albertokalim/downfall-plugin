@@ -144,13 +144,15 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Source\HighGain.cpp"/>
+    <ClCompile Include="..\..\Source\PreAmp.cpp"/>
     <ClCompile Include="..\..\Source\JsonSerializer.cpp"/>
     <ClCompile Include="..\..\Source\Diffuser.cpp"/>
     <ClCompile Include="..\..\Source\Splitter.cpp"/>
     <ClCompile Include="..\..\Source\Reverb.cpp"/>
     <ClCompile Include="..\..\Source\Effect.cpp"/>
-    <ClCompile Include="..\..\Source\HighGain.cpp"/>
-    <ClCompile Include="..\..\Source\PreAmp.cpp"/>
+    <ClCompile Include="..\..\Source\RotaryKnob.cpp"/>
+    <ClCompile Include="..\..\Source\LevelMeter.cpp"/>
     <ClCompile Include="..\..\Source\PluginProcessor.cpp"/>
     <ClCompile Include="..\..\Source\PluginEditor.cpp"/>
     <ClCompile Include="C:\JUCE\modules\juce_audio_basics\audio_play_head\juce_AudioPlayHead.cpp">
@@ -3005,18 +3007,20 @@
     <ClCompile Include="..\..\JuceLibraryCode\include_juce_gui_extra.cpp"/>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\Source\JsonSerializer.h"/>
-    <ClInclude Include="..\..\Source\Constants.h"/>
+    <ClInclude Include="..\..\Source\Parameters.h"/>
+    <ClInclude Include="..\..\Source\PluginProcessor.h"/>
+    <ClInclude Include="..\..\Source\PluginEditor.h"/>
+    <ClInclude Include="..\..\Source\RotaryKnob.h"/>
+    <ClInclude Include="..\..\Source\LevelMeter.h"/>
     <ClInclude Include="..\..\Source\Diffuser.h"/>
     <ClInclude Include="..\..\Source\Splitter.h"/>
     <ClInclude Include="..\..\Source\Reverb.h"/>
     <ClInclude Include="..\..\Source\Effect.h"/>
-    <ClInclude Include="..\..\Source\HighGain.h"/>
+    <ClInclude Include="..\..\Source\JsonSerializer.h"/>
+    <ClInclude Include="..\..\Source\Constants.h"/>
     <ClInclude Include="..\..\Source\Utils.h"/>
+    <ClInclude Include="..\..\Source\HighGain.h"/>
     <ClInclude Include="..\..\Source\PreAmp.h"/>
-    <ClInclude Include="..\..\Source\Parameters.h"/>
-    <ClInclude Include="..\..\Source\PluginProcessor.h"/>
-    <ClInclude Include="..\..\Source\PluginEditor.h"/>
     <ClInclude Include="C:\JUCE\modules\juce_audio_basics\audio_play_head\juce_AudioPlayHead.h"/>
     <ClInclude Include="C:\JUCE\modules\juce_audio_basics\buffers\juce_AudioChannelSet.h"/>
     <ClInclude Include="C:\JUCE\modules\juce_audio_basics\buffers\juce_AudioDataConverters.h"/>

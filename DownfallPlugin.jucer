@@ -7,33 +7,55 @@
     <GROUP id="{A1DA6CA4-139B-F186-11C3-D64C53B3EB6F}" name="Resources">
       <FILE id="DQnZGg" name="test-ir.wav" compile="0" resource="1" file="../../../test-ir.wav"/>
     </GROUP>
-    <GROUP id="{F8CB0AB7-C922-98DF-A4F1-2526B85D879F}" name="Source">
-      <FILE id="aul6xG" name="JsonSerializer.cpp" compile="1" resource="0"
-            file="Source/JsonSerializer.cpp"/>
-      <FILE id="nZPnjW" name="JsonSerializer.h" compile="0" resource="0"
-            file="Source/JsonSerializer.h"/>
-      <FILE id="x5hrUg" name="Constants.h" compile="0" resource="0" file="Source/Constants.h"/>
-      <FILE id="J0CFKC" name="Diffuser.cpp" compile="1" resource="0" file="Source/Diffuser.cpp"/>
-      <FILE id="QD2TTf" name="Diffuser.h" compile="0" resource="0" file="Source/Diffuser.h"/>
-      <FILE id="wIVviW" name="Splitter.cpp" compile="1" resource="0" file="Source/Splitter.cpp"/>
-      <FILE id="nETDLj" name="Splitter.h" compile="0" resource="0" file="Source/Splitter.h"/>
-      <FILE id="hv23E0" name="Reverb.cpp" compile="1" resource="0" file="Source/Reverb.cpp"/>
-      <FILE id="egCuaH" name="Reverb.h" compile="0" resource="0" file="Source/Reverb.h"/>
-      <FILE id="IvRY3h" name="Effect.cpp" compile="1" resource="0" file="Source/Effect.cpp"/>
-      <FILE id="CM60yX" name="Effect.h" compile="0" resource="0" file="Source/Effect.h"/>
-      <FILE id="ri8M3t" name="HighGain.cpp" compile="1" resource="0" file="Source/HighGain.cpp"/>
-      <FILE id="YIZF8W" name="HighGain.h" compile="0" resource="0" file="Source/HighGain.h"/>
-      <FILE id="kSGCtw" name="Utils.h" compile="0" resource="0" file="Source/Utils.h"/>
-      <FILE id="GQb8nM" name="PreAmp.cpp" compile="1" resource="0" file="Source/PreAmp.cpp"/>
-      <FILE id="e87VR3" name="PreAmp.h" compile="0" resource="0" file="Source/PreAmp.h"/>
+    <GROUP id="{71E7600E-055C-CF59-C769-E04AE9D7483F}" name="Include">
       <FILE id="dKC0rr" name="Parameters.h" compile="0" resource="0" file="Source/Parameters.h"/>
-      <FILE id="ioT0KD" name="PluginProcessor.cpp" compile="1" resource="0"
-            file="Source/PluginProcessor.cpp"/>
       <FILE id="ttdACv" name="PluginProcessor.h" compile="0" resource="0"
             file="Source/PluginProcessor.h"/>
+      <FILE id="UEsTA8" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
+      <GROUP id="{D3456CB4-B917-E3B1-0ACE-257C71D09048}" name="gui">
+        <FILE id="nmouk1" name="RotaryKnob.h" compile="0" resource="0" file="Source/RotaryKnob.h"/>
+        <FILE id="i5mXUT" name="LevelMeter.h" compile="0" resource="0" file="Source/LevelMeter.h"/>
+      </GROUP>
+      <GROUP id="{816743BA-E13E-5200-54E7-0514D64788C6}" name="fx">
+        <FILE id="QD2TTf" name="Diffuser.h" compile="0" resource="0" file="Source/Diffuser.h"/>
+        <FILE id="nETDLj" name="Splitter.h" compile="0" resource="0" file="Source/Splitter.h"/>
+        <FILE id="egCuaH" name="Reverb.h" compile="0" resource="0" file="Source/Reverb.h"/>
+        <FILE id="CM60yX" name="Effect.h" compile="0" resource="0" file="Source/Effect.h"/>
+      </GROUP>
+      <GROUP id="{96110EF5-4BA3-15E1-2E37-C9670963FABC}" name="utils">
+        <FILE id="nZPnjW" name="JsonSerializer.h" compile="0" resource="0"
+              file="Source/JsonSerializer.h"/>
+        <FILE id="x5hrUg" name="Constants.h" compile="0" resource="0" file="Source/Constants.h"/>
+        <FILE id="kSGCtw" name="Utils.h" compile="0" resource="0" file="Source/Utils.h"/>
+      </GROUP>
+      <GROUP id="{ABD2EEFB-D83B-7C0D-5F14-E08598FBD6E1}" name="amp">
+        <FILE id="YIZF8W" name="HighGain.h" compile="0" resource="0" file="Source/HighGain.h"/>
+        <FILE id="e87VR3" name="PreAmp.h" compile="0" resource="0" file="Source/PreAmp.h"/>
+      </GROUP>
+    </GROUP>
+    <GROUP id="{F8CB0AB7-C922-98DF-A4F1-2526B85D879F}" name="Source">
+      <GROUP id="{FEAD97A4-DDE1-2A4F-181B-4AADE1D4905B}" name="amp">
+        <FILE id="ri8M3t" name="HighGain.cpp" compile="1" resource="0" file="Source/HighGain.cpp"/>
+        <FILE id="GQb8nM" name="PreAmp.cpp" compile="1" resource="0" file="Source/PreAmp.cpp"/>
+      </GROUP>
+      <GROUP id="{BDC1413D-48AC-8797-772A-D39E72212E71}" name="utils">
+        <FILE id="aul6xG" name="JsonSerializer.cpp" compile="1" resource="0"
+              file="Source/JsonSerializer.cpp"/>
+      </GROUP>
+      <GROUP id="{C26DA705-F92E-53EE-0520-8BDDC9864BC6}" name="fx">
+        <FILE id="J0CFKC" name="Diffuser.cpp" compile="1" resource="0" file="Source/Diffuser.cpp"/>
+        <FILE id="wIVviW" name="Splitter.cpp" compile="1" resource="0" file="Source/Splitter.cpp"/>
+        <FILE id="hv23E0" name="Reverb.cpp" compile="1" resource="0" file="Source/Reverb.cpp"/>
+        <FILE id="IvRY3h" name="Effect.cpp" compile="1" resource="0" file="Source/Effect.cpp"/>
+      </GROUP>
+      <GROUP id="{566B1249-2089-B329-130A-202BDAE1B0FB}" name="gui">
+        <FILE id="Xv5w2i" name="RotaryKnob.cpp" compile="1" resource="0" file="Source/RotaryKnob.cpp"/>
+        <FILE id="JIbcWg" name="LevelMeter.cpp" compile="1" resource="0" file="Source/LevelMeter.cpp"/>
+      </GROUP>
+      <FILE id="ioT0KD" name="PluginProcessor.cpp" compile="1" resource="0"
+            file="Source/PluginProcessor.cpp"/>
       <FILE id="ATqlyS" name="PluginEditor.cpp" compile="1" resource="0"
             file="Source/PluginEditor.cpp"/>
-      <FILE id="UEsTA8" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
     </GROUP>
   </MAINGROUP>
   <MODULES>
