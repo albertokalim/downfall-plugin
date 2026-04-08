@@ -31,7 +31,7 @@ private:
     // access the processor object that created it.
     DownfallPluginAudioProcessor& audioProcessor;
     juce::GroupComponent top;
-    RotaryKnob inputKnob{"Input", true};
+    RotaryKnob inputKnob{"Input", true };
     RotaryKnob outputKnob{ "Output", true };
     LevelMeter inputLevelMeter, outputLevelMeter;
     juce::GroupComponent middle;
