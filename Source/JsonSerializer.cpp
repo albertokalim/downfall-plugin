@@ -9,7 +9,7 @@
 */
 
 #include "JsonSerializer.h"
-//Meter todos los parametros en una clase, quería hacerlo elegante pero no me dejan ser elegante.
+//Meter todos los parametros en una clase, queria hacerlo elegante pero no me dejan ser elegante.
 parameters::SerializableParameters from(parameters::Parameters& parameters) {
     parameters::SerializableParameters serializable;
     serializable.bypassCabinet = parameters.bypassCabinet.get();

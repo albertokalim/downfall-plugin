@@ -9,8 +9,6 @@
 */
 
 #include "LevelMeter.h"
-#include <JuceHeader.h>
-#include "LevelMeter.h"
 
 //==============================================================================
 LevelMeter::LevelMeter(Measurement& measurementL_, Measurement& measurementR_)
@@ -27,19 +25,9 @@ LevelMeter::~LevelMeter()
 
 void LevelMeter::paint(juce::Graphics& g)
 {
-    const auto bounds = getLocalBounds();
-    g.fillAll(juce::Colours::black);
+    g.fillAll(juce::Colours::white);
     drawLevel(g, dbLevelL, 0, 7);
     drawLevel(g, dbLevelR, 9, 7);
-
-    for (float db = maxdB; db >= mindB; db -= stepdB) {
-        int y = positionForLevel(db);
-        g.setColour({ 200, 200, 200 });
-        g.fillRect(0, y, 16, 1);
-        g.setColour({ 80, 80, 80 });
-        g.drawSingleLineText(juce::String(int(db)), bounds.getWidth(), y + 3,
-            juce::Justification::right);
-    }
 }
 
 void LevelMeter::resized()

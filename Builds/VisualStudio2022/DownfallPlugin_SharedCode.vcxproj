@@ -3016,6 +3016,7 @@
     <ClInclude Include="..\..\Source\Splitter.h"/>
     <ClInclude Include="..\..\Source\Reverb.h"/>
     <ClInclude Include="..\..\Source\Effect.h"/>
+    <ClInclude Include="..\..\Source\Measurement.h"/>
     <ClInclude Include="..\..\Source\JsonSerializer.h"/>
     <ClInclude Include="..\..\Source\Constants.h"/>
     <ClInclude Include="..\..\Source\Utils.h"/>

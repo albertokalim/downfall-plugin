@@ -2,8 +2,8 @@
 
 <Project ToolsVersion="17.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
-    <Filter Include="DownfallPlugin\Resources">
-      <UniqueIdentifier>{C24A9A45-1F26-92A5-9FBA-3A1A4219DDB9}</UniqueIdentifier>
+    <Filter Include="DownfallPlugin\Assets">
+      <UniqueIdentifier>{5B943042-93AD-4346-7B8C-7F1A5FBF8796}</UniqueIdentifier>
     </Filter>
     <Filter Include="DownfallPlugin\Include\gui">
       <UniqueIdentifier>{4B8A58A8-46DB-FAD1-8463-0860166C8EDF}</UniqueIdentifier>
@@ -3827,6 +3827,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\Effect.h">
       <Filter>DownfallPlugin\Include\fx</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\Measurement.h">
+      <Filter>DownfallPlugin\Include\utils</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\JsonSerializer.h">
       <Filter>DownfallPlugin\Include\utils</Filter>
@@ -8022,7 +8025,7 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="..\..\..\..\..\test-ir.wav">
-      <Filter>DownfallPlugin\Resources</Filter>
+      <Filter>DownfallPlugin\Assets</Filter>
     </None>
     <None Include="C:\JUCE\modules\juce_audio_devices\native\asio\LICENSE.txt">
       <Filter>JUCE Modules\juce_audio_devices\native\asio</Filter>

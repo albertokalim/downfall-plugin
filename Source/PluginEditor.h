@@ -11,6 +11,7 @@
 #include <JuceHeader.h>
 #include "PluginProcessor.h"
 #include "RotaryKnob.h"
+#include "LevelMeter.h"
 
 //==============================================================================
 /**
@@ -32,6 +33,7 @@ private:
     juce::GroupComponent top;
     RotaryKnob inputKnob{"Input", true};
     RotaryKnob outputKnob{ "Output", true };
+    LevelMeter inputLevelMeter, outputLevelMeter;
     juce::GroupComponent middle;
     juce::GroupComponent bottom;
 

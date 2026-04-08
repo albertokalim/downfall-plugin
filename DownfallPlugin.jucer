@@ -4,7 +4,7 @@
               addUsingNamespaceToJuceHeader="0" jucerFormatVersion="1" companyName="Alberto"
               cppLanguageStandard="20">
   <MAINGROUP id="waeduC" name="DownfallPlugin">
-    <GROUP id="{A1DA6CA4-139B-F186-11C3-D64C53B3EB6F}" name="Resources">
+    <GROUP id="{A1DA6CA4-139B-F186-11C3-D64C53B3EB6F}" name="Assets">
       <FILE id="DQnZGg" name="test-ir.wav" compile="0" resource="1" file="../../../test-ir.wav"/>
     </GROUP>
     <GROUP id="{71E7600E-055C-CF59-C769-E04AE9D7483F}" name="Include">
@@ -23,6 +23,7 @@
         <FILE id="CM60yX" name="Effect.h" compile="0" resource="0" file="Source/Effect.h"/>
       </GROUP>
       <GROUP id="{96110EF5-4BA3-15E1-2E37-C9670963FABC}" name="utils">
+        <FILE id="Lyh7TZ" name="Measurement.h" compile="0" resource="0" file="Source/Measurement.h"/>
         <FILE id="nZPnjW" name="JsonSerializer.h" compile="0" resource="0"
               file="Source/JsonSerializer.h"/>
         <FILE id="x5hrUg" name="Constants.h" compile="0" resource="0" file="Source/Constants.h"/>

@@ -104,11 +104,6 @@ void DownfallPluginAudioProcessor::prepareToPlay (double sampleRate, int samples
     spec.maximumBlockSize = static_cast<juce::uint32>(samplesPerBlock);
     spec.numChannels = getTotalNumOutputChannels();
     spec.sampleRate = sampleRate;
-    gate.reset();
-    gate.prepare(spec);
-    gate.setAttack(1.f);
-    gate.setRelease(200.f);
-    gate.setRatio(1.f);
 
     preAmps[0]->reset();
     preAmps[0]->prepare(spec);
@@ -130,6 +125,11 @@ void DownfallPluginAudioProcessor::prepareToPlay (double sampleRate, int samples
         juce::dsp::Convolution::Stereo::yes,
         juce::dsp::Convolution::Trim::yes,
         0);
+
+    outputLevelL.reset();
+    outputLevelR.reset();
+    inputLevelL.reset();
+    inputLevelR.reset();
 }
 
 void DownfallPluginAudioProcessor::releaseResources()
@@ -156,7 +156,6 @@ bool DownfallPluginAudioProcessor::isBusesLayoutSupported (const BusesLayout& la
 
 void DownfallPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
-
     juce::ScopedNoDenormals noDenormals;
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
@@ -166,7 +165,9 @@ void DownfallPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
 
     inputGainSmoother.setTargetValue(parameters.inputGain.get());
     outputGainSmoother.setTargetValue(parameters.outputGain.get());
-    gate.setThreshold(parameters.gateThreshold.get());
+
+    inputLevelL.updateIfGreater(buffer.getMagnitude(0, 0, buffer.getNumSamples()));
+    inputLevelR.updateIfGreater(buffer.getMagnitude(1, 0, buffer.getNumSamples()));
 
     buffer.applyGain(juce::Decibels::decibelsToGain(inputGainSmoother.getNextValue()));
 
@@ -188,13 +189,14 @@ void DownfallPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
     delay.process(context);
     reverb.process(context);
 
-    //gate.process(context);
-
     if (!parameters.bypassCabinet.get()) {
         convolution.process(context);
     }
 
     buffer.applyGain(juce::Decibels::decibelsToGain(outputGainSmoother.getNextValue()));
+
+    outputLevelL.updateIfGreater(buffer.getMagnitude(0, 0, buffer.getNumSamples()));
+    outputLevelR.updateIfGreater(buffer.getMagnitude(1, 0, buffer.getNumSamples()));
 }
 
 //==============================================================================

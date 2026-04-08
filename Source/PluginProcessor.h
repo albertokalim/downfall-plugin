@@ -15,6 +15,7 @@
 #include "Effect.h"
 #include "Reverb.h"
 #include "JsonSerializer.h"
+#include "Measurement.h"
 
 //==============================================================================
 /**
@@ -61,13 +62,14 @@ public:
 
     void setIRToConvolution(juce::File newIRFile);
 
+    Measurement outputLevelL, outputLevelR, inputLevelL, inputLevelR;
+
 private:
     parameters::Parameters parameters{ *this };
 
     juce::SmoothedValue<float> inputGainSmoother;
     juce::SmoothedValue<float> outputGainSmoother;
 
-    juce::dsp::NoiseGate<float> gate;
     std::vector<std::unique_ptr<preamp::PreAmp>> preAmps{ 2 };
 
     effects::DelayFX delay;
