@@ -12,6 +12,10 @@
 #include "PluginProcessor.h"
 #include "RotaryKnob.h"
 #include "LevelMeter.h"
+#include "AmpComponent.h"
+#include "FXComponent.h"
+#include "CabinetComponent.h"
+#include "EQComponent.h"
 
 //==============================================================================
 /**
@@ -35,7 +39,16 @@ private:
     RotaryKnob outputKnob{ "Output", true };
     LevelMeter inputLevelMeter, outputLevelMeter;
     juce::GroupComponent middle;
-    juce::GroupComponent bottom;
+    juce::GroupComponent menu;
+    juce::TextButton ampButton{ "Amp", "Show amp" };
+    juce::TextButton fxButton{ "FX", "Show effects" };
+    juce::TextButton cabinetButton{ "Cabinet", "Show screen to load IR" };
+    juce::TextButton eqButton{ "EQ", "Show eq" };
+    juce::Label ampComponent{ "Amp" };
+    juce::Label fxComponent{ "FX" };
+    juce::Label cabinetComponent{ "Cabinet" };
+    juce::Label eqComponent{ "EQ" };
+    
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DownfallPluginAudioProcessorEditor)
 };

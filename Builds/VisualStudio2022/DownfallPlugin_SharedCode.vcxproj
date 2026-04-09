@@ -151,6 +151,11 @@
     <ClCompile Include="..\..\Source\Splitter.cpp"/>
     <ClCompile Include="..\..\Source\Reverb.cpp"/>
     <ClCompile Include="..\..\Source\Effect.cpp"/>
+    <ClCompile Include="..\..\Source\FXComponent.cpp"/>
+    <ClCompile Include="..\..\Source\AmpComponent.cpp"/>
+    <ClCompile Include="..\..\Source\MenuButton.cpp"/>
+    <ClCompile Include="..\..\Source\CabinetComponent.cpp"/>
+    <ClCompile Include="..\..\Source\EQComponent.cpp"/>
     <ClCompile Include="..\..\Source\RotaryKnob.cpp"/>
     <ClCompile Include="..\..\Source\LevelMeter.cpp"/>
     <ClCompile Include="..\..\Source\PluginProcessor.cpp"/>
@@ -3010,6 +3015,11 @@
     <ClInclude Include="..\..\Source\Parameters.h"/>
     <ClInclude Include="..\..\Source\PluginProcessor.h"/>
     <ClInclude Include="..\..\Source\PluginEditor.h"/>
+    <ClInclude Include="..\..\Source\CabinetComponent.h"/>
+    <ClInclude Include="..\..\Source\AmpComponent.h"/>
+    <ClInclude Include="..\..\Source\EQComponent.h"/>
+    <ClInclude Include="..\..\Source\FXComponent.h"/>
+    <ClInclude Include="..\..\Source\MenuButton.h"/>
     <ClInclude Include="..\..\Source\RotaryKnob.h"/>
     <ClInclude Include="..\..\Source\LevelMeter.h"/>
     <ClInclude Include="..\..\Source\Diffuser.h"/>

@@ -754,6 +754,21 @@
     <ClCompile Include="..\..\Source\Effect.cpp">
       <Filter>DownfallPlugin\Source\fx</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\FXComponent.cpp">
+      <Filter>DownfallPlugin\Source\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\AmpComponent.cpp">
+      <Filter>DownfallPlugin\Source\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\MenuButton.cpp">
+      <Filter>DownfallPlugin\Source\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\CabinetComponent.cpp">
+      <Filter>DownfallPlugin\Source\gui</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\Source\EQComponent.cpp">
+      <Filter>DownfallPlugin\Source\gui</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\RotaryKnob.cpp">
       <Filter>DownfallPlugin\Source\gui</Filter>
     </ClCompile>
@@ -3809,6 +3824,21 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\PluginEditor.h">
       <Filter>DownfallPlugin\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\CabinetComponent.h">
+      <Filter>DownfallPlugin\Include\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\AmpComponent.h">
+      <Filter>DownfallPlugin\Include\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\EQComponent.h">
+      <Filter>DownfallPlugin\Include\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\FXComponent.h">
+      <Filter>DownfallPlugin\Include\gui</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\MenuButton.h">
+      <Filter>DownfallPlugin\Include\gui</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\RotaryKnob.h">
       <Filter>DownfallPlugin\Include\gui</Filter>
