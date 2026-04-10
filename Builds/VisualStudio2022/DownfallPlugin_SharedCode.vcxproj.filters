@@ -754,6 +754,9 @@
     <ClCompile Include="..\..\Source\Effect.cpp">
       <Filter>DownfallPlugin\Source\fx</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\Source\BypassButton.cpp">
+      <Filter>DownfallPlugin\Source\gui</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\FXComponent.cpp">
       <Filter>DownfallPlugin\Source\gui</Filter>
     </ClCompile>
@@ -3824,6 +3827,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\PluginEditor.h">
       <Filter>DownfallPlugin\Include</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\BypassButton.h">
+      <Filter>DownfallPlugin\Include\gui</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\CabinetComponent.h">
       <Filter>DownfallPlugin\Include\gui</Filter>

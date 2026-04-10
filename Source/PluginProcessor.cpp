@@ -225,6 +225,11 @@ void DownfallPluginAudioProcessor::setStateInformation (const void* data, int si
     JsonSerializer::deserializeParameters(inputStream, parameters);
 }
 
+juce::AudioProcessorParameter* DownfallPluginAudioProcessor::getBypassParameter() const
+{
+    return &parameters.bypass;
+}
+
 void DownfallPluginAudioProcessor::setIRToConvolution(juce::File newIRFile)
 {
     convolution.loadImpulseResponse(newIRFile,

@@ -214,7 +214,7 @@ namespace parameters {
             bypass(createParameterBool(audioProcessor,
                 "bypass",
                 "Bypass",
-                true))
+                false))
         {
         }
 

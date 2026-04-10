@@ -13,6 +13,7 @@
             file="Source/PluginProcessor.h"/>
       <FILE id="UEsTA8" name="PluginEditor.h" compile="0" resource="0" file="Source/PluginEditor.h"/>
       <GROUP id="{D3456CB4-B917-E3B1-0ACE-257C71D09048}" name="gui">
+        <FILE id="YGDvnn" name="BypassButton.h" compile="0" resource="0" file="Source/BypassButton.h"/>
         <FILE id="eDCP7O" name="CabinetComponent.h" compile="0" resource="0"
               file="Source/CabinetComponent.h"/>
         <FILE id="d66P2P" name="AmpComponent.h" compile="0" resource="0" file="Source/AmpComponent.h"/>
@@ -56,6 +57,8 @@
         <FILE id="IvRY3h" name="Effect.cpp" compile="1" resource="0" file="Source/Effect.cpp"/>
       </GROUP>
       <GROUP id="{566B1249-2089-B329-130A-202BDAE1B0FB}" name="gui">
+        <FILE id="P5i8Yd" name="BypassButton.cpp" compile="1" resource="0"
+              file="Source/BypassButton.cpp"/>
         <FILE id="WYiiij" name="FXComponent.cpp" compile="1" resource="0" file="Source/FXComponent.cpp"/>
         <FILE id="M7HpnO" name="AmpComponent.cpp" compile="1" resource="0"
               file="Source/AmpComponent.cpp"/>

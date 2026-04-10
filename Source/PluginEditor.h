@@ -16,6 +16,7 @@
 #include "FXComponent.h"
 #include "CabinetComponent.h"
 #include "EQComponent.h"
+#include "BypassButton.h"
 
 //==============================================================================
 /**
@@ -37,7 +38,7 @@ private:
     RotaryKnob inputKnob{"Input", audioProcessor.parameters.inputGain, true };
     RotaryKnob outputKnob{ "Output", audioProcessor.parameters.outputGain, true };
     LevelMeter inputLevelMeter, outputLevelMeter;
-    juce::ToggleButton bypassButton{"On/Off"};
+    BypassButton bypassButton{"On/Off", audioProcessor.parameters.bypass };
     juce::GroupComponent middle;
     juce::GroupComponent menu;
     juce::TextButton ampButton{ "Amp", "Show amp" };
