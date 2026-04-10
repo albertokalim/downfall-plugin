@@ -100,26 +100,11 @@ DownfallPluginAudioProcessorEditor::DownfallPluginAudioProcessorEditor (Downfall
     top.addAndMakeVisible(inputLevelMeter);
     top.addAndMakeVisible(inputKnob);
     top.addAndMakeVisible(menu);
+    top.addAndMakeVisible(bypassButton);
     top.addAndMakeVisible(outputKnob);
     top.addAndMakeVisible(outputLevelMeter);
 
     ampButton.setToggleState(true, juce::NotificationType::dontSendNotification);
-    ampComponent.setColour(juce::Label::ColourIds::textColourId, juce::Colours::white);
-    ampComponent.setText("Amp", juce::NotificationType::dontSendNotification);
-    ampComponent.setJustificationType(juce::Justification::horizontallyCentred);
-    ampComponent.setBorderSize(juce::BorderSize<int>{ 0, 0, 0, 0 });
-    fxComponent.setColour(juce::Label::ColourIds::textColourId, juce::Colours::white);
-    fxComponent.setText("FX", juce::NotificationType::dontSendNotification);
-    fxComponent.setJustificationType(juce::Justification::horizontallyCentred);
-    fxComponent.setBorderSize(juce::BorderSize<int>{ 0, 0, 0, 0 });
-    cabinetComponent.setColour(juce::Label::ColourIds::textColourId, juce::Colours::white);
-    cabinetComponent.setText("Cabinet", juce::NotificationType::dontSendNotification);
-    cabinetComponent.setJustificationType(juce::Justification::horizontallyCentred);
-    cabinetComponent.setBorderSize(juce::BorderSize<int>{ 0, 0, 0, 0 });
-    eqComponent.setColour(juce::Label::ColourIds::textColourId, juce::Colours::white);
-    eqComponent.setText("EQ", juce::NotificationType::dontSendNotification);
-    eqComponent.setJustificationType(juce::Justification::horizontallyCentred);
-    eqComponent.setBorderSize(juce::BorderSize<int>{ 0, 0, 0, 0 });
     middle.addAndMakeVisible(ampComponent);
     addAndMakeVisible(top);
     addAndMakeVisible(middle);
@@ -160,6 +145,7 @@ void DownfallPluginAudioProcessorEditor::resized()
     inputLevelMeter.setBounds(0, 0, widthLevelMeter, heightLevelMeter);
     inputLevelMeter.setTopLeftPosition(inputLevelX, inputLevelY);
     inputKnob.setTopLeftPosition(knobPaddingFromBorder, knobYCoord);
+    bypassButton.setBounds(bounds.getWidth() / 2 - menuWidth / 2 - 200, heightTop / 2 - 20, 100, 40);
     outputKnob.setTopLeftPosition(bounds.getWidth() - knobPaddingFromBorder - outputKnob.getWidth(), knobYCoord);
     outputLevelMeter.setBounds(0, 0, widthLevelMeter, heightLevelMeter);
     outputLevelMeter.setTopLeftPosition(outputLevelX, outputLevelY);
@@ -176,12 +162,12 @@ void DownfallPluginAudioProcessorEditor::resized()
     eqButton.setBounds(0, 0, buttonWidth, buttonHeight);
     eqButton.setTopLeftPosition(3* menu.getWidth() / 4, 0);
 
-    ampComponent.setBounds(0, 0, buttonWidth, buttonHeight);
+    ampComponent.setBounds(0, 0, middle.getWidth(), middle.getHeight());
     ampComponent.setTopLeftPosition(0, 0);
-    fxComponent.setBounds(0, 0, buttonWidth, buttonHeight);
+    fxComponent.setBounds(0, 0, middle.getWidth(), middle.getHeight());
     fxComponent.setTopLeftPosition(0, 0);
-    cabinetComponent.setBounds(0, 0, buttonWidth, buttonHeight);
+    cabinetComponent.setBounds(0, 0, middle.getWidth(), middle.getHeight());
     cabinetComponent.setTopLeftPosition(0, 0);
-    eqComponent.setBounds(0, 0, buttonWidth, buttonHeight);
+    eqComponent.setBounds(0, 0, middle.getWidth(), middle.getHeight());
     eqComponent.setTopLeftPosition(0, 0);
 }

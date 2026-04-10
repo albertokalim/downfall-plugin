@@ -64,7 +64,8 @@ juce::Label* RotaryKnobLookAndFeel::createSliderTextBox(juce::Slider& slider)
     return l;
 }
 
-void RotaryKnobLookAndFeel::drawRotarySlider(juce::Graphics& g, int x, int y, int width, [[maybe_unused]] int height, float sliderPos, float rotaryStartAngle, float rotaryEndAngle, juce::Slider& slider)
+void RotaryKnobLookAndFeel::drawRotarySlider(juce::Graphics& g, int x, int y, int width, 
+    [[maybe_unused]] int height, float sliderPos, float rotaryStartAngle, float rotaryEndAngle, juce::Slider& slider)
 {
     auto bounds = juce::Rectangle<int>(x, y, width, width).toFloat();
     auto knobRect = bounds.reduced(10.0f, 10.0f);
@@ -143,7 +144,8 @@ void RotaryKnobLookAndFeel::fillTextEditorBackground(juce::Graphics& g, int widt
 }
 
 //==============================================================================
-RotaryKnob::RotaryKnob(const juce::String& text, bool drawFromMiddle)
+RotaryKnob::RotaryKnob(const juce::String& text, juce::AudioParameterFloat& p, bool drawFromMiddle)
+    : listener{p, slider}
 {
     setLookAndFeel(RotaryKnobLookAndFeel::get());
 

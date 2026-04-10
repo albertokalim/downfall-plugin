@@ -31,23 +31,23 @@ public:
     void resized() override;
 
 private:
-    // This reference is provided as a quick way for your editor to
-    // access the processor object that created it.
     DownfallPluginAudioProcessor& audioProcessor;
     juce::GroupComponent top;
-    RotaryKnob inputKnob{"Input", true };
-    RotaryKnob outputKnob{ "Output", true };
+
+    RotaryKnob inputKnob{"Input", audioProcessor.parameters.inputGain, true };
+    RotaryKnob outputKnob{ "Output", audioProcessor.parameters.outputGain, true };
     LevelMeter inputLevelMeter, outputLevelMeter;
+    juce::ToggleButton bypassButton{"On/Off"};
     juce::GroupComponent middle;
     juce::GroupComponent menu;
     juce::TextButton ampButton{ "Amp", "Show amp" };
     juce::TextButton fxButton{ "FX", "Show effects" };
     juce::TextButton cabinetButton{ "Cabinet", "Show screen to load IR" };
     juce::TextButton eqButton{ "EQ", "Show eq" };
-    juce::Label ampComponent{ "Amp" };
-    juce::Label fxComponent{ "FX" };
-    juce::Label cabinetComponent{ "Cabinet" };
-    juce::Label eqComponent{ "EQ" };
+    AmpComponent ampComponent;
+    FXComponent fxComponent;
+    CabinetComponent cabinetComponent;
+    EQComponent eqComponent;
     
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DownfallPluginAudioProcessorEditor)

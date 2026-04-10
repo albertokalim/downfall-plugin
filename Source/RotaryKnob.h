@@ -64,7 +64,7 @@ private:
 class RotaryKnob : public juce::Component
 {
 public:
-    RotaryKnob(const juce::String& text, bool drawFromMiddle = false);
+    RotaryKnob(const juce::String& text, juce::AudioParameterFloat& p, bool drawFromMiddle = false);
     ~RotaryKnob() override;
 
     void resized() override;
@@ -73,7 +73,7 @@ public:
     juce::Label label;
 
 private:
-
+    juce::SliderParameterAttachment listener;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(RotaryKnob)
 };

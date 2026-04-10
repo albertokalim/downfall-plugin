@@ -63,10 +63,9 @@ public:
     void setIRToConvolution(juce::File newIRFile);
 
     Measurement outputLevelL, outputLevelR, inputLevelL, inputLevelR;
-
-private:
     parameters::Parameters parameters{ *this };
 
+private:
     juce::SmoothedValue<float> inputGainSmoother;
     juce::SmoothedValue<float> outputGainSmoother;
 

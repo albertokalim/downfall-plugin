@@ -210,6 +210,10 @@ namespace parameters {
             reverbBypass(createParameterBool(audioProcessor,
                 "reverbBypass",
                 "Reverb Bypass",
+                true)),
+            bypass(createParameterBool(audioProcessor,
+                "bypass",
+                "Bypass",
                 true))
         {
         }
@@ -239,6 +243,7 @@ namespace parameters {
         juce::AudioParameterBool& delayBypass;
         juce::AudioParameterBool& chorusBypass;
         juce::AudioParameterBool& reverbBypass;
+        juce::AudioParameterBool& bypass;
 
     private:
 
@@ -271,6 +276,7 @@ namespace parameters {
         bool reverbBypass;
         float decay;
         float reverbMix;
+        bool bypass;
 
         static constexpr auto marshallingVersion = MARSHALLING_VERSION;
 
@@ -311,7 +317,8 @@ namespace parameters {
                 named("chorusBypass", t.chorusBypass),
                 named("reverbBypass", t.reverbBypass),
                 named("reverbDecay", t.decay),
-                named("reverbMix", t.reverbMix));
+                named("reverbMix", t.reverbMix),
+                named("bypass", t.bypass));
         }
     };
 };

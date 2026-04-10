@@ -27,7 +27,6 @@ public:
         return &instance;
     }
 
-    void paint (juce::Graphics&) override;
     void resized() override;
 
 private:

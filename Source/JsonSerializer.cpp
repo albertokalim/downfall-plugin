@@ -37,6 +37,7 @@ parameters::SerializableParameters from(parameters::Parameters& parameters) {
     serializable.reverbBypass = parameters.reverbBypass.get();
     serializable.reverbMix = parameters.reverbMix.get();
     serializable.decay = parameters.decay.get();
+    serializable.bypass = parameters.bypass.get();
     return serializable;
 }
 
@@ -93,6 +94,7 @@ juce::Result JsonSerializer::deserializeParameters(juce::InputStream& input, par
     parameters.reverbBypass = parsedParameters->reverbBypass;
     parameters.decay = parsedParameters->decay;
     parameters.reverbMix = parsedParameters->reverbMix;
+    parameters.bypass = parsedParameters->bypass;
     return juce::Result::ok();
 }
 

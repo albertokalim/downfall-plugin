@@ -14,22 +14,20 @@
 //==============================================================================
 AmpComponent::AmpComponent()
 {
-    // In your constructor, you should add any child components, and
-    // initialise any special settings that your component needs.
+    text.setColour(juce::Label::ColourIds::textColourId, juce::Colours::white);
+    text.setText("Amp", juce::NotificationType::dontSendNotification);
+    text.setJustificationType(juce::Justification::horizontallyCentred);
+    text.setBorderSize(juce::BorderSize<int>{ 0, 0, 0, 0 });
     addAndMakeVisible(text);
 }
 
 AmpComponent::~AmpComponent()
-{
-}
-
-void AmpComponent::paint (juce::Graphics& g)
 {
     
 }
 
 void AmpComponent::resized()
 {
-    text.setTopLeftPosition(this->getWidth() / 2 - text.getWidth() / 2, this->getHeight() / 2 - text.getHeight() / 2);
-
+    text.setBounds(0, 0, 100, 100);
+    text.setTopLeftPosition(0, 0);
 }
