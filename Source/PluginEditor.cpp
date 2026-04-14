@@ -16,7 +16,10 @@ DownfallPluginAudioProcessorEditor::DownfallPluginAudioProcessorEditor (Downfall
     : AudioProcessorEditor (&p), 
     audioProcessor (p), 
     inputLevelMeter(p.inputLevelL, p.inputLevelR), 
-    outputLevelMeter(p.outputLevelL, p.outputLevelR)
+    outputLevelMeter(p.outputLevelL, p.outputLevelR),
+    ampComponent(p.parameters),
+    fxComponent(p.parameters),
+    bypassCabinet("Bypass Cabinet", p.parameters.bypassCabinet)
 {
     ampButton.setToggleable(true);
     fxButton.setToggleable(true);
@@ -73,7 +76,9 @@ DownfallPluginAudioProcessorEditor::DownfallPluginAudioProcessorEditor (Downfall
             this->eqButton.setToggleState(false, juce::NotificationType::dontSendNotification);
         }
         middle.removeAllChildren();
-        middle.addAndMakeVisible(cabinetComponent);
+        middle.addAndMakeVisible(textIR);
+        middle.addAndMakeVisible(buttonIRLoader);
+        middle.addAndMakeVisible(bypassCabinet);
     };
 
     eqButton.onClick = [this]() {
@@ -105,7 +110,27 @@ DownfallPluginAudioProcessorEditor::DownfallPluginAudioProcessorEditor (Downfall
     top.addAndMakeVisible(outputLevelMeter);
 
     ampButton.setToggleState(true, juce::NotificationType::dontSendNotification);
+    middle.setColour(juce::GroupComponent::outlineColourId, juce::Colours::black);
     middle.addAndMakeVisible(ampComponent);
+
+    //Group it, to add only one component to de parent.
+    textIR.setColour(juce::Label::ColourIds::textColourId, juce::Colours::white);
+    textIR.setText("Loaded: Default IR", juce::NotificationType::dontSendNotification);
+    textIR.setBorderSize(juce::BorderSize<int>{ 0, 0, 0, 0 });
+
+    buttonIRLoader.onClick = [this]() {
+        fileChooser.launchAsync(juce::FileBrowserComponent::openMode, [this](const juce::FileChooser& chooser)
+            {
+                juce::File newIRFile(chooser.getResult());
+                audioProcessor.setIRToConvolution(newIRFile);
+                juce::String str = "IR Loaded: ";
+                textIR.setText(str << newIRFile.getFileName(), juce::NotificationType::dontSendNotification);
+                alertWindow.showMessageBoxAsync(juce::MessageBoxIconType::InfoIcon,
+                    "Success!!",
+                    "IR Succesfully loaded");
+            });
+        };
+
     addAndMakeVisible(top);
     addAndMakeVisible(middle);
     setSize (1356, 706);
@@ -162,12 +187,19 @@ void DownfallPluginAudioProcessorEditor::resized()
     eqButton.setBounds(0, 0, buttonWidth, buttonHeight);
     eqButton.setTopLeftPosition(3* menu.getWidth() / 4, 0);
 
+    int offset = 200;
+
     ampComponent.setBounds(0, 0, middle.getWidth(), middle.getHeight());
     ampComponent.setTopLeftPosition(0, 0);
     fxComponent.setBounds(0, 0, middle.getWidth(), middle.getHeight());
     fxComponent.setTopLeftPosition(0, 0);
-    cabinetComponent.setBounds(0, 0, middle.getWidth(), middle.getHeight());
-    cabinetComponent.setTopLeftPosition(0, 0);
+    textIR.setBounds(0, 0, 500, 50);
+    textIR.setTopLeftPosition(middle.getWidth() / 2 - textIR.getWidth() / 2, 10 + offset);
+    buttonIRLoader.setBounds(0, 55, 200, 30);
+    buttonIRLoader.setTopLeftPosition(middle.getWidth() / 2 - buttonIRLoader.getWidth() / 2, 60 + offset);
+    bypassCabinet.setBounds(0, 90, 100, 100);
+    bypassCabinet.setTopLeftPosition(middle.getWidth() / 2 - buttonIRLoader.getWidth() / 2, 110 + offset);
     eqComponent.setBounds(0, 0, middle.getWidth(), middle.getHeight());
     eqComponent.setTopLeftPosition(0, 0);
 }
+

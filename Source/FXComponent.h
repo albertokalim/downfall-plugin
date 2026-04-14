@@ -11,6 +11,9 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include "RotaryKnob.h"
+#include "BypassButton.h"
+#include "Parameters.h"
 
 //==============================================================================
 /*
@@ -18,19 +21,31 @@
 class FXComponent  : public juce::Component
 {
 public:
-    FXComponent();
+    FXComponent(parameters::Parameters& p);
     ~FXComponent() override;
-
-    static FXComponent* get()
-    {
-        static FXComponent instance;
-        return &instance;
-    }
 
     void resized() override;
 
 private:
-    juce::Label text{ "FX" };
+    juce::GroupComponent delayGroup;
+    RotaryKnob delayTimeKnob;
+    RotaryKnob feedbackKnob;
+    RotaryKnob mixKnob;
+    RotaryKnob delayNoteKnob;
+    BypassButton delayBypass;
+    juce::ToggleButton syncButton{ "Sync" };
+    juce::ButtonParameterAttachment syncAttachment;
+
+    juce::GroupComponent chorusGroup;
+    RotaryKnob chorusRateKnob;
+    RotaryKnob chorusWidthKnob;
+    RotaryKnob chorusMixKnob;
+    BypassButton chorusBypass;
+
+    juce::GroupComponent reverbGroup;
+    RotaryKnob reverbDecayKnob;
+    RotaryKnob reverbMixKnob;
+    BypassButton reverbBypass;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (FXComponent)
 };

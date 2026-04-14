@@ -144,7 +144,7 @@ void RotaryKnobLookAndFeel::fillTextEditorBackground(juce::Graphics& g, int widt
 }
 
 //==============================================================================
-RotaryKnob::RotaryKnob(const juce::String& text, juce::AudioParameterFloat& p, bool drawFromMiddle)
+RotaryKnob::RotaryKnob(const juce::String& text, juce::RangedAudioParameter& p, bool drawFromMiddle)
     : listener{p, slider}
 {
     setLookAndFeel(RotaryKnobLookAndFeel::get());

@@ -38,7 +38,7 @@ private:
     RotaryKnob inputKnob{"Input", audioProcessor.parameters.inputGain, true };
     RotaryKnob outputKnob{ "Output", audioProcessor.parameters.outputGain, true };
     LevelMeter inputLevelMeter, outputLevelMeter;
-    BypassButton bypassButton{"On/Off", audioProcessor.parameters.bypass };
+    BypassButton bypassButton{"Bypass Plugin", audioProcessor.parameters.bypass };
     juce::GroupComponent middle;
     juce::GroupComponent menu;
     juce::TextButton ampButton{ "Amp", "Show amp" };
@@ -47,7 +47,11 @@ private:
     juce::TextButton eqButton{ "EQ", "Show eq" };
     AmpComponent ampComponent;
     FXComponent fxComponent;
-    CabinetComponent cabinetComponent;
+    juce::Label textIR{ "Default IR" };
+    juce::TextButton buttonIRLoader{ "Load custom IR" };
+    juce::FileChooser fileChooser{ "Select an IR file to load", juce::File::getSpecialLocation(juce::File::userHomeDirectory), "*.wav" };
+    juce::AlertWindow alertWindow{ "Success!!", "IR Succesfully loaded", juce::MessageBoxIconType::InfoIcon };
+    BypassButton bypassCabinet;
     EQComponent eqComponent;
     
 

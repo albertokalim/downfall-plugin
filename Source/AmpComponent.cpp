@@ -12,22 +12,67 @@
 #include "AmpComponent.h"
 
 //==============================================================================
-AmpComponent::AmpComponent()
+AmpComponent::AmpComponent(parameters::Parameters& p)
+    : gainKnob("Gain", p.gain),
+    bassKnob("Bass", p.bass),
+    middleKnob("Middle", p.middle),
+    trebleKnob("Treble", p.treble),
+    presenceKnob("Presence", p.presence),
+    masterKnob("Master", p.master),
+    bypassAmp("Active", p.bypassPreamp),
+    ampTypeComboBox("Amp Type"),
+    ampTypeParameterAttachment(p.ampType, ampTypeComboBox)
 {
-    text.setColour(juce::Label::ColourIds::textColourId, juce::Colours::white);
-    text.setText("Amp", juce::NotificationType::dontSendNotification);
-    text.setJustificationType(juce::Justification::horizontallyCentred);
-    text.setBorderSize(juce::BorderSize<int>{ 0, 0, 0, 0 });
-    addAndMakeVisible(text);
+    head.addAndMakeVisible(gainKnob);
+    head.addAndMakeVisible(bassKnob);
+    head.addAndMakeVisible(middleKnob);
+    head.addAndMakeVisible(trebleKnob);
+    head.addAndMakeVisible(masterKnob);
+    head.addAndMakeVisible(presenceKnob);
+    head.addAndMakeVisible(bypassAmp);
+
+    ampTypeComboBox.addItemList(p.ampType.getAllValueStrings(), 1);
+    ampTypeComboBox.onChange = [this]() {
+        if (this->ampTypeComboBox.getSelectedId() == 2) {
+            presenceKnob.setVisible(true);
+        }
+        else {
+            presenceKnob.setVisible(false);
+        }
+        };
+    ampTypeComboBox.setSelectedId(1);
+    
+
+    head.addAndMakeVisible(ampTypeComboBox);
+    addAndMakeVisible(head);
 }
 
 AmpComponent::~AmpComponent()
 {
-    
 }
 
 void AmpComponent::resized()
 {
-    text.setBounds(0, 0, 100, 100);
-    text.setTopLeftPosition(0, 0);
+    auto bounds = getLocalBounds();
+    int widthTenPerc = std::ceil(bounds.getWidth() * 0.1);
+    int heightTenPerc = std::ceil(bounds.getHeight() * 0.3);
+    int width = bounds.getWidth() - widthTenPerc;
+    int height = bounds.getHeight() - heightTenPerc;
+    head.setBounds(widthTenPerc/2, heightTenPerc/2, width, height);
+
+    int knobAreaWidth = std::ceil(head.getWidth() * 0.9);
+    int knobWidth = knobAreaWidth / 6;
+    int bottomHeight = std::ceil(head.getHeight() * 0.2);
+    int knobHeight = std::ceil(head.getHeight() * 0.8);
+    int knobY = knobHeight / 2 - bottomHeight;
+    int offset = std::ceil(head.getWidth() * 0.1);
+    
+    gainKnob.setTopLeftPosition(offset, knobY);
+    bassKnob.setTopLeftPosition(offset + knobWidth, knobY);
+    middleKnob.setTopLeftPosition(offset + 2*knobWidth, knobY);
+    trebleKnob.setTopLeftPosition(offset + 3*knobWidth, knobY);
+    masterKnob.setTopLeftPosition(offset + 4*knobWidth, knobY);
+    presenceKnob.setTopLeftPosition(offset + 5*knobWidth, knobY);
+    bypassAmp.setBounds(head.getWidth() - offset - offset/2, knobHeight + bottomHeight / 2 - 50, 100, 100);
+    ampTypeComboBox.setBounds(offset, knobHeight + bottomHeight / 2 - 50, 200, 30);
 }

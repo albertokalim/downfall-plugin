@@ -64,7 +64,7 @@ private:
 class RotaryKnob : public juce::Component
 {
 public:
-    RotaryKnob(const juce::String& text, juce::AudioParameterFloat& p, bool drawFromMiddle = false);
+    RotaryKnob(const juce::String& text, juce::RangedAudioParameter& p, bool drawFromMiddle = false);
     ~RotaryKnob() override;
 
     void resized() override;

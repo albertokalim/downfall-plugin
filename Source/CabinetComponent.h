@@ -11,6 +11,7 @@
 #pragma once
 
 #include <JuceHeader.h>
+#include <functional>
 
 //==============================================================================
 /*
@@ -21,16 +22,13 @@ public:
     CabinetComponent();
     ~CabinetComponent() override;
 
-    static CabinetComponent* get()
-    {
-        static CabinetComponent instance;
-        return &instance;
-    }
-
     void resized() override;
+    void addListener(juce::ChangeListener&);
 
 private:
-    juce::Label text{ "Cabinet" };
+    juce::Label text{ "Default IR" };
+    juce::TextButton buttonIRLoader{ "Load custom IR" };
+    juce::FileChooser fileChooser{ "Select an IR file to load", juce::File::getSpecialLocation(juce::File::userHomeDirectory), "*.wav" };
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (CabinetComponent)
 };
