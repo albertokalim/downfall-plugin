@@ -214,7 +214,77 @@ namespace parameters {
             bypass(createParameterBool(audioProcessor,
                 "bypass",
                 "Bypass",
-                false))
+                false)),
+            bypassEq(createParameterBool(audioProcessor,
+                "bypassEq",
+                "Bypass EQ",
+                false)),
+            hpfFq(createParameterFloat(audioProcessor,
+                "hpfFq",
+                "High Pass FQ",
+                juce::NormalisableRange<float>(0.0f, 500.f, 1.f),
+                0.f,
+                juce::AudioParameterFloatAttributes{}.withLabel("Hz"))),
+            lpfFq(createParameterFloat(audioProcessor,
+                "lpfFq",
+                "Low Pass FQ",
+                juce::NormalisableRange<float>(0.0f, 500.f, 1.f),
+                0.f,
+                juce::AudioParameterFloatAttributes{}.withLabel("Hz"))),
+            eq65hzGain(createParameterFloat(audioProcessor,
+                "eq65hzGain",
+                "65Hz",
+                juce::NormalisableRange{ -12.f, 12.f, 0.1f },
+                0.f,
+                juce::AudioParameterFloatAttributes{}.withLabel("dB"))),
+            eq125hzGain(createParameterFloat(audioProcessor,
+                "eq125hzGain",
+                "125Hz",
+                juce::NormalisableRange{ -12.f, 12.f, 0.1f },
+                0.f,
+                juce::AudioParameterFloatAttributes{}.withLabel("dB"))),
+            eq250hzGain(createParameterFloat(audioProcessor,
+                "eq250hzGain",
+                "250Hz",
+                juce::NormalisableRange{ -12.f, 12.f, 0.1f },
+                0.f,
+                juce::AudioParameterFloatAttributes{}.withLabel("dB"))),
+            eq500hzGain(createParameterFloat(audioProcessor,
+                "eq500hzGain",
+                "500Hz",
+                juce::NormalisableRange{ -12.f, 12.f, 0.1f },
+                0.f,
+                juce::AudioParameterFloatAttributes{}.withLabel("dB"))),
+            eq1khzGain(createParameterFloat(audioProcessor,
+                "eq1khzGain",
+                "1kHz",
+                juce::NormalisableRange{ -12.f, 12.f, 0.1f },
+                0.f,
+                juce::AudioParameterFloatAttributes{}.withLabel("dB"))),
+            eq2khzGain(createParameterFloat(audioProcessor,
+                "eq2khzGain",
+                "2kHz",
+                juce::NormalisableRange{ -12.f, 12.f, 0.1f },
+                0.f,
+                juce::AudioParameterFloatAttributes{}.withLabel("dB"))),
+            eq4khzGain(createParameterFloat(audioProcessor,
+                "eq4khzGain",
+                "4kHz",
+                juce::NormalisableRange{ -12.f, 12.f, 0.1f },
+                0.f,
+                juce::AudioParameterFloatAttributes{}.withLabel("dB"))),
+            eq8khzGain(createParameterFloat(audioProcessor,
+                "eq8khzGain",
+                "8kHz",
+                juce::NormalisableRange{ -12.f, 12.f, 0.1f },
+                0.f,
+                juce::AudioParameterFloatAttributes{}.withLabel("dB"))),
+            eq16khzGain(createParameterFloat(audioProcessor,
+                "eq16khzGain",
+                "16kHz",
+                juce::NormalisableRange{ -12.f, 12.f, 0.1f },
+                0.f,
+                juce::AudioParameterFloatAttributes{}.withLabel("dB")))
         {
         }
 
@@ -244,6 +314,18 @@ namespace parameters {
         juce::AudioParameterBool& chorusBypass;
         juce::AudioParameterBool& reverbBypass;
         juce::AudioParameterBool& bypass;
+        juce::AudioParameterFloat& hpfFq;
+        juce::AudioParameterFloat& lpfFq;
+        juce::AudioParameterFloat& eq65hzGain;
+        juce::AudioParameterFloat& eq125hzGain;
+        juce::AudioParameterFloat& eq250hzGain;
+        juce::AudioParameterFloat& eq500hzGain;
+        juce::AudioParameterFloat& eq1khzGain;
+        juce::AudioParameterFloat& eq2khzGain;
+        juce::AudioParameterFloat& eq4khzGain;
+        juce::AudioParameterFloat& eq8khzGain;
+        juce::AudioParameterFloat& eq16khzGain;
+        juce::AudioParameterBool& bypassEq;
 
     private:
 
@@ -277,6 +359,18 @@ namespace parameters {
         float decay;
         float reverbMix;
         bool bypass;
+        float hpfFq;
+        float lpfFq;
+        float eq65hzGain;
+        float eq125hzGain;
+        float eq250hzGain;
+        float eq500hzGain;
+        float eq1khzGain;
+        float eq2khzGain;
+        float eq4khzGain;
+        float eq8khzGain;
+        float eq16khzGain;
+        bool bypassEq;
 
         static constexpr auto marshallingVersion = MARSHALLING_VERSION;
 
@@ -318,7 +412,19 @@ namespace parameters {
                 named("reverbBypass", t.reverbBypass),
                 named("reverbDecay", t.decay),
                 named("reverbMix", t.reverbMix),
-                named("bypass", t.bypass));
+                named("bypass", t.bypass),
+                named("eqBypass", t.bypassEq),
+                named("hpfFq", t.hpfFq),
+                named("lpfFq", t.lpfFq),
+                named("eq65hzGain", t.eq65hzGain),
+                named("eq125hzGain", t.eq125hzGain),
+                named("eq250hzGain", t.eq250hzGain),
+                named("eq500hzGain", t.eq500hzGain),
+                named("eq1khzGain", t.eq1khzGain),
+                named("eq2khzGain", t.eq2khzGain),
+                named("eq4khzGain", t.eq4khzGain),
+                named("eq8khzGain", t.eq8khzGain),
+                named("eq16khzGain", t.eq16khzGain));
         }
     };
 };

@@ -19,7 +19,8 @@ DownfallPluginAudioProcessorEditor::DownfallPluginAudioProcessorEditor (Downfall
     outputLevelMeter(p.outputLevelL, p.outputLevelR),
     ampComponent(p.parameters),
     fxComponent(p.parameters),
-    bypassCabinet("Bypass Cabinet", p.parameters.bypassCabinet)
+    bypassCabinet("Bypass Cabinet", p.parameters.bypassCabinet),
+    eqComponent(p.parameters)
 {
     ampButton.setToggleable(true);
     fxButton.setToggleable(true);

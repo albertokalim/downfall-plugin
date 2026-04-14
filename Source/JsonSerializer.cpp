@@ -38,6 +38,18 @@ parameters::SerializableParameters from(parameters::Parameters& parameters) {
     serializable.reverbMix = parameters.reverbMix.get();
     serializable.decay = parameters.decay.get();
     serializable.bypass = parameters.bypass.get();
+    serializable.bypassEq = parameters.bypassEq.get();
+    serializable.hpfFq = parameters.hpfFq.get();
+    serializable.lpfFq = parameters.lpfFq.get();
+    serializable.eq65hzGain = parameters.eq65hzGain.get();
+    serializable.eq125hzGain = parameters.eq125hzGain.get();
+    serializable.eq250hzGain = parameters.eq250hzGain.get();
+    serializable.eq500hzGain = parameters.eq500hzGain.get();
+    serializable.eq1khzGain = parameters.eq1khzGain.get();
+    serializable.eq2khzGain = parameters.eq2khzGain.get();
+    serializable.eq4khzGain = parameters.eq4khzGain.get();
+    serializable.eq8khzGain = parameters.eq8khzGain.get();
+    serializable.eq16khzGain = parameters.eq16khzGain.get();
     return serializable;
 }
 
@@ -95,6 +107,18 @@ juce::Result JsonSerializer::deserializeParameters(juce::InputStream& input, par
     parameters.decay = parsedParameters->decay;
     parameters.reverbMix = parsedParameters->reverbMix;
     parameters.bypass = parsedParameters->bypass;
+    parameters.bypassEq = parsedParameters->bypassEq;
+    parameters.hpfFq = parsedParameters->hpfFq;
+    parameters.lpfFq = parsedParameters->lpfFq;
+    parameters.eq65hzGain = parsedParameters->eq65hzGain;
+    parameters.eq125hzGain = parsedParameters->eq125hzGain;
+    parameters.eq250hzGain = parsedParameters->eq250hzGain;
+    parameters.eq500hzGain = parsedParameters->eq500hzGain;
+    parameters.eq1khzGain = parsedParameters->eq1khzGain;
+    parameters.eq2khzGain = parsedParameters->eq2khzGain;
+    parameters.eq4khzGain = parsedParameters->eq4khzGain;
+    parameters.eq8khzGain = parsedParameters->eq8khzGain;
+    parameters.eq16khzGain = parsedParameters->eq16khzGain;
     return juce::Result::ok();
 }
 
