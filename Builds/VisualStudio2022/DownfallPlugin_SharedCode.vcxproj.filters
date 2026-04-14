@@ -733,6 +733,9 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Source\EQModule.cpp">
+      <Filter>DownfallPlugin\Source\amp</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\HighGain.cpp">
       <Filter>DownfallPlugin\Source\amp</Filter>
     </ClCompile>
@@ -3875,6 +3878,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\Utils.h">
       <Filter>DownfallPlugin\Include\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\EQModule.h">
+      <Filter>DownfallPlugin\Include\amp</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\HighGain.h">
       <Filter>DownfallPlugin\Include\amp</Filter>

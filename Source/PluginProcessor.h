@@ -16,6 +16,7 @@
 #include "Reverb.h"
 #include "JsonSerializer.h"
 #include "Measurement.h"
+#include "EQModule.h"
 
 //==============================================================================
 /**
@@ -78,6 +79,7 @@ private:
     effects::ReverbFX reverb{ 100.0 };
 
     juce::dsp::Convolution convolution;
+    EQModule eq;
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DownfallPluginAudioProcessor)
 };

@@ -218,7 +218,7 @@ namespace parameters {
             bypassEq(createParameterBool(audioProcessor,
                 "bypassEq",
                 "Bypass EQ",
-                false)),
+                true)),
             hpfFq(createParameterFloat(audioProcessor,
                 "hpfFq",
                 "High Pass FQ",

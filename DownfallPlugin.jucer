@@ -37,12 +37,14 @@
         <FILE id="kSGCtw" name="Utils.h" compile="0" resource="0" file="Source/Utils.h"/>
       </GROUP>
       <GROUP id="{ABD2EEFB-D83B-7C0D-5F14-E08598FBD6E1}" name="amp">
+        <FILE id="pEtinl" name="EQModule.h" compile="0" resource="0" file="Source/EQModule.h"/>
         <FILE id="YIZF8W" name="HighGain.h" compile="0" resource="0" file="Source/HighGain.h"/>
         <FILE id="e87VR3" name="PreAmp.h" compile="0" resource="0" file="Source/PreAmp.h"/>
       </GROUP>
     </GROUP>
     <GROUP id="{F8CB0AB7-C922-98DF-A4F1-2526B85D879F}" name="Source">
       <GROUP id="{FEAD97A4-DDE1-2A4F-181B-4AADE1D4905B}" name="amp">
+        <FILE id="XNyRDW" name="EQModule.cpp" compile="1" resource="0" file="Source/EQModule.cpp"/>
         <FILE id="ri8M3t" name="HighGain.cpp" compile="1" resource="0" file="Source/HighGain.cpp"/>
         <FILE id="GQb8nM" name="PreAmp.cpp" compile="1" resource="0" file="Source/PreAmp.cpp"/>
       </GROUP>

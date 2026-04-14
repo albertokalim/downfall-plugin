@@ -144,6 +144,7 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Source\EQModule.cpp"/>
     <ClCompile Include="..\..\Source\HighGain.cpp"/>
     <ClCompile Include="..\..\Source\PreAmp.cpp"/>
     <ClCompile Include="..\..\Source\JsonSerializer.cpp"/>
@@ -3032,6 +3033,7 @@
     <ClInclude Include="..\..\Source\JsonSerializer.h"/>
     <ClInclude Include="..\..\Source\Constants.h"/>
     <ClInclude Include="..\..\Source\Utils.h"/>
+    <ClInclude Include="..\..\Source\EQModule.h"/>
     <ClInclude Include="..\..\Source\HighGain.h"/>
     <ClInclude Include="..\..\Source\PreAmp.h"/>
     <ClInclude Include="C:\JUCE\modules\juce_audio_basics\audio_play_head\juce_AudioPlayHead.h"/>

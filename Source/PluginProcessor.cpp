@@ -126,6 +126,9 @@ void DownfallPluginAudioProcessor::prepareToPlay (double sampleRate, int samples
         juce::dsp::Convolution::Trim::yes,
         0);
 
+    eq.reset();
+    eq.prepare(spec);
+
     outputLevelL.reset();
     outputLevelR.reset();
     inputLevelL.reset();
@@ -193,6 +196,8 @@ void DownfallPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
         convolution.process(context);
     }
 
+    eq.process(context);
+
     buffer.applyGain(juce::Decibels::decibelsToGain(outputGainSmoother.getNextValue()));
 
     outputLevelL.updateIfGreater(buffer.getMagnitude(0, 0, buffer.getNumSamples()));
@@ -202,7 +207,7 @@ void DownfallPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
 //==============================================================================
 bool DownfallPluginAudioProcessor::hasEditor() const
 {
-    return true; // (change this to false if you choose to not supply an editor)
+    return true; 
 }
 
 juce::AudioProcessorEditor* DownfallPluginAudioProcessor::createEditor()
