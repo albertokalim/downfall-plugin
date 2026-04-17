@@ -159,6 +159,8 @@ bool DownfallPluginAudioProcessor::isBusesLayoutSupported (const BusesLayout& la
 
 void DownfallPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffer, juce::MidiBuffer& midiMessages)
 {
+    if (parameters.bypass) return;
+
     juce::ScopedNoDenormals noDenormals;
     auto totalNumInputChannels  = getTotalNumInputChannels();
     auto totalNumOutputChannels = getTotalNumOutputChannels();
@@ -180,6 +182,7 @@ void DownfallPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
     delay.updateTempoPlayHead(getPlayHead());
     delay.update(parameters);
     reverb.update(parameters);
+    eq.update(parameters);
     
     juce::dsp::AudioBlock<float> block(buffer);
     juce::dsp::ProcessContextReplacing<float> context(block);

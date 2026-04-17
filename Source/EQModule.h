@@ -13,6 +13,7 @@
 #include "Parameters.h"
 
 using IIRFilter = juce::dsp::IIR::Filter<float>;
+using IIRCoefs = juce::dsp::IIR::Coefficients<float>;
 
 class EQModule {
 public:
@@ -25,18 +26,22 @@ public:
 
 private:
     float sampleRate = 44100.f;
+    bool bypass = false;
 
-    IIRFilter highPassFilter;
-    IIRFilter lowPassFilter;
-    IIRFilter bell65;
-    IIRFilter bell125;
-    IIRFilter bell250;
-    IIRFilter bell500;
-    IIRFilter bell1k;
-    IIRFilter bell2k;
-    IIRFilter bell4k;
-    IIRFilter bell8k;
-    IIRFilter bell16k;
+    juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> highPassFilter;
+    juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> lowPassFilter;
+    juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> bell65;
+    juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> bell125;
+    juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> bell250;
+    juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> bell500;
+    juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> bell1k;
+    juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> bell2k;
+    juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> bell4k;
+    juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> bell8k;
+    juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> bell16k;
+
+    float currentHighPassFq = 0.f;
+    float currentLowPassFq = 0.f;
 
     juce::SmoothedValue<float> highPassCenterFqSmoother;
     juce::SmoothedValue<float> lowPassCenterFqSmoother;

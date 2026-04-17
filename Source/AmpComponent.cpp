@@ -40,7 +40,7 @@ AmpComponent::AmpComponent(parameters::Parameters& p)
             presenceKnob.setVisible(false);
         }
         };
-    ampTypeComboBox.setSelectedId(1);
+    ampTypeComboBox.setSelectedId(p.ampType.getIndex() + 1);
     
 
     head.addAndMakeVisible(ampTypeComboBox);
