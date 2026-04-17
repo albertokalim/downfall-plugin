@@ -38,6 +38,7 @@ DownfallPluginAudioProcessorEditor::DownfallPluginAudioProcessorEditor (Downfall
     eqButton.setLookAndFeel(MenuButtonLookAndFeel::get());
 
     ampButton.onClick = [this]() {
+        ampButton.setToggleState(true, juce::NotificationType::dontSendNotification);
         if (this->fxButton.getToggleState()) {
             this->fxButton.setToggleState(false, juce::NotificationType::dontSendNotification);
         }
@@ -52,6 +53,7 @@ DownfallPluginAudioProcessorEditor::DownfallPluginAudioProcessorEditor (Downfall
     };
 
     fxButton.onClick = [this]() {
+        fxButton.setToggleState(true, juce::NotificationType::dontSendNotification);
         if (this->ampButton.getToggleState()) {
             this->ampButton.setToggleState(false, juce::NotificationType::dontSendNotification);
         }
@@ -67,6 +69,7 @@ DownfallPluginAudioProcessorEditor::DownfallPluginAudioProcessorEditor (Downfall
     };
 
     cabinetButton.onClick = [this]() {
+        cabinetButton.setToggleState(true, juce::NotificationType::dontSendNotification);
         if (this->ampButton.getToggleState()) {
             this->ampButton.setToggleState(false, juce::NotificationType::dontSendNotification);
         }
@@ -83,6 +86,7 @@ DownfallPluginAudioProcessorEditor::DownfallPluginAudioProcessorEditor (Downfall
     };
 
     eqButton.onClick = [this]() {
+        eqButton.setToggleState(true, juce::NotificationType::dontSendNotification);
         if (this->ampButton.getToggleState()) {
             this->ampButton.setToggleState(false, juce::NotificationType::dontSendNotification);
         }

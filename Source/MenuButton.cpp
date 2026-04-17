@@ -22,25 +22,25 @@ void MenuButtonLookAndFeel::drawButtonBackground(juce::Graphics& g, juce::Button
 {
     auto buttonArea = button.getLocalBounds();
     auto edge = 4;
-    if (shouldDrawButtonAsDown || button.getToggleState()) {
-        g.setColour(juce::Colours::white);
-    } 
-    else if (shouldDrawButtonAsHighlighted){
+    if (shouldDrawButtonAsHighlighted){
         g.setColour(juce::Colours::darkgrey);
     }
     else {
         g.setColour(backgroundColour);
     }
-    
     g.fillRect(buttonArea);
+    if (button.getToggleState()) {
+        g.setColour(juce::Colours::white);
+        g.drawLine(buttonArea.getX(), buttonArea.getY() + buttonArea.getHeight(), buttonArea.getX() + buttonArea.getWidth(), buttonArea.getY() + buttonArea.getHeight());
+    }
 }
 
 void MenuButtonLookAndFeel::drawButtonText(juce::Graphics& g, juce::TextButton& button, bool isMouseOverButton, bool isButtonDown)
 {
     auto font = getTextButtonFont(button, button.getHeight());
     g.setFont(font);
-    g.setColour(button.findColour(button.getToggleState() ? juce::TextButton::textColourOnId
-        : juce::TextButton::textColourOffId));
+    g.setColour(button.findColour(juce::TextButton::textColourOffId));
+    
     auto yIndent = juce::jmin(4, button.proportionOfHeight(0.3f));
     auto cornerSize = juce::jmin(button.getHeight(), button.getWidth()) / 2;
     auto fontHeight = juce::roundToInt(font.getHeight() * 0.6f);
