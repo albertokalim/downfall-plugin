@@ -176,7 +176,7 @@ void DownfallPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
 
     buffer.applyGain(juce::Decibels::decibelsToGain(inputGainSmoother.getNextValue()));
 
-    auto index = parameters.ampType.getIndex();//TODO: Maybe Amp Type is a global parameter.
+    auto index = parameters.ampType.getIndex();
     preAmps[index]->update(parameters);
     chorus.update(parameters);
     delay.updateTempoPlayHead(getPlayHead());
@@ -222,14 +222,12 @@ juce::AudioProcessorEditor* DownfallPluginAudioProcessor::createEditor()
 void DownfallPluginAudioProcessor::getStateInformation (juce::MemoryBlock& destData)
 {
     juce::MemoryOutputStream outputStream{ destData, true };
-    //TODO: Considerar meter esto en un solo método porque es repetir código.
     JsonSerializer::serializeParameters(parameters, outputStream);
 }
 
 void DownfallPluginAudioProcessor::setStateInformation (const void* data, int sizeInBytes)
 {
     juce::MemoryInputStream inputStream{ data, static_cast<size_t>(sizeInBytes), false };
-    //TODO: Considerar meter esto en un solo método porque es repetir código.
     JsonSerializer::deserializeParameters(inputStream, parameters);
 }
 
