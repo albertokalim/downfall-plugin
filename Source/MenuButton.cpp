@@ -24,7 +24,7 @@ void MenuButtonLookAndFeel::drawButtonBackground(juce::Graphics& g, juce::Button
     auto buttonArea = button.getLocalBounds();
     auto edge = 4;
 
-    g.setColour(backgroundColour);
+    g.setColour(backgroundColour.withAlpha(0.f));
     g.fillRect(buttonArea);
     if (button.getToggleState()) {
         g.setColour(button.findColour(juce::TextButton::textColourOffId));

@@ -33,14 +33,15 @@ public:
 
 private:
     DownfallPluginAudioProcessor& audioProcessor;
+
     juce::GroupComponent top;
+    juce::GroupComponent middle;
+    juce::GroupComponent menu;
 
     RotaryKnob inputKnob{"Input", audioProcessor.parameters.inputGain, true };
     RotaryKnob outputKnob{ "Output", audioProcessor.parameters.outputGain, true };
     LevelMeter inputLevelMeter, outputLevelMeter;
     BypassButton bypassButton{"Bypass Plugin", audioProcessor.parameters.bypass };
-    juce::GroupComponent middle;
-    juce::GroupComponent menu;
     juce::TextButton ampButton{ "Amp", "Show amp" };
     juce::TextButton fxButton{ "FX", "Show effects" };
     juce::TextButton cabinetButton{ "Cabinet", "Show screen to load IR" };

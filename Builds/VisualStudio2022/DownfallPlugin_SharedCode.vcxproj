@@ -4430,6 +4430,8 @@
     <ClInclude Include="..\..\JuceLibraryCode\JucePluginDefines.h"/>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\..\..\..\Noise.png"/>
+    <None Include="..\..\..\..\..\plugin-title.png"/>
     <None Include="..\..\..\..\..\test-ir.wav"/>
     <None Include="C:\JUCE\modules\juce_audio_devices\native\asio\LICENSE.txt"/>
     <None Include="C:\JUCE\modules\juce_audio_devices\native\oboe\src\common\README.md"/>

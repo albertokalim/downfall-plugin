@@ -100,13 +100,13 @@ DownfallPluginAudioProcessorEditor::DownfallPluginAudioProcessorEditor (Downfall
         middle.addAndMakeVisible(eqComponent);
     };
 
-    menu.setColour(juce::GroupComponent::outlineColourId, juce::Colours::black);
+    menu.setColour(juce::GroupComponent::outlineColourId, juce::Colours::black.withAlpha(0.f));
     menu.addAndMakeVisible(ampButton);
     menu.addAndMakeVisible(fxButton);
     menu.addAndMakeVisible(cabinetButton);
     menu.addAndMakeVisible(eqButton);
 
-    top.setColour(juce::GroupComponent::outlineColourId, juce::Colours::black);
+    top.setColour(juce::GroupComponent::outlineColourId, juce::Colours::black.withAlpha(0.f));
     top.addAndMakeVisible(inputLevelMeter);
     top.addAndMakeVisible(inputKnob);
     top.addAndMakeVisible(menu);
@@ -115,7 +115,7 @@ DownfallPluginAudioProcessorEditor::DownfallPluginAudioProcessorEditor (Downfall
     top.addAndMakeVisible(outputLevelMeter);
 
     ampButton.setToggleState(true, juce::NotificationType::dontSendNotification);
-    middle.setColour(juce::GroupComponent::outlineColourId, juce::Colours::black);
+    middle.setColour(juce::GroupComponent::outlineColourId, juce::Colours::black.withAlpha(0.f));
     middle.addAndMakeVisible(ampComponent);
 
     //Group it, to add only one component to de parent.
@@ -149,23 +149,37 @@ DownfallPluginAudioProcessorEditor::~DownfallPluginAudioProcessorEditor()
 void DownfallPluginAudioProcessorEditor::paint (juce::Graphics& g)
 {
     // (Our component is opaque, so we must completely fill the background with a solid colour)
-    g.fillAll (juce::Colours::black);
+    auto noise = juce::ImageCache::getFromMemory(
+        BinaryData::Noise_png, BinaryData::Noise_pngSize);
+    auto fillType = juce::FillType(noise, juce::AffineTransform::scale(0.5f));
+    g.setFillType(fillType);
+    g.fillRect(getLocalBounds());
+    
+    auto image = juce::ImageCache::getFromMemory(
+        BinaryData::plugintitle_png, BinaryData::plugintitle_pngSize);
+
+    int destWidth = image.getWidth() / 2;
+    int destHeight = image.getHeight() / 2;
+    g.drawImage(image,
+        getWidth() / 2 - image.getWidth() / 2, 15, image.getWidth()-40, image.getHeight()-40,
+        0, 0, image.getWidth(), image.getHeight());
+
 }
 
 void DownfallPluginAudioProcessorEditor::resized()
 {
     auto bounds = getLocalBounds();
-    int heightTop = 2 * bounds.getHeight() / 10;
-    int menuWidth = bounds.getWidth() / 3;
     int menuHeight = 50;
-
+    int heightTop = 2 * bounds.getHeight() / 10 + menuHeight;
+    int menuWidth = bounds.getWidth() / 3;
+    
     top.setBounds(0, 0, bounds.getWidth(), heightTop);
-    menu.setBounds(bounds.getWidth() / 2 - menuWidth / 2, heightTop - menuHeight - 4, menuWidth, menuHeight);
+    menu.setBounds(bounds.getWidth() / 2 - menuWidth / 2, heightTop - menuHeight, menuWidth, menuHeight);
     middle.setBounds(0, heightTop, bounds.getWidth(), bounds.getHeight() - heightTop);
 
     int knobPaddingFromBorder = 80;
     int knobYCoord = (heightTop / 2) - (inputKnob.getHeight() / 2);
-    int heightLevelMeter = heightTop - 30;
+    int heightLevelMeter = heightTop - menuHeight - 30;
     int widthLevelMeter = 15;
     int inputLevelX = knobPaddingFromBorder / 2 - widthLevelMeter / 2;
     int inputLevelY = heightTop / 2 - heightLevelMeter / 2;

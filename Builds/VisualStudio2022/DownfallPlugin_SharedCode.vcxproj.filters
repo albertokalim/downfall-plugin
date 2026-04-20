@@ -8066,6 +8066,12 @@
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\..\..\..\Noise.png">
+      <Filter>DownfallPlugin\Assets</Filter>
+    </None>
+    <None Include="..\..\..\..\..\plugin-title.png">
+      <Filter>DownfallPlugin\Assets</Filter>
+    </None>
     <None Include="..\..\..\..\..\test-ir.wav">
       <Filter>DownfallPlugin\Assets</Filter>
     </None>
