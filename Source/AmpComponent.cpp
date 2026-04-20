@@ -30,6 +30,7 @@ AmpComponent::AmpComponent(parameters::Parameters& p)
     head.addAndMakeVisible(masterKnob);
     head.addAndMakeVisible(presenceKnob);
     head.addAndMakeVisible(bypassAmp);
+    head.setColour(juce::GroupComponent::ColourIds::outlineColourId, juce::Colours::white.withAlpha(0.3f));
 
     ampTypeComboBox.addItemList(p.ampType.getAllValueStrings(), 1);
     ampTypeComboBox.onChange = [this]() {

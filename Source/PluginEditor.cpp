@@ -204,7 +204,7 @@ void DownfallPluginAudioProcessorEditor::resized()
     buttonIRLoader.setTopLeftPosition(middle.getWidth() / 2 - buttonIRLoader.getWidth() / 2, 60 + offset);
     bypassCabinet.setBounds(0, 90, 100, 100);
     bypassCabinet.setTopLeftPosition(middle.getWidth() / 2 - buttonIRLoader.getWidth() / 2, 110 + offset);
-    eqComponent.setBounds(0, 0, middle.getWidth(), middle.getHeight());
-    eqComponent.setTopLeftPosition(0, 0);
+    eqComponent.setBounds(0, 0, middle.getWidth() - 20, middle.getHeight());
+    eqComponent.setTopLeftPosition(10, 0);
 }
 

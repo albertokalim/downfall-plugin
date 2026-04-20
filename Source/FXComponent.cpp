@@ -48,6 +48,10 @@ FXComponent::FXComponent(parameters::Parameters& p)
     reverbGroup.addAndMakeVisible(reverbMixKnob);
     reverbGroup.addAndMakeVisible(reverbBypass);
 
+    delayGroup.setColour(juce::GroupComponent::ColourIds::outlineColourId, juce::Colours::white.withAlpha(0.3f));
+    chorusGroup.setColour(juce::GroupComponent::ColourIds::outlineColourId, juce::Colours::white.withAlpha(0.3f));
+    reverbGroup.setColour(juce::GroupComponent::ColourIds::outlineColourId, juce::Colours::white.withAlpha(0.3f));
+
     delayNoteKnob.setVisible(false);
     syncButton.onClick = [this]() {
             bool isSyncActive = syncButton.getToggleStateValue().getValue();

@@ -122,7 +122,7 @@ EQComponent::EQComponent(parameters::Parameters& p)
     eq.addAndMakeVisible(fq4kLabel);
     eq.addAndMakeVisible(fq8kLabel);
     eq.addAndMakeVisible(fq16kLabel);
-
+    eq.setColour(juce::GroupComponent::ColourIds::outlineColourId, juce::Colours::white.withAlpha(0.3f));
     addAndMakeVisible(eq);
 }
 
@@ -139,7 +139,7 @@ void EQComponent::resized()
     eq.setBounds(0, heightTenPerc / 2, width, height);
 
     bypassButton.setBounds(0, 0, 100, 100);
-    bypassButton.setTopLeftPosition(10, 50);
+    bypassButton.setTopLeftPosition(100, 50);
 
     int sliderHeight = 300;
     int sliderWidth = 75;
