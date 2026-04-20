@@ -103,7 +103,8 @@ void EQModule::update(parameters::Parameters& parameters)
 
     highPassCenterFqSmoother.setTargetValue(parameters.hpfFq.get());
     currentHighPassFq = highPassCenterFqSmoother.getNextValue();
-    *highPassFilter.state = *juce::dsp::IIR::Coefficients<float>::makeHighPass(sampleRate, currentHighPassFq);
+    if(currentHighPassFq > 0.f)
+        *highPassFilter.state = *juce::dsp::IIR::Coefficients<float>::makeHighPass(sampleRate, currentHighPassFq);
 
     lowPassCenterFqSmoother.setTargetValue(parameters.lpfFq.get());
     currentLowPassFq = lowPassCenterFqSmoother.getNextValue();

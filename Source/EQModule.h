@@ -41,7 +41,7 @@ private:
     juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> bell16k;
 
     float currentHighPassFq = 0.f;
-    float currentLowPassFq = 0.f;
+    float currentLowPassFq = 20000.f;
 
     juce::SmoothedValue<float> highPassCenterFqSmoother;
     juce::SmoothedValue<float> lowPassCenterFqSmoother;
