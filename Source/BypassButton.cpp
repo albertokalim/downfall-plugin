@@ -41,7 +41,7 @@ void BypassButtonLookAndFeel::drawToggleButton(juce::Graphics& g, juce::ToggleBu
     path.addEllipse(shadowRect);
     dropShadow.colour = juce::Colours::darkgrey;
     dropShadow.drawForPath(g, path);
-    g.setColour(button.getToggleState() ? juce::Colours::grey : juce::Colours::red);
+    g.setColour(button.getToggleState() ? juce::Colours::darkgrey : juce::Colours::lightgreen);
     g.fillEllipse(buttonRect);
     
     auto center = buttonRect.getCentre();
