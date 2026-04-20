@@ -59,7 +59,7 @@ void BypassButtonLookAndFeel::drawToggleButton(juce::Graphics& g, juce::ToggleBu
         true);
     auto strokeType = juce::PathStrokeType(
         2.f, juce::PathStrokeType::curved, juce::PathStrokeType::rounded);
-    juce::Colour colour = juce::Colours::black.withAlpha(0.5f);
+    juce::Colour colour = juce::Colours::black.withAlpha(0.3f);
     g.setColour(colour);
     g.strokePath(innerCirclePath, strokeType);
 
