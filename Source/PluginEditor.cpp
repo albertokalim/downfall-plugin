@@ -154,7 +154,13 @@ void DownfallPluginAudioProcessorEditor::paint (juce::Graphics& g)
     auto fillType = juce::FillType(noise, juce::AffineTransform::scale(0.5f));
     g.setFillType(fillType);
     g.fillRect(getLocalBounds());
-    
+
+    if (cabinetButton.getToggleState()) {
+        auto ampMesh = juce::ImageCache::getFromMemory(
+            BinaryData::ampmesh_jpeg, BinaryData::ampmesh_jpegSize);
+        g.drawImage(ampMesh, middle.getBounds().getX() + 5, middle.getBounds().getY() + 5, middle.getWidth()-10, middle.getHeight()-10, 1, 10, ampMesh.getWidth(), ampMesh.getHeight()-20);
+    }
+
     auto image = juce::ImageCache::getFromMemory(
         BinaryData::plugintitle_png, BinaryData::plugintitle_pngSize);
 

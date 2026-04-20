@@ -8,6 +8,9 @@
 
 namespace BinaryData
 {
+    extern const char*   ampmesh_jpeg;
+    const int            ampmesh_jpegSize = 87383;
+
     extern const char*   Noise_png;
     const int            Noise_pngSize = 39464;
 
@@ -18,7 +21,7 @@ namespace BinaryData
     const int            testir_wavSize = 69058;
 
     // Number of elements in the namedResourceList and originalFileNames arrays.
-    const int namedResourceListSize = 3;
+    const int namedResourceListSize = 4;
 
     // Points to the start of a list of resource names.
     extern const char* namedResourceList[];
