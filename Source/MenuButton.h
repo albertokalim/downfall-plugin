@@ -14,7 +14,6 @@
 class MenuButtonLookAndFeel : public juce::LookAndFeel_V4
 {
 public:
-    MenuButtonLookAndFeel();
 
     static MenuButtonLookAndFeel* get()
     {
@@ -27,6 +26,7 @@ public:
     void drawButtonText(juce::Graphics& g, juce::TextButton& button, bool isMouseOverButton, bool isButtonDown) override;
 
 private:
-    
+    MenuButtonLookAndFeel();
+
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(MenuButtonLookAndFeel)
 };

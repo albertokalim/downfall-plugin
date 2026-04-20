@@ -175,7 +175,7 @@ void DownfallPluginAudioProcessorEditor::resized()
     inputLevelMeter.setBounds(0, 0, widthLevelMeter, heightLevelMeter);
     inputLevelMeter.setTopLeftPosition(inputLevelX, inputLevelY);
     inputKnob.setTopLeftPosition(knobPaddingFromBorder, knobYCoord);
-    bypassButton.setBounds(bounds.getWidth() / 2 - menuWidth / 2 - 200, heightTop / 2 - 20, 100, 40);
+    bypassButton.setBounds(bounds.getWidth() / 2 - menuWidth / 2 - 200, heightTop / 2 - 20, 40, 40);
     outputKnob.setTopLeftPosition(bounds.getWidth() - knobPaddingFromBorder - outputKnob.getWidth(), knobYCoord);
     outputLevelMeter.setBounds(0, 0, widthLevelMeter, heightLevelMeter);
     outputLevelMeter.setTopLeftPosition(outputLevelX, outputLevelY);
