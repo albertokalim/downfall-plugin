@@ -16,8 +16,8 @@ DownfallPluginAudioProcessor::DownfallPluginAudioProcessor()
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true))
 {
     gate.setRatio(100.f);
-    gate.setAttack(1.f);
-    gate.setRelease(1.f);
+    gate.setAttack(20.f);
+    gate.setRelease(20.f);
     gate.setThreshold(-20.f);
 }
 

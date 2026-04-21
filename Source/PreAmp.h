@@ -33,11 +33,11 @@ namespace preamp {
 
     namespace waveshapingFunctions {
         static float tanh(float x) {
-            return (x * (abs(x) + 3.5f) / (x * x + (3.5f - 1) * abs(x) + 1));
+            return juce::jlimit(-1.f, 1.f, (x * (abs(x) + 3.5f) / (x * x + (3.5f - 1) * abs(x) + 1)));
         }
 
         static float tanhHighGain(float x) {
-            return (x * (abs(x) + 50.f) / (x * x + (50.f - 1) * abs(x) + 1));
+            return juce::jlimit(-1.f, 1.f, (x * (abs(x) + 50.f) / (x * x + (50.f - 1) * abs(x) + 1)));
         }
     };
 
