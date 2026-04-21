@@ -49,7 +49,7 @@ private:
     AmpComponent ampComponent;
     FXComponent fxComponent;
     juce::Label textIR{ "Default IR" };
-    juce::TextButton buttonIRLoader{ "Load custom IR" };
+    juce::TextButton buttonIRLoader{ "Load IR" };
     juce::FileChooser fileChooser{ "Select an IR file to load", juce::File::getSpecialLocation(juce::File::userHomeDirectory), "*.wav" };
     juce::AlertWindow alertWindow{ "Success!!", "IR Succesfully loaded", juce::MessageBoxIconType::InfoIcon };
     BypassButton bypassCabinet;

@@ -126,13 +126,22 @@ DownfallPluginAudioProcessorEditor::DownfallPluginAudioProcessorEditor (Downfall
     buttonIRLoader.onClick = [this]() {
         fileChooser.launchAsync(juce::FileBrowserComponent::openMode, [this](const juce::FileChooser& chooser)
             {
+                
                 juce::File newIRFile(chooser.getResult());
-                audioProcessor.setIRToConvolution(newIRFile);
-                juce::String str = "IR Loaded: ";
-                textIR.setText(str << newIRFile.getFileName(), juce::NotificationType::dontSendNotification);
-                alertWindow.showMessageBoxAsync(juce::MessageBoxIconType::InfoIcon,
-                    "Success!!",
-                    "IR Succesfully loaded");
+                auto fileExtension = newIRFile.getFileExtension();
+                if (newIRFile.existsAsFile() && fileExtension == ".wav") {
+                    audioProcessor.setIRToConvolution(newIRFile);
+                    juce::String str = "IR Loaded: ";
+                    textIR.setText(str << newIRFile.getFileName(), juce::NotificationType::dontSendNotification);
+                    alertWindow.showMessageBoxAsync(juce::MessageBoxIconType::InfoIcon,
+                        "Success!!",
+                        "IR Succesfully loaded");
+                }
+                else if (newIRFile.existsAsFile()) {
+                    alertWindow.showMessageBoxAsync(juce::MessageBoxIconType::WarningIcon,
+                        "Error!!",
+                        "Please select a .wav file");
+                }
             });
         };
 
@@ -148,7 +157,6 @@ DownfallPluginAudioProcessorEditor::~DownfallPluginAudioProcessorEditor()
 //==============================================================================
 void DownfallPluginAudioProcessorEditor::paint (juce::Graphics& g)
 {
-    // (Our component is opaque, so we must completely fill the background with a solid colour)
     auto noise = juce::ImageCache::getFromMemory(
         BinaryData::Noise_png, BinaryData::Noise_pngSize);
     auto fillType = juce::FillType(noise, juce::AffineTransform::scale(0.5f));
@@ -158,7 +166,8 @@ void DownfallPluginAudioProcessorEditor::paint (juce::Graphics& g)
     if (cabinetButton.getToggleState()) {
         auto ampMesh = juce::ImageCache::getFromMemory(
             BinaryData::ampmesh_JPG, BinaryData::ampmesh_JPGSize);
-        g.drawImage(ampMesh, middle.getBounds().getX() + 5, middle.getBounds().getY() + 5, middle.getWidth()-10, middle.getHeight()-10, 0, 0, ampMesh.getWidth(), ampMesh.getHeight());
+        int meshPadding = 100;
+        g.drawImage(ampMesh, middle.getBounds().getX() + meshPadding / 2, middle.getBounds().getY() + meshPadding / 2, middle.getWidth() - meshPadding, middle.getHeight()- meshPadding, 0, 0, ampMesh.getWidth(), ampMesh.getHeight());
     }
 
     auto image = juce::ImageCache::getFromMemory(
@@ -212,18 +221,18 @@ void DownfallPluginAudioProcessorEditor::resized()
     eqButton.setBounds(0, 0, buttonWidth, buttonHeight);
     eqButton.setTopLeftPosition(3* menu.getWidth() / 4, 0);
 
-    int offset = 200;
+    int offset = 50;
 
     ampComponent.setBounds(0, 0, middle.getWidth(), middle.getHeight());
     ampComponent.setTopLeftPosition(0, 0);
     fxComponent.setBounds(0, 0, middle.getWidth(), middle.getHeight());
     fxComponent.setTopLeftPosition(0, 0);
     textIR.setBounds(0, 0, 500, 50);
-    textIR.setTopLeftPosition(middle.getWidth() / 2 - textIR.getWidth() / 2, 10 + offset);
+    textIR.setTopLeftPosition(middle.getWidth() / 2 - textIR.getWidth(), 10 + offset);
     buttonIRLoader.setBounds(0, 55, 200, 30);
-    buttonIRLoader.setTopLeftPosition(middle.getWidth() / 2 - buttonIRLoader.getWidth() / 2, 60 + offset);
+    buttonIRLoader.setTopLeftPosition(middle.getWidth() / 2 - textIR.getWidth(), 50 + offset);
     bypassCabinet.setBounds(0, 90, 100, 100);
-    bypassCabinet.setTopLeftPosition(middle.getWidth() / 2 - buttonIRLoader.getWidth() / 2, 110 + offset);
+    bypassCabinet.setTopLeftPosition(middle.getWidth() - buttonIRLoader.getWidth(), 25 + offset);
     eqComponent.setBounds(0, 0, middle.getWidth() - 20, middle.getHeight());
     eqComponent.setTopLeftPosition(10, 0);
 }
