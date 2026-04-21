@@ -4430,7 +4430,7 @@
     <ClInclude Include="..\..\JuceLibraryCode\JucePluginDefines.h"/>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\..\..\..\ampmesh.jpeg"/>
+    <None Include="..\..\..\..\..\ampmesh.JPG"/>
     <None Include="..\..\..\..\..\Noise.png"/>
     <None Include="..\..\..\..\..\plugin-title.png"/>
     <None Include="..\..\..\..\..\test-ir.wav"/>

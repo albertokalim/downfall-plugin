@@ -8,8 +8,8 @@
 
 namespace BinaryData
 {
-    extern const char*   ampmesh_jpeg;
-    const int            ampmesh_jpegSize = 87383;
+    extern const char*   ampmesh_JPG;
+    const int            ampmesh_JPGSize = 167012;
 
     extern const char*   Noise_png;
     const int            Noise_pngSize = 39464;

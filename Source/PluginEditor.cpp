@@ -157,8 +157,8 @@ void DownfallPluginAudioProcessorEditor::paint (juce::Graphics& g)
 
     if (cabinetButton.getToggleState()) {
         auto ampMesh = juce::ImageCache::getFromMemory(
-            BinaryData::ampmesh_jpeg, BinaryData::ampmesh_jpegSize);
-        g.drawImage(ampMesh, middle.getBounds().getX() + 5, middle.getBounds().getY() + 5, middle.getWidth()-10, middle.getHeight()-10, 1, 10, ampMesh.getWidth(), ampMesh.getHeight()-20);
+            BinaryData::ampmesh_JPG, BinaryData::ampmesh_JPGSize);
+        g.drawImage(ampMesh, middle.getBounds().getX() + 5, middle.getBounds().getY() + 5, middle.getWidth()-10, middle.getHeight()-10, 0, 0, ampMesh.getWidth(), ampMesh.getHeight());
     }
 
     auto image = juce::ImageCache::getFromMemory(

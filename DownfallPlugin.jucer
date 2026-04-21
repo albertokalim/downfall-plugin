@@ -5,7 +5,7 @@
               cppLanguageStandard="20">
   <MAINGROUP id="waeduC" name="DownfallPlugin">
     <GROUP id="{A1DA6CA4-139B-F186-11C3-D64C53B3EB6F}" name="Assets">
-      <FILE id="xu1EFh" name="ampmesh.jpeg" compile="0" resource="1" file="../../../ampmesh.jpeg"/>
+      <FILE id="eHyLWe" name="ampmesh.JPG" compile="0" resource="1" file="../../../ampmesh.JPG"/>
       <FILE id="KGGZ9E" name="Noise.png" compile="0" resource="1" file="../../../Noise.png"/>
       <FILE id="UXx3GG" name="plugin-title.png" compile="0" resource="1"
             file="../../../plugin-title.png"/>
