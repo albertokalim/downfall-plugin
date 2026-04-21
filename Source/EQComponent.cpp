@@ -139,15 +139,15 @@ void EQComponent::resized()
     eq.setBounds(0, heightTenPerc / 2, width, height);
 
     bypassButton.setBounds(0, 0, 100, 100);
-    bypassButton.setTopLeftPosition(100, 50);
+    bypassButton.setTopLeftPosition(60, 50);
 
     int sliderHeight = 300;
     int sliderWidth = 75;
     int labelHeight = 50;
     int partition = width / 11;
     int paddingLeft = 30;
-    int yCoordSliders = 100;
-    int yCoordLabels = 390;
+    int yCoordSliders = 60;
+    int yCoordLabels = 350;
     int labelHorizontalOffset = 18;
     
     hpfKnob.setTopLeftPosition(paddingLeft, 150);

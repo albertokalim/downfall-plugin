@@ -15,6 +15,10 @@ DownfallPluginAudioProcessor::DownfallPluginAudioProcessor()
                        .withInput  ("Input",  juce::AudioChannelSet::stereo(), true)
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true))
 {
+    gate.setRatio(100.f);
+    gate.setAttack(1.f);
+    gate.setRelease(1.f);
+    gate.setThreshold(-20.f);
 }
 
 DownfallPluginAudioProcessor::~DownfallPluginAudioProcessor()
@@ -119,6 +123,9 @@ void DownfallPluginAudioProcessor::prepareToPlay (double sampleRate, int samples
     reverb.reset();
     reverb.prepare(spec);
 
+    gate.reset();
+    gate.prepare(spec);
+
     convolution.reset();
     convolution.prepare(spec);
     convolution.loadImpulseResponse(BinaryData::testir_wav, BinaryData::testir_wavSize,
@@ -183,6 +190,7 @@ void DownfallPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
     delay.update(parameters);
     reverb.update(parameters);
     eq.update(parameters);
+    gate.setThreshold(parameters.gateThreshold.get());
     
     juce::dsp::AudioBlock<float> block(buffer);
     juce::dsp::ProcessContextReplacing<float> context(block);
@@ -198,6 +206,8 @@ void DownfallPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
     if (!parameters.bypassCabinet.get()) {
         convolution.process(context);
     }
+
+    gate.process(context);
 
     eq.process(context);
 

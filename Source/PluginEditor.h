@@ -40,6 +40,7 @@ private:
 
     RotaryKnob inputKnob{"Input", audioProcessor.parameters.inputGain, true };
     RotaryKnob outputKnob{ "Output", audioProcessor.parameters.outputGain, true };
+    RotaryKnob gateKnob{ "Gate", audioProcessor.parameters.gateThreshold };
     LevelMeter inputLevelMeter, outputLevelMeter;
     BypassButton bypassButton{"Bypass Plugin", audioProcessor.parameters.bypass };
     juce::TextButton ampButton{ "Amp", "Show amp" };

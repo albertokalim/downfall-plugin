@@ -78,6 +78,8 @@ private:
     effects::ChorusFX chorus;
     effects::ReverbFX reverb{ 100.0 };
 
+    juce::dsp::NoiseGate<float> gate;
+
     juce::dsp::Convolution convolution;
     EQModule eq;
 

@@ -109,6 +109,7 @@ DownfallPluginAudioProcessorEditor::DownfallPluginAudioProcessorEditor (Downfall
     top.setColour(juce::GroupComponent::outlineColourId, juce::Colours::black.withAlpha(0.f));
     top.addAndMakeVisible(inputLevelMeter);
     top.addAndMakeVisible(inputKnob);
+    top.addAndMakeVisible(gateKnob);
     top.addAndMakeVisible(menu);
     top.addAndMakeVisible(bypassButton);
     top.addAndMakeVisible(outputKnob);
@@ -206,6 +207,7 @@ void DownfallPluginAudioProcessorEditor::resized()
     inputKnob.setTopLeftPosition(knobPaddingFromBorder, knobYCoord);
     bypassButton.setBounds(bounds.getWidth() / 2 - menuWidth / 2 - 200, heightTop / 2 - 20, 40, 40);
     outputKnob.setTopLeftPosition(bounds.getWidth() - knobPaddingFromBorder - outputKnob.getWidth(), knobYCoord);
+    gateKnob.setTopLeftPosition(outputKnob.getX() - gateKnob.getWidth() - 40, knobYCoord);
     outputLevelMeter.setBounds(0, 0, widthLevelMeter, heightLevelMeter);
     outputLevelMeter.setTopLeftPosition(outputLevelX, outputLevelY);
 
