@@ -72,7 +72,8 @@ private:
     juce::SmoothedValue<float> inputGainSmoother;
     juce::SmoothedValue<float> outputGainSmoother;
 
-    std::vector<std::unique_ptr<preamp::PreAmp>> preAmps{ 2 };
+    std::unique_ptr<preamp::PreAmp> preamp;
+    std::vector<preamp::PreAmpDecorator*> preAmpDecorators{ 2 };
 
     effects::DelayFX delay;
     effects::ChorusFX chorus;
