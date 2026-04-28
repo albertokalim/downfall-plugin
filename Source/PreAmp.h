@@ -55,29 +55,10 @@ namespace preamp {
         virtual void reset() = 0;
     };
 
-    class PreAmpDecorator : public PreAmpInterface {
+    class PreAmpDecorator {
     public:
-        PreAmpDecorator(PreAmpInterface* _preAmp) : preAmp(_preAmp) {}
-        ~PreAmpDecorator() { }
-
-        void prepare(juce::dsp::ProcessSpec& spec) override { preAmp->prepare(spec); }
-        void updateState(parameters::Parameters& parameters) override { preAmp->updateState(parameters); }
-        void manageInput(juce::dsp::ProcessContextReplacing<float>& context) override { preAmp->manageInput(context); }
-        void prefilter(juce::dsp::ProcessContextReplacing<float>& context) override { preAmp->prefilter(context); }
-        void waveshaping(juce::dsp::ProcessContextReplacing<float>& context) override { preAmp->waveshaping(context); }
-        void postfilter(juce::dsp::ProcessContextReplacing<float>& context) override { preAmp->postfilter(context); }
-        void eq(juce::dsp::ProcessContextReplacing<float>& context) override { preAmp->eq(context); }
-        void manageOutput(juce::dsp::ProcessContextReplacing<float>& context) override { preAmp->manageOutput(context); }
-        void reset() override { preAmp->reset(); }
-
-    protected:
-        std::unique_ptr<PreAmpInterface> preAmp;
-    };
-
-    class PreAmp {
-    public:
-        PreAmp(PreAmpDecorator* _decorator) : decorator(_decorator) {}
-        ~PreAmp() { }
+        PreAmpDecorator(PreAmpInterface* _decorator) : decorator(_decorator) {}
+        ~PreAmpDecorator() {}
 
         void prepare(juce::dsp::ProcessSpec& spec) { decorator->prepare(spec); }
         void update(parameters::Parameters& parameters) { decorator->updateState(parameters); }
@@ -94,58 +75,12 @@ namespace preamp {
             decorator->reset(); 
         }
 
-        void setDecorator(PreAmpDecorator* _decorator) { decorator = std::unique_ptr<PreAmpDecorator>(_decorator); }
-
-    private:
-        std::unique_ptr<PreAmpDecorator> decorator;
-    };
-
-    class CleanAmp : public PreAmpInterface {
-    public:
-        CleanAmp() {
-            minDrive = MIN_DRIVE;
-            maxDrive = MAX_DRIVE;
+        void setDecorator(PreAmpInterface* _decorator) {
+            jassert(_decorator != nullptr);
+            decorator = _decorator; 
         }
 
-        CleanAmp(float _minDrive, float _maxDrive){
-            minDrive = _minDrive;
-            maxDrive = _maxDrive;
-        }
-        void prepare(juce::dsp::ProcessSpec& spec) override;
-        void updateState(parameters::Parameters& parameters) override;
-        void manageInput(juce::dsp::ProcessContextReplacing<float>& context) override;
-        void prefilter(juce::dsp::ProcessContextReplacing<float>& context) override;
-        void waveshaping(juce::dsp::ProcessContextReplacing<float>& context) override;
-        void postfilter(juce::dsp::ProcessContextReplacing<float>& context) override;
-        void eq(juce::dsp::ProcessContextReplacing<float>& context) override;
-        void manageOutput(juce::dsp::ProcessContextReplacing<float>& context) override;
-        void reset() override;
-
     private:
-        float minDrive = MIN_DRIVE;
-        float maxDrive = MAX_DRIVE;
-        double sampleRate = 44100;
-
-        juce::SmoothedValue<float> bassSmoother;
-        juce::SmoothedValue<float> middleSmoother;
-        juce::SmoothedValue<float> trebleSmoother;
-
-        juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> lowMidBoost;
-        juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> midBoost;
-        juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> pickAccentBoost;
-        juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> highShelf;
-        juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> lowEndBoost;
-        std::unique_ptr<juce::dsp::Oversampling<float>> oversample;
-        juce::dsp::Gain<float> gain;
-        juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> postLowEndBoost;
-        juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> postMidBoost;
-        juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> lowPassFilter;
-        juce::dsp::WaveShaper<float> waveshaper{ { waveshapingFunctions::tanh } };
-        juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> bassEQ;
-        juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> middleEQ;
-        juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> trebleEQ;
-        juce::dsp::Gain<float> master;
-
-        JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (CleanAmp)
+        PreAmpInterface* decorator;
     };
 };

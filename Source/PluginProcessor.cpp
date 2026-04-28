@@ -90,15 +90,10 @@ void DownfallPluginAudioProcessor::changeProgramName (int index, const juce::Str
 //==============================================================================
 void DownfallPluginAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    preamp::CleanAmp* cleanAmp = new preamp::CleanAmp(1.f, 7.5f);
-    preamp::PreAmpDecorator* decoratorClean = new preamp::PreAmpDecorator(cleanAmp);
-    preAmpDecorators[0] = new preamp::PreAmpDecorator(decoratorClean);
+    preAmpStrategies[0] = new preamp::CleanAmp(1.f, 7.5f);
+    preAmpStrategies[1] = new preamp::HighGainAmp(25.f, 100.f);
 
-    preamp::HighGainAmp* highGainAmp = new preamp::HighGainAmp(25.f, 100.f);
-    preamp::PreAmpDecorator* decoratorHighGain = new preamp::PreAmpDecorator(highGainAmp);
-    preAmpDecorators[1] = new preamp::PreAmpDecorator(decoratorHighGain);
-
-    preamp = std::unique_ptr<preamp::PreAmp>(new preamp::PreAmp(decoratorClean));
+    preamp = std::unique_ptr<preamp::PreAmpDecorator>(new preamp::PreAmpDecorator(preAmpStrategies[0]));
 
     inputGainSmoother.reset(sampleRate, 0.002f);
     inputGainSmoother.setCurrentAndTargetValue(0.f);
@@ -111,10 +106,10 @@ void DownfallPluginAudioProcessor::prepareToPlay (double sampleRate, int samples
     spec.numChannels = getTotalNumOutputChannels();
     spec.sampleRate = sampleRate;
 
-    preAmpDecorators[0]->reset();
-    preAmpDecorators[0]->prepare(spec);
-    preAmpDecorators[1]->reset(); //Lo hago en los decoradores, para que ambos estén listos por si cambiamos de preamp.
-    preAmpDecorators[1]->prepare(spec);
+    preAmpStrategies[0]->reset();
+    preAmpStrategies[0]->prepare(spec);
+    preAmpStrategies[1]->reset(); //Lo hago en los decoradores, para que ambos estén listos por si cambiamos de preamp.
+    preAmpStrategies[1]->prepare(spec);
 
     delay.reset();
     delay.prepare(spec);
@@ -148,7 +143,7 @@ void DownfallPluginAudioProcessor::releaseResources()
 {
     reverb.reset();
     for (int i = 0; i < 2; i++) {
-        delete(preAmpDecorators[i]);
+        delete(preAmpStrategies[i]);
     }
 }
 
@@ -189,7 +184,7 @@ void DownfallPluginAudioProcessor::processBlock (juce::AudioBuffer<float>& buffe
     buffer.applyGain(juce::Decibels::decibelsToGain(inputGainSmoother.getNextValue()));
 
     auto index = parameters.ampType.getIndex();
-    preamp->setDecorator(preAmpDecorators[parameters.ampType.getIndex()]);
+    preamp->setDecorator(preAmpStrategies[index]);
     preamp->update(parameters);
     chorus.update(parameters);
     delay.updateTempoPlayHead(getPlayHead());

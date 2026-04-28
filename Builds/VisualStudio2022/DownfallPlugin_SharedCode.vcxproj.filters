@@ -733,13 +733,13 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Source\CleanAmp.cpp">
+      <Filter>DownfallPlugin\Source\amp</Filter>
+    </ClCompile>
     <ClCompile Include="..\..\Source\EQModule.cpp">
       <Filter>DownfallPlugin\Source\amp</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\HighGain.cpp">
-      <Filter>DownfallPlugin\Source\amp</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\Source\PreAmp.cpp">
       <Filter>DownfallPlugin\Source\amp</Filter>
     </ClCompile>
     <ClCompile Include="..\..\Source\JsonSerializer.cpp">
@@ -3878,6 +3878,9 @@
     </ClInclude>
     <ClInclude Include="..\..\Source\Utils.h">
       <Filter>DownfallPlugin\Include\utils</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\Source\CleanAmp.h">
+      <Filter>DownfallPlugin\Include\amp</Filter>
     </ClInclude>
     <ClInclude Include="..\..\Source\EQModule.h">
       <Filter>DownfallPlugin\Include\amp</Filter>

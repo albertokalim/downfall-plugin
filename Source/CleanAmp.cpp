@@ -1,14 +1,14 @@
 /*
   ==============================================================================
 
-    PreAmp.cpp
-    Created: 11 Mar 2026 11:52:16am
+    CleanAmp.cpp
+    Created: 28 Apr 2026 11:35:17am
     Author:  Alberto
 
   ==============================================================================
 */
 
-#include "PreAmp.h"
+#include "CleanAmp.h"
 //TODO: There is so much repeated code in this class with HighGain class. Maybe a solution is to create a parent class, 
 //or to put everything in common in the parent class already instead of creating a new one.
 void preamp::CleanAmp::prepare(juce::dsp::ProcessSpec& spec)

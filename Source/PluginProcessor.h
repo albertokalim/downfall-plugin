@@ -11,6 +11,7 @@
 #include <JuceHeader.h>
 #include "Parameters.h"
 #include "PreAmp.h"
+#include "CleanAmp.h"
 #include "HighGain.h"
 #include "Effect.h"
 #include "Reverb.h"
@@ -72,8 +73,8 @@ private:
     juce::SmoothedValue<float> inputGainSmoother;
     juce::SmoothedValue<float> outputGainSmoother;
 
-    std::unique_ptr<preamp::PreAmp> preamp;
-    std::vector<preamp::PreAmpDecorator*> preAmpDecorators{ 2 };
+    std::unique_ptr<preamp::PreAmpDecorator> preamp;
+    std::vector<preamp::PreAmpInterface*> preAmpStrategies{ 2 };
 
     effects::DelayFX delay;
     effects::ChorusFX chorus;

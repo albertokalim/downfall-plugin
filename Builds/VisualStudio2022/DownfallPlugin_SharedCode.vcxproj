@@ -144,9 +144,9 @@
     </Bscmake>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\Source\CleanAmp.cpp"/>
     <ClCompile Include="..\..\Source\EQModule.cpp"/>
     <ClCompile Include="..\..\Source\HighGain.cpp"/>
-    <ClCompile Include="..\..\Source\PreAmp.cpp"/>
     <ClCompile Include="..\..\Source\JsonSerializer.cpp"/>
     <ClCompile Include="..\..\Source\Diffuser.cpp"/>
     <ClCompile Include="..\..\Source\Splitter.cpp"/>
@@ -3033,6 +3033,7 @@
     <ClInclude Include="..\..\Source\JsonSerializer.h"/>
     <ClInclude Include="..\..\Source\Constants.h"/>
     <ClInclude Include="..\..\Source\Utils.h"/>
+    <ClInclude Include="..\..\Source\CleanAmp.h"/>
     <ClInclude Include="..\..\Source\EQModule.h"/>
     <ClInclude Include="..\..\Source\HighGain.h"/>
     <ClInclude Include="..\..\Source\PreAmp.h"/>
