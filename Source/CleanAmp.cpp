@@ -9,68 +9,32 @@
 */
 
 #include "CleanAmp.h"
-//TODO: There is so much repeated code in this class with HighGain class. Maybe a solution is to create a parent class, 
-//or to put everything in common in the parent class already instead of creating a new one.
+#include "Utils.h"
 void preamp::CleanAmp::prepare(juce::dsp::ProcessSpec& spec)
 {
     sampleRate = spec.sampleRate;
 
-    gain.reset();
-    gain.prepare(spec);
-    gain.setGainLinear(mapValueInRange(0.5f, minDrive, maxDrive));
+    prepareGainObject(gain, spec, mapValueInRange(0.5f, minDrive, maxDrive));
 
-    bassSmoother.reset(spec.sampleRate, 0.002f);
-    bassSmoother.setCurrentAndTargetValue(1.f);
+    prepareSmoothedValueObject(spec.sampleRate, bassSmoother, 1.f);
+    prepareSmoothedValueObject(spec.sampleRate, middleSmoother, 1.f);
+    prepareSmoothedValueObject(spec.sampleRate, trebleSmoother, 1.f);
 
-    middleSmoother.reset(spec.sampleRate, 0.002f);
-    middleSmoother.setCurrentAndTargetValue(1.f);
+    prepareIIRFilter(lowMidBoost, spec, spec.sampleRate, 223.69f, 0.9f, 2.f);
+    prepareIIRFilter(treble3kBoost, spec, spec.sampleRate, 3000.f, 0.9f, 2.f);
+    prepareIIRFilter(pickStrokeAccentBoost, spec, spec.sampleRate, 1385.7f, 6.f, 1.413f);
+    
+    prepareIIRShelf(highShelf, spec, ShelfType::HighShelf, spec.sampleRate, 5000.f, 0.3f, 1.413f);
 
-    trebleSmoother.reset(spec.sampleRate, 0.002f);
-    trebleSmoother.setCurrentAndTargetValue(1.f);
+    prepareIIRFilter(bassEQ, spec, spec.sampleRate, BASS_CENTER_FQ, BASS_Q_FACTOR, 1.f);
+    prepareIIRFilter(middleEQ, spec, spec.sampleRate, MID_CENTER_FQ, MID_Q_FACTOR, 1.f);
+    prepareIIRFilter(trebleEQ, spec, spec.sampleRate, TREBLE_CENTER_FQ, TREBLE_Q_FACTOR, 1.f);
 
-    lowMidBoost.reset();
-    *lowMidBoost.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(spec.sampleRate, 223.69f, 0.9f, 2.f);
-    lowMidBoost.prepare(spec);
+    prepareGainObject(gain, spec, 0.5f);
 
-    midBoost.reset();
-    *midBoost.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(spec.sampleRate, 3000.f, 0.9f, 2.f);
-    midBoost.prepare(spec);
-
-    pickAccentBoost.reset();
-    *pickAccentBoost.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(spec.sampleRate, 1385.7f, 6.f, 1.413f);
-    pickAccentBoost.prepare(spec);
-
-    highShelf.reset();
-    *highShelf.state = *juce::dsp::IIR::Coefficients<float>::makeHighShelf(spec.sampleRate, 5000.f, 0.3f, 1.413f);
-    highShelf.prepare(spec);
-
-    bassEQ.reset();
-    *bassEQ.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(spec.sampleRate, BASS_CENTER_FQ, BASS_Q_FACTOR, 1.f);
-    bassEQ.prepare(spec);
-
-    middleEQ.reset();
-    *middleEQ.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(spec.sampleRate, MID_CENTER_FQ, MID_Q_FACTOR, 1.f);
-    middleEQ.prepare(spec);
-
-    trebleEQ.reset();
-    *trebleEQ.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(spec.sampleRate, TREBLE_CENTER_FQ, TREBLE_Q_FACTOR, 1.f);
-    trebleEQ.prepare(spec);
-
-    master.reset();
-    master.prepare(spec);
-    master.setGainLinear(0.5f);
-
-    postLowEndBoost.reset();
-    *postLowEndBoost.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(spec.sampleRate, 165.29f, 1.113f, 2.2f);
-    postLowEndBoost.prepare(spec);
-
-    postMidBoost.reset();
-    *postMidBoost.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(spec.sampleRate, 1298.f, 2.716f, 2.2f);
-    postMidBoost.prepare(spec);
-
-    lowPassFilter.reset();
-    *lowPassFilter.state = *juce::dsp::IIR::Coefficients<float>::makeLowPass(spec.sampleRate, 15000.f, 0.7f);
-    lowPassFilter.prepare(spec);
+    prepareIIRFilter(postLowEndBoost, spec, spec.sampleRate, 165.29f, 1.113f, 2.2f);
+    prepareIIRFilter(postMidBoost, spec, spec.sampleRate, 1298.f, 2.716f, 2.2f);
+    prepareIIRCutOffFilter(lowPassFilter, spec, FilterType::LowPass, spec.sampleRate, 15000.f, 0.7f);
 
     oversample = std::unique_ptr<juce::dsp::Oversampling<float>>(new juce::dsp::Oversampling<float>(spec.numChannels,
         2,
@@ -91,6 +55,9 @@ void preamp::CleanAmp::prepare(juce::dsp::ProcessSpec& spec)
 
 void preamp::CleanAmp::updateState(parameters::Parameters& parameters)
 {
+    bypassPostFilters = parameters.bypassPostFilters;
+    bypassPreFilters = parameters.bypassPreFilters;
+
     gain.setGainLinear(mapValueInRange(parameters.gain.get() / 100.f, minDrive, maxDrive));
 
     bassSmoother.setTargetValue(mapValueInRange(parameters.bass.get() / 100.f, MIN_BAND_GAIN, MAX_BAND_GAIN));
@@ -121,10 +88,11 @@ void preamp::CleanAmp::manageInput(juce::dsp::ProcessContextReplacing<float>& co
 
 void preamp::CleanAmp::prefilter(juce::dsp::ProcessContextReplacing<float>& context)
 {
+    if (bypassPreFilters) return;
     highShelf.process(context);
     lowMidBoost.process(context);
-    midBoost.process(context);
-    pickAccentBoost.process(context);
+    treble3kBoost.process(context);
+    pickStrokeAccentBoost.process(context);
 }
 
 void preamp::CleanAmp::waveshaping(juce::dsp::ProcessContextReplacing<float>& context)
@@ -139,6 +107,7 @@ void preamp::CleanAmp::waveshaping(juce::dsp::ProcessContextReplacing<float>& co
 
 void preamp::CleanAmp::postfilter(juce::dsp::ProcessContextReplacing<float>& context)
 {
+    if (bypassPostFilters) return;
     postLowEndBoost.process(context);
     postMidBoost.process(context);
     lowPassFilter.process(context);

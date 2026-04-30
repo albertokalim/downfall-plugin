@@ -35,6 +35,9 @@ namespace preamp {
         void manageOutput(juce::dsp::ProcessContextReplacing<float>& context) override;
         void reset() override;
 
+        bool bypassPreFilters = false;
+        bool bypassPostFilters = false;
+
     private:
         float minDrive = MIN_DRIVE;
         float maxDrive = MAX_DRIVE;
@@ -49,19 +52,19 @@ namespace preamp {
         juce::dsp::Gain<float> gain;
         juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> lowMidBoost;
         juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> lowEndControl;
-        juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> midBoost;
-        juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> midBoost2;
-        juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> pickAccentBoost;
+        juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> treble3kBoost;
+        juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> mid1kBoost;
+        juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> pickStrokeAccentBoost;
         juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> highShelf;
-        juce::dsp::WaveShaper<float> waveshaper{ { waveshapingFunctions::tanhHighGain } };
-        juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> hpfPostWaveshaper;
-        juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> highShelfPostWaveshaper;
-        juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> pickAccentPostWaveshaper;
-        juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> lowEndControlPostWaveshaper;
+        juce::dsp::WaveShaper<float> waveshaper{ { waveshapingFunctions::hardClipping } };
+        juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> hpfPostFilter;
+        juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> highShelfPostFilter;
+        juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> midBoostPostFilter;
+        juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> lowEndControlPostFilter;
         juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> bassEQ;
         juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> middleEQ;
         juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> trebleEQ;
-        juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> presence;
+        juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> presenceEQ;
         juce::dsp::Gain<float> master;
 
         JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR(HighGainAmp)

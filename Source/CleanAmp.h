@@ -34,6 +34,9 @@ namespace preamp {
         void manageOutput(juce::dsp::ProcessContextReplacing<float>& context) override;
         void reset() override;
 
+        bool bypassPreFilters = false;
+        bool bypassPostFilters = false;
+
     private:
         float minDrive = MIN_DRIVE;
         float maxDrive = MAX_DRIVE;
@@ -44,8 +47,8 @@ namespace preamp {
         juce::SmoothedValue<float> trebleSmoother;
 
         juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> lowMidBoost;
-        juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> midBoost;
-        juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> pickAccentBoost;
+        juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> treble3kBoost;
+        juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> pickStrokeAccentBoost;
         juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> highShelf;
         juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> lowEndBoost;
         std::unique_ptr<juce::dsp::Oversampling<float>> oversample;
@@ -53,7 +56,7 @@ namespace preamp {
         juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> postLowEndBoost;
         juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> postMidBoost;
         juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> lowPassFilter;
-        juce::dsp::WaveShaper<float> waveshaper{ { waveshapingFunctions::tanh } };
+        juce::dsp::WaveShaper<float> waveshaper{ { waveshapingFunctions::softClipping } };
         juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> bassEQ;
         juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> middleEQ;
         juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> trebleEQ;

@@ -32,12 +32,19 @@ namespace preamp {
     using IIRCoefs = juce::dsp::IIR::Coefficients<float>;
 
     namespace waveshapingFunctions {
-        static float tanh(float x) {
-            return juce::jlimit(-1.f, 1.f, (x * (abs(x) + 3.5f) / (x * x + (3.5f - 1) * abs(x) + 1)));
+        static constexpr float W_SOFT = 3.5f;
+        static constexpr float W_HARD = 50.f;
+
+        static float sigmoidFunction(float x, float w) {
+            return (x * (abs(x) + w) / (x * x + (w - 1) * abs(x) + 1));
         }
 
-        static float tanhHighGain(float x) {
-            return juce::jlimit(-1.f, 1.f, (x * (abs(x) + 50.f) / (x * x + (50.f - 1) * abs(x) + 1)));
+        static float softClipping(float x) {
+            return juce::jlimit(-1.f, 1.f, sigmoidFunction(x, W_SOFT));
+        }
+
+        static float hardClipping(float x) {
+            return juce::jlimit(-1.f, 1.f, sigmoidFunction(x, W_HARD));
         }
     };
 

@@ -284,7 +284,15 @@ namespace parameters {
                 "16kHz",
                 juce::NormalisableRange{ -12.f, 12.f, 0.1f },
                 0.f,
-                juce::AudioParameterFloatAttributes{}.withLabel("dB")))
+                juce::AudioParameterFloatAttributes{}.withLabel("dB"))),
+            bypassPreFilters(createParameterBool(audioProcessor,
+                "bypassPreFilters",
+                "bypassPreFilters",
+                false)),
+            bypassPostFilters(createParameterBool(audioProcessor,
+                "bypassPostFilters",
+                "bypassPostFilters",
+                false))
         {
         }
 
@@ -326,6 +334,8 @@ namespace parameters {
         juce::AudioParameterFloat& eq8khzGain;
         juce::AudioParameterFloat& eq16khzGain;
         juce::AudioParameterBool& bypassEq;
+        juce::AudioParameterBool& bypassPreFilters;
+        juce::AudioParameterBool& bypassPostFilters;
 
     private:
 
