@@ -12,6 +12,7 @@
 #include <JuceHeader.h>
 #include "Utils.h"
 #include "Parameters.h"
+#include "Processor.h"
 
 namespace preamp {
 
@@ -62,14 +63,14 @@ namespace preamp {
         virtual void reset() = 0;
     };
 
-    class PreAmpDecorator {
+    class PreAmpDecorator : public ProcessorBase{
     public:
         PreAmpDecorator(PreAmpInterface* _decorator) : decorator(_decorator) {}
         ~PreAmpDecorator() {}
 
-        void prepare(juce::dsp::ProcessSpec& spec) { decorator->prepare(spec); }
-        void update(parameters::Parameters& parameters) { decorator->updateState(parameters); }
-        void process(juce::dsp::ProcessContextReplacing<float>& context) {
+        void prepare(juce::dsp::ProcessSpec& spec) override { decorator->prepare(spec); }
+        void update(parameters::Parameters& parameters) override { decorator->updateState(parameters); }
+        void process(juce::dsp::ProcessContextReplacing<float>& context) override {
             decorator->manageInput(context);
             decorator->prefilter(context);
             decorator->waveshaping(context);
@@ -77,7 +78,7 @@ namespace preamp {
             decorator->eq(context);
             decorator->manageOutput(context);
         }
-        void reset() { 
+        void reset() override { 
             jassert(decorator != nullptr);
             decorator->reset(); 
         }

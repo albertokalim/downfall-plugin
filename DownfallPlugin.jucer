@@ -12,6 +12,7 @@
       <FILE id="DQnZGg" name="test-ir.wav" compile="0" resource="1" file="../../../test-ir.wav"/>
     </GROUP>
     <GROUP id="{71E7600E-055C-CF59-C769-E04AE9D7483F}" name="Include">
+      <FILE id="Piz88c" name="Processor.h" compile="0" resource="0" file="Source/Processor.h"/>
       <FILE id="dKC0rr" name="Parameters.h" compile="0" resource="0" file="Source/Parameters.h"/>
       <FILE id="ttdACv" name="PluginProcessor.h" compile="0" resource="0"
             file="Source/PluginProcessor.h"/>
@@ -28,6 +29,8 @@
         <FILE id="i5mXUT" name="LevelMeter.h" compile="0" resource="0" file="Source/LevelMeter.h"/>
       </GROUP>
       <GROUP id="{816743BA-E13E-5200-54E7-0514D64788C6}" name="fx">
+        <FILE id="jandQa" name="Delay.h" compile="0" resource="0" file="Source/Delay.h"/>
+        <FILE id="kdUbaK" name="Chorus.h" compile="0" resource="0" file="Source/Chorus.h"/>
         <FILE id="QD2TTf" name="Diffuser.h" compile="0" resource="0" file="Source/Diffuser.h"/>
         <FILE id="nETDLj" name="Splitter.h" compile="0" resource="0" file="Source/Splitter.h"/>
         <FILE id="egCuaH" name="Reverb.h" compile="0" resource="0" file="Source/Reverb.h"/>
@@ -58,10 +61,11 @@
               file="Source/JsonSerializer.cpp"/>
       </GROUP>
       <GROUP id="{C26DA705-F92E-53EE-0520-8BDDC9864BC6}" name="fx">
+        <FILE id="XHNbun" name="Chorus.cpp" compile="1" resource="0" file="Source/Chorus.cpp"/>
         <FILE id="J0CFKC" name="Diffuser.cpp" compile="1" resource="0" file="Source/Diffuser.cpp"/>
+        <FILE id="W2GaSN" name="Delay.cpp" compile="1" resource="0" file="Source/Delay.cpp"/>
         <FILE id="wIVviW" name="Splitter.cpp" compile="1" resource="0" file="Source/Splitter.cpp"/>
         <FILE id="hv23E0" name="Reverb.cpp" compile="1" resource="0" file="Source/Reverb.cpp"/>
-        <FILE id="IvRY3h" name="Effect.cpp" compile="1" resource="0" file="Source/Effect.cpp"/>
       </GROUP>
       <GROUP id="{566B1249-2089-B329-130A-202BDAE1B0FB}" name="gui">
         <FILE id="P5i8Yd" name="BypassButton.cpp" compile="1" resource="0"

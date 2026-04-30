@@ -148,10 +148,11 @@
     <ClCompile Include="..\..\Source\EQModule.cpp"/>
     <ClCompile Include="..\..\Source\HighGain.cpp"/>
     <ClCompile Include="..\..\Source\JsonSerializer.cpp"/>
+    <ClCompile Include="..\..\Source\Chorus.cpp"/>
     <ClCompile Include="..\..\Source\Diffuser.cpp"/>
+    <ClCompile Include="..\..\Source\Delay.cpp"/>
     <ClCompile Include="..\..\Source\Splitter.cpp"/>
     <ClCompile Include="..\..\Source\Reverb.cpp"/>
-    <ClCompile Include="..\..\Source\Effect.cpp"/>
     <ClCompile Include="..\..\Source\BypassButton.cpp"/>
     <ClCompile Include="..\..\Source\FXComponent.cpp"/>
     <ClCompile Include="..\..\Source\AmpComponent.cpp"/>
@@ -3014,6 +3015,7 @@
     <ClCompile Include="..\..\JuceLibraryCode\include_juce_gui_extra.cpp"/>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\Source\Processor.h"/>
     <ClInclude Include="..\..\Source\Parameters.h"/>
     <ClInclude Include="..\..\Source\PluginProcessor.h"/>
     <ClInclude Include="..\..\Source\PluginEditor.h"/>
@@ -3025,6 +3027,8 @@
     <ClInclude Include="..\..\Source\MenuButton.h"/>
     <ClInclude Include="..\..\Source\RotaryKnob.h"/>
     <ClInclude Include="..\..\Source\LevelMeter.h"/>
+    <ClInclude Include="..\..\Source\Delay.h"/>
+    <ClInclude Include="..\..\Source\Chorus.h"/>
     <ClInclude Include="..\..\Source\Diffuser.h"/>
     <ClInclude Include="..\..\Source\Splitter.h"/>
     <ClInclude Include="..\..\Source\Reverb.h"/>
