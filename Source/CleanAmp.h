@@ -11,6 +11,7 @@
 #pragma once
 #include <JuceHeader.h>
 #include "PreAmp.h"
+#include "Constants.h"
 
 namespace preamp {
     class CleanAmp : public PreAmpInterface {

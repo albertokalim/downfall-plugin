@@ -70,14 +70,9 @@ void effects::DelayFX::prepare(juce::dsp::ProcessSpec& spec)
     delayLine.setMaximumDelayInSamples(maxDelayInSamples);
     delayLine.reset();
 
-    delayTimeSmoother.reset(spec.sampleRate, 0.002f);
-    delayTimeSmoother.setCurrentAndTargetValue(0.f);
-
-    mixSmoother.reset(spec.sampleRate, 0.002f);
-    mixSmoother.setCurrentAndTargetValue(1.0f);
-
-    feedbackSmoother.reset(spec.sampleRate, 0.002f);
-    feedbackSmoother.setCurrentAndTargetValue(0.f);
+    prepareSmoothedValueObject(sampleRate, delayTimeSmoother, 0.f);
+    prepareSmoothedValueObject(sampleRate, mixSmoother, 1.f);
+    prepareSmoothedValueObject(sampleRate, feedbackSmoother, 0.f);
 }
 
 void effects::DelayFX::update(parameters::Parameters& parameters)

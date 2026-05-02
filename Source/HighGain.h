@@ -12,6 +12,7 @@
 
 #include <JuceHeader.h>
 #include "PreAmp.h"
+#include "Constants.h"
 
 namespace preamp {
     class HighGainAmp : public PreAmpInterface {

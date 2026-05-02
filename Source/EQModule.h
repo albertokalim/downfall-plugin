@@ -11,9 +11,8 @@
 #pragma once
 #include <JuceHeader.h>
 #include "Parameters.h"
-
-using IIRFilter = juce::dsp::IIR::Filter<float>;
-using IIRCoefs = juce::dsp::IIR::Coefficients<float>;
+#include "Utils.h"
+#include "Constants.h"
 
 class EQModule {
 public:
@@ -25,7 +24,7 @@ public:
     void reset();
 
 private:
-    float sampleRate = 44100.f;
+    float sampleRate = DEFAULT_SAMPLE_RATE;
     bool bypass = false;
 
     juce::dsp::ProcessorDuplicator<IIRFilter, IIRCoefs> highPassFilter;

@@ -29,7 +29,7 @@ void effects::ReverbFX::prepare(juce::dsp::ProcessSpec& spec)
     oneChannelSpec.sampleRate = spec.sampleRate;
 
     highShelfCut.reset();
-    highShelfCut.coefficients = juce::dsp::IIR::Coefficients<float>::makeHighShelf(sampleRate, 8000.f, 0.3f, 0.9f);
+    highShelfCut.coefficients = juce::dsp::IIR::Coefficients<float>::makeHighShelf(sampleRate, cutOff_fq, q_high_cut, gain_reduction_linear);
     highShelfCut.prepare(oneChannelSpec);
 
     float delaySamplesBase = delayTime / 1000.0f * spec.sampleRate;
@@ -45,13 +45,8 @@ void effects::ReverbFX::prepare(juce::dsp::ProcessSpec& spec)
         delayedSamples[i] = 0.f;
     }
 
-    decay.reset(0.002f);
-    decay.setCurrentAndTargetValue(0.f);
-
-    mix.reset(0.002f);
-    mix.setCurrentAndTargetValue(0.5f);
-
-    
+    prepareSmoothedValueObject(sampleRate, decay, 0.f);
+    prepareSmoothedValueObject(sampleRate, mix, 0.5f);
 }
 
 void effects::ReverbFX::update(parameters::Parameters& parameters)
@@ -59,9 +54,9 @@ void effects::ReverbFX::update(parameters::Parameters& parameters)
     bypass = parameters.reverbBypass.get();
     decay.setTargetValue(parameters.decay.get() / 100.f);
     highShelfCut.coefficients = juce::dsp::IIR::Coefficients<float>::makeHighShelf(sampleRate,
-        8000.f, 
-        0.3f,
-        juce::jlimit<float>(0.f, 0.9f, decay.getNextValue()));
+        cutOff_fq, 
+        q_high_cut,
+        juce::jlimit<float>(0.f, gain_reduction_linear, decay.getNextValue()));
     mix.setTargetValue(parameters.reverbMix.get() / 100.f);
 }
 

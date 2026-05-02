@@ -26,13 +26,18 @@ namespace effects {
 
     private:
         static constexpr float multiplier = -2.f / REVERB_CHANNELS;
+        static constexpr float base_diff_delay = 20.f;
+        static constexpr float cutOff_fq = 8000.f;
+        static constexpr float q_high_cut = 0.3f;
+        static constexpr float gain_reduction_linear = 0.9f;
+
 
         float delayTime = 0.f;
-        float sampleRate = 44100.f;
+        float sampleRate = DEFAULT_SAMPLE_RATE;
         Splitter split;
-        std::array<Diffuser, DIFF_STEPS> diff{ Diffuser{20.0f},Diffuser{40.0f},Diffuser{80.0f},Diffuser{160.0f} };
+        std::array<Diffuser, DIFF_STEPS> diff{ Diffuser{base_diff_delay},Diffuser{base_diff_delay * 2},Diffuser{base_diff_delay * 4},Diffuser{base_diff_delay * 8}};
         std::array<juce::dsp::DelayLine<float>, REVERB_CHANNELS> delays;
-        IIRFilter highShelfCut{ juce::dsp::IIR::Coefficients<float>::makeHighShelf(sampleRate, 8000.f, 0.3f, 0.9f) };
+        IIRFilter highShelfCut{ juce::dsp::IIR::Coefficients<float>::makeHighShelf(sampleRate, cutOff_fq, q_high_cut, gain_reduction_linear) };
         std::array<float, REVERB_CHANNELS> delayedSamples;
         float* output[REVERB_CHANNELS];
 

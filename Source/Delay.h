@@ -10,6 +10,7 @@
 
 #pragma once
 #include "Effect.h"
+#include "Constants.h"
 
 namespace effects {
     class Tempo {
@@ -48,7 +49,7 @@ namespace effects {
 
         bool sync = false;
         int delayNoteIndex = 0;
-        float sampleRate = 44100.f;
+        float sampleRate = DEFAULT_SAMPLE_RATE;
         float feedbackL = 0.0f;
         float feedbackR = 0.0f;
     };

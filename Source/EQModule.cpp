@@ -19,82 +19,29 @@ void EQModule::prepare(juce::dsp::ProcessSpec& spec)
 {
     sampleRate = spec.sampleRate;
 
-    highPassCenterFqSmoother.reset(spec.sampleRate, 0.002f);
-    highPassCenterFqSmoother.setCurrentAndTargetValue(0.f);
+    prepareSmoothedValueObject(sampleRate, highPassCenterFqSmoother, 0.f);
+    prepareSmoothedValueObject(sampleRate, lowPassCenterFqSmoother, 0.f);
+    prepareSmoothedValueObject(sampleRate, gain65Smoother, 0.f);
+    prepareSmoothedValueObject(sampleRate, gain125Smoother, 0.f);
+    prepareSmoothedValueObject(sampleRate, gain250Smoother, 0.f);
+    prepareSmoothedValueObject(sampleRate, gain500Smoother, 0.f);
+    prepareSmoothedValueObject(sampleRate, gain1kSmoother, 0.f);
+    prepareSmoothedValueObject(sampleRate, gain2kSmoother, 0.f);
+    prepareSmoothedValueObject(sampleRate, gain4kSmoother, 0.f);
+    prepareSmoothedValueObject(sampleRate, gain8kSmoother, 0.f);
+    prepareSmoothedValueObject(sampleRate, gain16kSmoother, 0.f);
 
-    lowPassCenterFqSmoother.reset(spec.sampleRate, 0.002f);
-    lowPassCenterFqSmoother.setCurrentAndTargetValue(0.f);
-
-    gain65Smoother.reset(spec.sampleRate, 0.002f);
-    gain65Smoother.setCurrentAndTargetValue(0.f);
-
-    gain125Smoother.reset(spec.sampleRate, 0.002f);
-    gain125Smoother.setCurrentAndTargetValue(0.f);
-
-    gain250Smoother.reset(spec.sampleRate, 0.002f);
-    gain250Smoother.setCurrentAndTargetValue(0.f);
-
-    gain500Smoother.reset(spec.sampleRate, 0.002f);
-    gain500Smoother.setCurrentAndTargetValue(0.f);
-
-    gain1kSmoother.reset(spec.sampleRate, 0.002f);
-    gain1kSmoother.setCurrentAndTargetValue(0.f);
-
-    gain2kSmoother.reset(spec.sampleRate, 0.002f);
-    gain2kSmoother.setCurrentAndTargetValue(0.f);
-
-    gain4kSmoother.reset(spec.sampleRate, 0.002f);
-    gain4kSmoother.setCurrentAndTargetValue(0.f);
-
-    gain8kSmoother.reset(spec.sampleRate, 0.002f);
-    gain8kSmoother.setCurrentAndTargetValue(0.f);
-
-    gain16kSmoother.reset(spec.sampleRate, 0.002f);
-    gain16kSmoother.setCurrentAndTargetValue(0.f);
-
-    highPassFilter.reset();
-    *highPassFilter.state = *juce::dsp::IIR::Coefficients<float>::makeHighPass(spec.sampleRate, 20.f);
-    highPassFilter.prepare(spec);
-
-    lowPassFilter.reset();
-    *lowPassFilter.state = *juce::dsp::IIR::Coefficients<float>::makeLowPass(spec.sampleRate, 20000.f);
-    lowPassFilter.prepare(spec);
-
-    bell65.reset();
-    *bell65.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(spec.sampleRate, 65.0f, 0.9f, 1.f);
-    bell65.prepare(spec);
-
-    bell125.reset();
-    *bell125.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(spec.sampleRate, 125.0f, 0.9f, 1.f);
-    bell125.prepare(spec);
-
-    bell250.reset();
-    *bell250.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(spec.sampleRate, 250.0f, 0.9f, 1.f);
-    bell250.prepare(spec);
-
-    bell500.reset();
-    *bell500.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(spec.sampleRate, 500.0f, 0.9f, 1.f);
-    bell500.prepare(spec);
-
-    bell1k.reset();
-    *bell1k.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(spec.sampleRate, 1000.0f, 0.9f, 1.f);
-    bell1k.prepare(spec);
-
-    bell2k.reset();
-    *bell2k.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(spec.sampleRate, 2000.0f, 0.9f, 1.f);
-    bell2k.prepare(spec);
-
-    bell4k.reset();
-    *bell4k.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(spec.sampleRate, 4000.0f, 0.9f, 1.f);
-    bell4k.prepare(spec);
-
-    bell8k.reset();
-    *bell8k.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(spec.sampleRate, 8000.0f, 0.9f, 1.f);
-    bell8k.prepare(spec);
-
-    bell16k.reset();
-    *bell16k.state = *juce::dsp::IIR::Coefficients<float>::makePeakFilter(spec.sampleRate, 16000.0f, 0.9f, 1.f);
-    bell16k.prepare(spec);
+    prepareIIRCutOffFilter(highPassFilter, spec, FilterType::HighPass, sampleRate, 20.f, 0.6f);
+    prepareIIRCutOffFilter(lowPassFilter, spec, FilterType::LowPass, sampleRate, 20000.f, 0.6f);
+    prepareIIRFilter(bell65, spec, sampleRate, 65.0f, 0.9f, 1.f);
+    prepareIIRFilter(bell125, spec, sampleRate, 125.0f, 0.9f, 1.f);
+    prepareIIRFilter(bell250, spec, sampleRate, 250.0f, 0.9f, 1.f);
+    prepareIIRFilter(bell500, spec, sampleRate, 500.0f, 0.9f, 1.f);
+    prepareIIRFilter(bell1k, spec, sampleRate, 1000.0f, 0.9f, 1.f);
+    prepareIIRFilter(bell2k, spec, sampleRate, 2000.0f, 0.9f, 1.f);
+    prepareIIRFilter(bell4k, spec, sampleRate, 4000.0f, 0.9f, 1.f);
+    prepareIIRFilter(bell8k, spec, sampleRate, 8000.0f, 0.9f, 1.f);
+    prepareIIRFilter(bell16k, spec, sampleRate, 16000.0f, 0.9f, 1.f);
 }
 
 void EQModule::update(parameters::Parameters& parameters)

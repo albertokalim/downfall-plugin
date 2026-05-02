@@ -10,6 +10,7 @@
 
 #pragma once
 #include "Effect.h"
+#include "Constants.h"
 
 namespace effects {
     class ChorusFX : public FX {
@@ -32,7 +33,7 @@ namespace effects {
         };
 
         float delayTime = MIN_CHORUS_DELAY;
-        float sampleRate = 44100.f;
+        float sampleRate = DEFAULT_SAMPLE_RATE;
         juce::SmoothedValue<float> mixSmoother;
         juce::SmoothedValue<float> rateSmoother; //fq in Hz
         juce::SmoothedValue<float> widthSmoother;

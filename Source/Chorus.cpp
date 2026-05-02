@@ -22,14 +22,9 @@ void effects::ChorusFX::prepare(juce::dsp::ProcessSpec& spec)
 
     lfo.prepare(spec);
 
-    rateSmoother.reset(spec.sampleRate, 0.002f);
-    rateSmoother.setCurrentAndTargetValue(1.f);
-
-    widthSmoother.reset(spec.sampleRate, 0.002f);
-    widthSmoother.setCurrentAndTargetValue(0.4f);
-
-    mixSmoother.reset(spec.sampleRate, 0.002f);
-    mixSmoother.setCurrentAndTargetValue(0.5f);
+    prepareSmoothedValueObject(sampleRate, rateSmoother, 1.f);
+    prepareSmoothedValueObject(sampleRate, widthSmoother, 0.4f);
+    prepareSmoothedValueObject(sampleRate, mixSmoother, 0.5f);
 }
 
 void effects::ChorusFX::update(parameters::Parameters& parameters)
