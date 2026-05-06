@@ -18,11 +18,6 @@ static const int versionHint = 1;
 static constexpr auto MARSHALLING_VERSION = 1;
 
 namespace parameters {
-    /**
-    * Añade un parámetro al PluginProcessor
-    * @param juce::AudioProcessor& processor : la instancia del PluginProcessor
-    * @param auto parameter : el parámetro que vamos a añadir al PluginProcessor
-    **/
     static auto& addParameterToProcessor(juce::AudioProcessor& processor, auto parameter) {
         auto& parameterReference = *parameter;
         processor.addParameter(parameter.release());
