@@ -10,18 +10,19 @@
 
 #pragma once
 #include <JuceHeader.h>
+#include "Processor.h"
 #include "Parameters.h"
 #include "Utils.h"
 #include "Constants.h"
 
-class EQModule {
+class EQModule : public ProcessorBase{
 public:
     EQModule();
 
-    void prepare(juce::dsp::ProcessSpec& spec);
-    void update(parameters::Parameters& parameters);
-    void process(juce::dsp::ProcessContextReplacing<float>& context);
-    void reset();
+    void prepare(juce::dsp::ProcessSpec& spec) override;
+    void update(parameters::Parameters& parameters) override;
+    void process(juce::dsp::ProcessContextReplacing<float>& context) override;
+    void reset() override;
 
 private:
     float sampleRate = DEFAULT_SAMPLE_RATE;

@@ -12,8 +12,6 @@
 #include <JuceHeader.h>
 #include "Splitter.h"
 
-using IIRFilter = juce::dsp::IIR::Filter<float>;
-using IIRCoefs = juce::dsp::IIR::Coefficients<float>;
 namespace effects {
     class Diffuser {
     public:
