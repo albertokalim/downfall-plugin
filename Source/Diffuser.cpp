@@ -22,7 +22,7 @@ effects::Diffuser::Diffuser(float _delayTime) : frame(new float[REVERB_CHANNELS]
 
 effects::Diffuser::~Diffuser()
 {
-    delete frame;
+    delete[] frame;
 }
 
 void effects::Diffuser::prepare(juce::dsp::ProcessSpec& spec)
@@ -50,11 +50,12 @@ void effects::Diffuser::prepare(juce::dsp::ProcessSpec& spec)
 
 void effects::Diffuser::process(Splitter& split)
 {
+    auto& buffers = split.getAudioBuffers();
     for (int c = 0; c < REVERB_CHANNELS; ++c) {
-        output[c] = split.getAudioBuffer(c).getWritePointer(0);
+        output[c] = buffers[c]->getWritePointer(0);
         jassert(output[c] != nullptr);
     }
-    int numSamples = split.getAudioBuffer(0).getNumSamples();
+    int numSamples = buffers[0]->getNumSamples();
 
     for (int sample = 0; sample < numSamples; ++sample) {
         for (int c = 0; c < REVERB_CHANNELS; ++c) {

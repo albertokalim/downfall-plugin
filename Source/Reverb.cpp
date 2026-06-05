@@ -67,17 +67,20 @@ void effects::ReverbFX::process(juce::dsp::ProcessContextReplacing<float>& conte
 
     split.clearAudioBuffers();
     split.split(context);
+
+    auto& buffers = split.getAudioBuffers();
+
     for (int i = 0; i < DIFF_STEPS; ++i) {
         diff[i].process(split);
     }
 
     for (int c = 0; c < REVERB_CHANNELS; ++c) {
-        output[c] = split.getAudioBuffer(c).getWritePointer(0);
+        output[c] = buffers[c]->getWritePointer(0);
         jassert(output[c] != nullptr);
         delayedSamples[c] = 0.f;
     }
     
-    for (int sample = 0; sample < split.getAudioBuffer(0).getNumSamples(); ++sample) {
+    for (int sample = 0; sample < buffers[0]->getNumSamples(); ++sample) {
         for (int c = 0; c < REVERB_CHANNELS; ++c) {
             delayedSamples[c] = delays[c].popSample(0);
         }

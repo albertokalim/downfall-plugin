@@ -10,11 +10,25 @@
 
 #include "Splitter.h"
 
+effects::Splitter::Splitter(int _n)
+{
+    n = _n;
+}
+
+effects::Splitter::~Splitter()
+{
+
+}
+
 void effects::Splitter::prepare(int numSamples)
 {
-    for (int c = 0; c < REVERB_CHANNELS; ++c) {
-        audioBuffers[c].setSize(1, numSamples, false, true, true);
-        audioBuffers[c].clear();
+    if (audioBuffers.size() == 0) { 
+        for (int i = 0; i < n; ++i) {
+            std::unique_ptr<AudioBuffer> audioBuffer = std::make_unique<AudioBuffer>();
+            audioBuffer->setSize(1, numSamples, false, true, true);
+            audioBuffer->clear();
+            audioBuffers.push_back(std::move(audioBuffer));
+        }
     }
 }
 
@@ -24,14 +38,16 @@ void effects::Splitter::split(juce::dsp::ProcessContextReplacing<float>& context
     float* source = context.getOutputBlock().getChannelPointer(0);
     const int numSamples = (int)block.getNumSamples();
 
-    for (int i = 0; i < REVERB_CHANNELS; ++i) {
-        audioBuffers[i].copyFrom(0, 0, source, numSamples);
+    for (int i = 0; i < n; ++i) {
+        audioBuffers[i]->copyFrom(0, 0, source, numSamples);
     }
 }
 
 void effects::Splitter::clearAudioBuffers()
 {
-    for (int i = 0; i < REVERB_CHANNELS; ++i) {
-        audioBuffers[i].clear();
+    for (int i = 0; i < n; ++i) {
+        if (audioBuffers[i] != nullptr) {
+            audioBuffers[i]->clear();
+        }
     }
 }

@@ -34,7 +34,7 @@ namespace effects {
 
         float delayTime = 0.f;
         float sampleRate = DEFAULT_SAMPLE_RATE;
-        Splitter split;
+        
         std::array<Diffuser, DIFF_STEPS> diff{ Diffuser{base_diff_delay},Diffuser{base_diff_delay * 2},Diffuser{base_diff_delay * 4},Diffuser{base_diff_delay * 8}};
         std::array<juce::dsp::DelayLine<float>, REVERB_CHANNELS> delays;
         IIRFilter highShelfCut{ juce::dsp::IIR::Coefficients<float>::makeHighShelf(sampleRate, cutOff_fq, q_high_cut, gain_reduction_linear) };
@@ -43,6 +43,7 @@ namespace effects {
 
         juce::SmoothedValue<float> decay;
         juce::SmoothedValue<float> mix;
+        Splitter split{ REVERB_CHANNELS };
 
         void Householder(std::array<float, REVERB_CHANNELS>& inputs);
     };

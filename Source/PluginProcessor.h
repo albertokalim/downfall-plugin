@@ -77,14 +77,13 @@ private:
     std::unique_ptr<preamp::PreAmpDecorator> preamp;
     std::vector<preamp::PreAmpInterface*> preAmpStrategies{ 2 };
 
-    effects::DelayFX delay;
-    effects::ChorusFX chorus;
-    effects::ReverbFX reverb{ 100.0 };
-
     juce::dsp::NoiseGate<float> gate;
 
     juce::dsp::Convolution convolution;
     EQModule eq;
+    effects::DelayFX delay;
+    effects::ChorusFX chorus;
+    effects::ReverbFX reverb{ 100.0 };
 
     JUCE_DECLARE_NON_COPYABLE_WITH_LEAK_DETECTOR (DownfallPluginAudioProcessor)
 };

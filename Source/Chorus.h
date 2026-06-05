@@ -11,6 +11,7 @@
 #pragma once
 #include "Effect.h"
 #include "Constants.h"
+#include "Splitter.h"
 
 namespace effects {
     class ChorusFX : public FX {
@@ -22,13 +23,19 @@ namespace effects {
         void reset() override;
 
     private:
-        static constexpr float MAX_CHORUS_DELAY = 35.f;
-        static constexpr float MIN_CHORUS_DELAY = 15.f;
+        static const int CHORUS_CHANNELS = 2;
+        static constexpr float MAX_CHORUS_DELAY = 20.f;
+        static constexpr float MIN_CHORUS_DELAY = 0.f;
 
-        juce::dsp::DelayLine<float, juce::dsp::DelayLineInterpolationTypes::Linear> delayLine;
-        juce::dsp::Oscillator<float> lfo{
-            [](auto phase) {
-                return std::sin(phase);
+        std::array<juce::dsp::DelayLine<float, juce::dsp::DelayLineInterpolationTypes::Linear>, CHORUS_CHANNELS> delayLines;
+        std::array<juce::dsp::Oscillator<float>, CHORUS_CHANNELS> lfos{
+                juce::dsp::Oscillator<float>{[](auto phase) {
+                    return std::sin(phase);
+                }
+            },
+                juce::dsp::Oscillator<float>{[](auto phase) {
+                    return std::cos(phase);
+                }
             }
         };
 
@@ -37,5 +44,6 @@ namespace effects {
         juce::SmoothedValue<float> mixSmoother;
         juce::SmoothedValue<float> rateSmoother; //fq in Hz
         juce::SmoothedValue<float> widthSmoother;
+        Splitter split{ CHORUS_CHANNELS };
     };
 }

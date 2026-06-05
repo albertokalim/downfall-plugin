@@ -35,7 +35,7 @@ namespace preamp {
 
     class PreAmpInterface {
     public:
-        virtual ~PreAmpInterface() {}
+        virtual ~PreAmpInterface() = default;
         virtual void prepare(juce::dsp::ProcessSpec& spec) = 0;
         virtual void updateState(parameters::Parameters& parameters) = 0;
         virtual void manageInput(juce::dsp::ProcessContextReplacing<float>& context) = 0;

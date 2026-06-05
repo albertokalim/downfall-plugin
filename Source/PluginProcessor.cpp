@@ -15,6 +15,8 @@ DownfallPluginAudioProcessor::DownfallPluginAudioProcessor()
                        .withInput  ("Input",  juce::AudioChannelSet::stereo(), true)
                        .withOutput ("Output", juce::AudioChannelSet::stereo(), true))
 {
+    preAmpStrategies[0] = new preamp::CleanAmp(1.f, 7.5f);
+    preAmpStrategies[1] = new preamp::HighGainAmp(25.f, 100.f);
     gate.setRatio(100.f);
     gate.setAttack(20.f);
     gate.setRelease(20.f);
@@ -23,6 +25,9 @@ DownfallPluginAudioProcessor::DownfallPluginAudioProcessor()
 
 DownfallPluginAudioProcessor::~DownfallPluginAudioProcessor()
 {
+    for (int i = 0; i < 2; ++i) {
+        delete preAmpStrategies[i];
+    }
 }
 
 //==============================================================================
@@ -90,8 +95,6 @@ void DownfallPluginAudioProcessor::changeProgramName (int index, const juce::Str
 //==============================================================================
 void DownfallPluginAudioProcessor::prepareToPlay (double sampleRate, int samplesPerBlock)
 {
-    preAmpStrategies[0] = new preamp::CleanAmp(1.f, 7.5f);
-    preAmpStrategies[1] = new preamp::HighGainAmp(25.f, 100.f);
 
     preamp = std::unique_ptr<preamp::PreAmpDecorator>(new preamp::PreAmpDecorator(preAmpStrategies[0]));
 
@@ -114,10 +117,8 @@ void DownfallPluginAudioProcessor::prepareToPlay (double sampleRate, int samples
     delay.reset();
     delay.prepare(spec);
 
-    chorus.reset();
     chorus.prepare(spec);
 
-    reverb.reset();
     reverb.prepare(spec);
 
     gate.reset();
@@ -141,6 +142,7 @@ void DownfallPluginAudioProcessor::prepareToPlay (double sampleRate, int samples
 
 void DownfallPluginAudioProcessor::releaseResources()
 {
+    chorus.reset();
     reverb.reset();
 }
 
